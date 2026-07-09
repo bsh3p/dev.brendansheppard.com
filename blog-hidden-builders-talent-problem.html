@@ -1,26 +1,19 @@
 <!--
   VERSION HISTORY
-  v1.0 (13 Mar 2026)  - Original homepage
-  v2.0 (07 Jul 2026)  - Removed colour tester modal, completed theme toggle
-                        script, added Portfolio nav link, AU spelling fixes
-  v2.1 (07 Jul 2026)  - Switched to clean permanent filenames, added Blog
-                        nav link
-  v2.2 (07 Jul 2026)  - Removed Terms/Privacy footer links, Portfolio renamed to Showcase
-  v3.0 (07 Jul 2026)  - Brand separation: removed all Services section and
-                        all paid CTAs. Personal site is now services-free.
-                        Header CTA changed to Get in Touch (mailto). Hero
-                        CTAs updated. See
+  v1.0 (07 Jul 2026)  - Published from master_publishing_plan_v1_0_12jun26.md
+  v1.1 (07 Jul 2026)  - Nav updated to Showcase, removed Terms/Privacy footer links
+  v2.0 (07 Jul 2026)  - Brand separation applied: header CTA changed to Get
+                        in Touch, Power Hour block replaced with Textac
+                        text-only reference, byline updated. See
                         Website_and_Brand_Separation_Strategy_v1_0_07Jul26.md
-  v3.1 (07 Jul 2026)  - Get in Touch is now a slide-in contact drawer
+  v2.1 (07 Jul 2026)  - Get in Touch is now a slide-in contact drawer
                         (email with copy-to-clipboard, LinkedIn, Textac
                         link) instead of a plain mailto. Common component
                         shared identically across all site pages.
-  v3.2 (07 Jul 2026)  - Rewrote hero and about copy to remove sales-pitch
-                        voice (dropped the "outmanoeuvre the enterprise"
-                        headline and "problem I see everywhere" framing).
-                        Retired The Enterprise Translator brand name
-                        entirely, site now just reads as Brendan Sheppard.
-  v3.3 (07 Jul 2026)  - Accessibility pass: fixed root font-size (13px to
+  v2.2 (07 Jul 2026)  - Retired The Enterprise Translator brand name from
+                        article meta and byline (now plain brendansheppard.com).
+                        Aligned date label with blog.html's monthly structure.
+  v2.3 (07 Jul 2026)  - Accessibility pass: fixed root font-size (13px to
                         16px, was silently shrinking all rem-based text by
                         ~19% site-wide), added WCAG-compliant text-contrast
                         tokens (--accent-text, --accent-cyan-text,
@@ -28,23 +21,29 @@
                         colour was used as small text, fixing several
                         contrast failures including unreadable button text
                         in dark mode (was 2.64:1, now compliant).
-  v3.4 (08 Jul 2026)  - Swapped consulting@brendan.pro to hello@brendan.pro
+  v2.4 (08 Jul 2026)  - Added citizen-developer scale stats paragraph
+                        (non-developer AI tool use, Gartner 4:1 projection)
+                        early in article, grounding the "hidden builders"
+                        claim in numbers before the behavioural argument.
+                        Numbers sourced from July 2026 industry research
+                        summarised in the Governed Vibe Coding document.
+  v2.5 (08 Jul 2026)  - Swapped consulting@brendan.pro to hello@brendan.pro
                         site-wide (friendlier address now that consulting
                         enquiries route through Textac, not the personal
                         site directly).
-  v3.5 (09 Jul 2026)  - Fixed primary button legibility. Near-black text on
+  v2.6 (09 Jul 2026)  - Fixed primary button legibility. Near-black text on
                         the bright purple background passed WCAG's 4.5:1
                         minimum on paper (4.83:1) but was hard to read in
                         practice, a known weak spot in how the standard
                         measures saturated colour combinations. Switched
                         to white text on a deeper, fixed purple (#7C3AED,
                         5.70:1) that reads cleanly in both themes.
-  v3.6 (09 Jul 2026)  - Fixed secondary button legibility (dark background,
+  v2.7 (09 Jul 2026)  - Fixed secondary button legibility (dark background,
                         light purple text). Same colour pair as the primary
                         button bug, just reversed roles, same weak 4.83:1.
                         Switched text to #C084FC (7.24:1) for a comfortable,
                         clearly-purple result.
-  v3.7 (09 Jul 2026)  - New rule: no saturated purple or cyan as small text
+  v2.8 (09 Jul 2026)  - New rule: no saturated purple or cyan as small text
                         on a dark background, regardless of contrast ratio.
                         This was a structural issue, not a one-off, it
                         affected every small link, tag, and label in dark
@@ -60,10 +59,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Brendan Sheppard - Enterprise Business Analyst</title>
+<title>The Hidden Builders: Why Your AI Strategy Has a Talent Problem - Brendan Sheppard</title>
 
 <style>
-  /* ---- Base / Reset ---- */
   *, *::before, *::after { box-sizing: border-box; }
   html, body {
     min-height: 100%;
@@ -78,7 +76,7 @@
   :root{
     --bg:#ffffff;
     --fg:#0A0F1C;
-    --accent:#A855F7;  /* PURPLE - Balanced option */
+    --accent:#A855F7;
     --accent-cyan:#00BCD4;
     --accent-hover:#9333EA;
     --accent-text:#9333EA;  /* WCAG-compliant purple for text on light backgrounds */
@@ -88,12 +86,12 @@
     --cta-bg-hover:#6D28D9;  /* fixed button hover state, both themes */
     --logo-strip-bg:#f5f5f5;
     --header-h:72px;
-    --container-w:800px;
+    --container-w:760px;
   }
   [data-theme="dark"]{
     --bg:#0f0f0f;
     --fg:#ffffff;
-    --accent:#C084FC;  /* Lighter purple for dark mode */
+    --accent:#C084FC;
     --accent-hover:#A855F7;
     --accent-text:var(--fg);  /* purple fails as small text on dark bg regardless of ratio, use fg instead */
     --accent-cyan-text:var(--fg);  /* same reasoning, cyan retired as small text on dark bg */
@@ -102,7 +100,6 @@
 
   body{ background:var(--bg); color:var(--fg); }
 
-  /* ---- Fixed Header ---- */
   .header{
     position:fixed; inset:0 0 auto 0; height:var(--header-h);
     display:flex; align-items:center; justify-content:space-between; gap:14px;
@@ -131,14 +128,14 @@
   .theme-btn:hover{ background:rgba(128,128,128,.1); }
   .theme-icon{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 
-  .header .linkedin-icon{
+  .linkedin-icon{
     width:28px; height:28px; display:inline-block;
     background-image:url('https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg');
     background-size:contain; background-repeat:no-repeat;
     filter: brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(1583%) hue-rotate(187deg) brightness(94%) contrast(98%);
     transition: transform .2s ease;
   }
-  .header .linkedin-icon:hover{ transform:scale(1.08); }
+  .linkedin-icon:hover{ transform:scale(1.08); }
 
   .cta{
     background:var(--cta-bg); color:#ffffff; text-decoration:none;
@@ -153,116 +150,44 @@
     box-shadow:0 4px 16px rgba(124,58,237,.5);
   }
 
-  .cta.secondary{
-    background:#0A0F1C; color:#ffffff;
-    box-shadow:0 2px 8px rgba(10,15,28,.2);
-  }
-  .cta.secondary:hover{ background:#1a1f2c; color:#ffffff; }
-  [data-theme="dark"] .cta.secondary{ background:#ffffff; color:#9333EA; }
-  [data-theme="dark"] .cta.secondary:hover{ background:#f0f0f0; }
-
-  /* ---- Main container ---- */
-  .container{
+  .article-container{
     max-width:var(--container-w);
     margin:0 auto;
-    padding: calc(var(--header-h) + 48px) 40px 60px;
-    text-align:center;
+    padding: calc(var(--header-h) + 48px) 40px 80px;
   }
-  .avatar{
-    width:192px; height:192px; border-radius:50%;
-    object-fit:cover; object-position:top;
-    margin:0 auto 24px;
-    background:transparent;
+  .back-link{
+    display:inline-block; color:var(--accent-text); text-decoration:underline; font-weight:600;
+    font-size:0.9rem; margin-bottom:24px;
   }
-  h1{ color:var(--fg); font-size:2.5rem; margin:0 0 8px; font-weight:700; }
-  .subtitle{ color:var(--accent-text); font-size:1.5rem; margin:0 0 24px; font-weight:600; }
-  .bio{ font-size:1.125rem; line-height:1.7; margin:0 0 20px; opacity:.9; }
-  .cta-wrapper{ margin-top:32px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .back-link:hover{ text-decoration:underline; }
+  .article-tag{
+    display:inline-block; background:var(--logo-strip-bg); color:var(--accent-text);
+    font-size:0.78rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    padding:4px 10px; border-radius:6px; margin-bottom:16px;
+  }
+  .article-container h1{
+    color:var(--fg); font-size:2rem; margin:0 0 12px; font-weight:700; line-height:1.25;
+  }
+  .article-meta{
+    opacity:.6; font-size:0.9rem; margin:0 0 40px;
+  }
+  .article-container h3{
+    color:var(--accent); font-size:1.2rem; margin:36px 0 14px;
+  }
+  .article-container p{
+    font-size:1.08rem; line-height:1.75; margin:0 0 18px; opacity:.92; text-align:left;
+  }
+  .article-container a{ color:var(--accent-text); }
+  .byline{
+    font-style:italic; opacity:.75; font-size:0.95rem; margin-top:40px;
+    border-top:1px solid rgba(128,128,128,.2); padding-top:24px;
+  }
+  .article-cta{
+    background:var(--logo-strip-bg); border-radius:12px; padding:28px;
+    text-align:center; margin-top:40px;
+  }
+  .article-cta p{ margin:0 0 16px; opacity:.9; }
 
-  /* ---- Logo marquee ---- */
-  .logo-strip{
-    --strip-h: clamp(48px, 6vw, 70px);
-    --logo-h: calc(var(--strip-h) * 0.75);
-    --gap: clamp(48px, 7vw, 70px);
-    --speed: 35s;
-
-    background: var(--logo-strip-bg);
-    padding:16px 0;
-    margin-top:48px;
-    overflow:hidden;
-    width:100vw; margin-left:calc(-50vw + 50%);
-    border-top:1px solid #e9e9e9; border-bottom:1px solid #e9e9e9;
-
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  }
-  [data-theme="dark"] .logo-strip{ border-top:1px solid #333; border-bottom:1px solid #333; }
-
-  .marquee{ overflow:hidden; }
-  .marquee-inner{
-    display:inline-flex; align-items:center; gap:var(--gap);
-    height:var(--strip-h);
-    will-change: transform;
-    animation: marquee var(--speed) linear infinite;
-  }
-  @keyframes marquee { from{ transform: translateX(0) } to{ transform: translateX(-50%) } }
-  .marquee:hover .marquee-inner{ animation-play-state: paused; }
-  .logo-mono{ filter: brightness(0) saturate(100%) invert(3%) sepia(13%) saturate(4851%) hue-rotate(189deg) brightness(97%) contrast(96%); }
-  [data-theme="dark"] .logo-mono{ filter: brightness(0) saturate(100%) invert(100%); }
-
-  /* ---- About Section ---- */
-  .about-section{
-    background:var(--bg);
-    padding: 80px 40px;
-    max-width:var(--container-w);
-    margin:0 auto;
-  }
-  .about-section h2{
-    color:var(--accent); font-size:2rem; margin:0 0 32px; text-align:center;
-  }
-  .about-section p{
-    font-size:1.125rem; line-height:1.8; margin:0 0 24px; text-align:left;
-  }
-  .about-section strong{ color:var(--accent-text); }
-
-  /* ---- Services Section ---- */
-  .services-section{
-    background:var(--logo-strip-bg);
-    padding:80px 40px;
-    width:100vw; margin-left:calc(-50vw + 50%);
-  }
-  .services-inner{
-    max-width:var(--container-w);
-    margin:0 auto;
-  }
-  .services-section h2{
-    color:var(--accent); font-size:2rem; margin:0 0 48px; text-align:center;
-  }
-  .service-card{
-    background:var(--bg);
-    padding:32px;
-    border-radius:12px;
-    margin-bottom:32px;
-    text-align:left;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    border-left: 4px solid var(--accent);
-  }
-  [data-theme="dark"] .service-card{ box-shadow: 0 2px 8px rgba(255,255,255,.06); }
-  .service-card h3{
-    font-size:1.5rem; margin:0 0 12px; color:var(--fg);
-  }
-  .service-card .price{
-    color:var(--accent); font-weight:700; font-size:1.125rem; margin-bottom:12px;
-  }
-  .service-card p{
-    font-size:1.05rem; line-height:1.7; margin:0 0 16px;
-  }
-  .service-card ul{
-    font-size:1.05rem; line-height:1.8; opacity:.9; margin:0 0 24px; padding-left:24px;
-  }
-  .service-card li{ margin-bottom:8px; }
-
-  /* ---- Footer ---- */
   footer{
     background:var(--logo-strip-bg);
     padding:48px 40px 32px;
@@ -275,23 +200,13 @@
   footer .footer-links{
     display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin-bottom:24px;
   }
-  footer a{
-    color:var(--fg); text-decoration:none; opacity:.8; transition:opacity .2s;
-  }
+  footer a{ color:var(--fg); text-decoration:none; opacity:.8; transition:opacity .2s; }
   footer a:hover{ opacity:1; text-decoration:underline; }
   footer .copyright{ font-size:0.9rem; opacity:.6; margin-top:24px; }
 
-  /* ---- Responsive ---- */
   @media (max-width:768px){
-    .container{ padding: calc(var(--header-h) + 36px) 24px 40px; }
-    .about-section, .services-section{ padding:60px 24px; }
-    h1{ font-size:2rem; }
-    .subtitle{ font-size:1.25rem; }
-    .header-left{ gap:12px; }
-  }
-  @media (max-width:480px){
-    .logo-strip{ --gap:clamp(36px, 9vw, 48px); --speed:45s; }
-    .service-card{ padding:24px; }
+    .article-container{ padding: calc(var(--header-h) + 36px) 24px 60px; }
+    .article-container h1{ font-size:1.6rem; }
   }
 
   /* ---- Contact Drawer ---- */
@@ -377,7 +292,6 @@
 </head>
 
 <body>
-  <!-- Fixed Header -->
   <header class="header" id="header">
     <div class="header-left">
       <a href="index.html" class="nav-link">Home</a>
@@ -427,134 +341,69 @@
   </aside>
 
 
-  <!-- Main content -->
-  <main>
-    <div class="container">
-      <img
-        src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761572854/Headshot_white_tn3o7u.png"
-        alt="Brendan Sheppard"
-        class="avatar"
-      />
-      <h1>Brendan Sheppard</h1>
-      <p class="subtitle">Enterprise Business Analyst | Operations &amp; Process Improvement</p>
+  <main class="article-container">
+    <a href="blog.html" class="back-link">&larr; Back to Blog</a>
+    <span class="article-tag">Talent</span>
+    <h1>The Hidden Builders: Why Your AI Strategy Has a Talent Problem</h1>
+    <p class="article-meta">Month 2 &middot; Brendan Sheppard</p>
 
-      <p class="bio">
-        Twenty years inside Australia's largest enterprises, including Flight Centre,
-        Heritage Bank, Allianz Partners, and Queensland Government, across business
-        analysis, process improvement, and operational strategy.
-      </p>
-      <p class="bio">
-        This is where I write about what that experience actually looks like in
-        practice, and where I show what I build to test the ideas rather than
-        just argue them.
-      </p>
+    <p>A few weeks ago I wrote about candidates starting to ask employers what AI tools they'll have access to before accepting a job. My prediction was that AI access is becoming a non-negotiable for a growing number of people.</p>
+    <p>That post was about attracting talent. This one is about what happens after they arrive.</p>
+    <p>Because here is the part most businesses haven't thought through yet.</p>
+    <h3>One person. Five people's output. And nobody knows.</h3>
+    <p>There is a quiet shift happening inside organisations right now, and most leadership teams are completely unaware of it.</p>
+    <p>Someone in your business, probably not your most senior person, has worked out how to use AI well enough that they can produce the same output they used to produce in eight hours in about two. They have built themselves a workflow edge. They are not going to tell you about it.</p>
+    <p>The scale is easy to underestimate. Recent industry research puts the share of AI coding tool users who identify as non-developers at around 63 percent. Gartner projects citizen developers will outnumber professional engineers roughly four to one by 2028. The person quietly building something in your business is not an outlier any more. They are becoming the majority.</p>
+    <p>Think about it from their perspective. If they share it, one of two things happens. Either the same workload comes back, just faster, and they've handed over their advantage for nothing. Or they get a pat on the back and a "great job" that doesn't translate into anything tangible.</p>
+    <p>So a lot of them won't share it. They'll keep the clever solution running on localhost. They'll present polished results to their manager. And the business will have no idea what's actually sitting underneath.</p>
+    <p>This is not new behaviour. People have been optimising their own work quietly for as long as there have been spreadsheets. What has changed is the scale and the secrecy.</p>
+    <p>Previously, building something useful for a business generally required you to put forward an initiative, secure funding, and wait on a centralised team to build an ETL pipeline, a UiPath bot, or a custom report. The effort to build was high enough that it naturally created visibility. You had to tell someone.</p>
+    <p>Now, one person can spin up a working application over a weekend. They can build an AI agent, a live dashboard, a data processing tool, a bespoke solution to a problem their team has had for years. And nobody else in the business ever has to know it exists.</p>
+    <p>The specialised centralised teams still have a place. But we are well past the point where the barrier to building is high enough to guarantee visibility.</p>
+    <h3>What you lose when they walk</h3>
+    <p>Here is the real business risk. If that person leaves, they do not just take their skills. They take everything they built that you never saw.</p>
+    <p>You cannot use what was never shared. You cannot scale a solution sitting on someone's laptop. You cannot hand it to the next person, fork it for another part of the business, or integrate it with live data. It simply disappears.</p>
+    <p>And these people are in demand in a way that is only going to increase. It does not matter whether they have been with your business for twenty years or they are twenty years old. Talent that can build real solutions to real problems with AI is what every business is looking for right now. If you take them for granted, you run a genuine risk of losing not only the person but everything they were quietly creating.</p>
+    <p>A "great job" is not a retention strategy for someone who knows what they are worth.</p>
+    <h3>A real example: built in days, saved weeks of effort</h3>
+    <p>I want to give you a concrete example of what I mean, without giving away the details of the client I am currently working with.</p>
+    <p>As a business analyst on a recent engagement, I needed to present a case to senior stakeholders about global support coverage. The question was: do we have enough people, across the right time zones, to cover global demand?</p>
+    <p>I built an application that maps retail locations operating across multiple time zones globally. It shows not only which locations are open on a typical business day, but how many staff work at each site, giving a weighted view of potential support demand by hour across the globe.</p>
+    <p>You can overlay actual case volume against the coverage model. You can toggle regional teams on and off to see exactly what happens to global coverage if one region goes offline, whether due to leave, illness, or a structural change.</p>
+    <p>The data could have been read off a spreadsheet. What the application did was make it visual, clear, and specific to the decision we were trying to make. When we presented to a senior leader who needed to sign off on resourcing, the conversation was grounded in data and immediately legible. Not buried in a slide deck. Not a generic report from a tool that does a hundred other things we did not need.</p>
+    <p>Now consider what that would have taken without AI-assisted development. Contacting multiple departments to gather the data. Writing requirements for a bespoke Power BI report. Waiting for someone in a central team to have capacity. Explaining and re-explaining the specific use case. Best case, you are looking at several people, several weeks, and real cost to the business.</p>
+    <p>I built the working version myself, in a fraction of the time.</p>
+    <p>And here is the tension. Right now it is a static HTML file. I used it, it was well received, and it could easily disappear from view. I am a contractor. Nobody has asked me to do anything further with it.</p>
+    <p>That is the risk businesses face every day with work like this. Something valuable gets built, serves its immediate purpose, and then quietly stops existing because there is no system to capture, share, and scale it.</p>
+    <h3>The anti-SaaS argument</h3>
+    <p>There is a financial dimension to this that I think is worth being direct about.</p>
+    <p>That application could potentially be productised for other parts of the business. With live data integration, it becomes genuinely powerful. With a little effort from someone who knows what they are doing with AI, it could be adapted for a different use case, a different region, a different team.</p>
+    <p>The cost to build that kind of tailored solution, with AI assistance, might be a few thousand dollars of internal effort. Compare that to finding a SaaS product that does something similar, paying a few thousand dollars a month in licensing, handling data integration, managing onboarding, dealing with all the features you do not need, and building a dependency on a vendor's pricing decisions.</p>
+    <p>Not every custom build is better than buying. But a lot of the time, for a specific problem with specific data, the custom build wins on cost, fit, and speed. The catch is that you need someone who can actually build it, and a business environment that makes it worth their while to do so.</p>
+    <h3>What your AI strategy actually needs to cover</h3>
+    <p>Most businesses, when asked about their AI strategy, can tell you which LLM they have access to. Some can tell you about their governance policy. Very few have thought through what comes after.</p>
+    <p>A real AI strategy for a mid-market business needs to address at least the following.</p>
+    <p>How do you identify the people in your business who are already building things? Because they exist, and most businesses do not know who they are.</p>
+    <p>How do you create the conditions for those people to share what they build safely? That means internal repositories, basic governance frameworks, and a process for reviewing and deploying internal tools without creating a bureaucratic nightmare.</p>
+    <p>How do you remunerate and reward builders regardless of their tenure or seniority? The person who builds something that saves your team twenty hours a week might be the most junior person in the room. The old enterprise model where you do your time before you get paid accordingly is going to be a significant handicap when it comes to retaining this kind of talent.</p>
+    <p>How do you build internal capability rather than defaulting entirely to external consultants? There is a place for external expertise, including for implementation and governance work. But businesses that throw money at large consulting engagements for every AI initiative, rather than developing internal capability alongside it, are going to find themselves permanently dependent and permanently behind.</p>
+    <p>And finally, what is your five-year plan? Not for the tools. For the people.</p>
+    <h3>This is not new. It is just on steroids.</h3>
+    <p>I want to be clear that almost everything I have described above has been true for as long as businesses have had people who were good at optimising things.</p>
+    <p>Go through nearly any enterprise and spend time talking to frontline people about what takes the most time in their day. The stuff you find is genuinely surprising. Processes that have not changed in twenty years. Manual steps that someone built a workaround for years ago and then left. Tools that nobody uses but everybody pays for.</p>
+    <p>The tragedy is not that these problems exist. It is that most businesses have never invested seriously in finding the right people to identify and fix them. There are never enough people going through the business and asking frontline teams what their actual challenges are.</p>
+    <p>AI makes this easier to fix. The ability to build bespoke solutions is now accessible to far more people than it used to be. But it does not fix the underlying problem if businesses do not create the culture, the processes, and the incentives to surface and act on that knowledge.</p>
+    <p>The businesses that will do well out of this shift are the ones that treat their internal builders, at whatever level of seniority, as a genuine strategic asset. The ones that invest in developing that capability, reward it appropriately, and build the systems to capture and scale what those people create.</p>
+    <p>The ones that do not will keep losing their best builders. And most of them will never know what they lost.</p>
+    <p class="byline">Brendan Sheppard is an enterprise business analyst and consultant with twenty years of experience across Australian financial services, government, and enterprise operations. He writes at <a href="index.html">brendansheppard.com</a> and takes consulting work through <a href="https://textac.com.au" target="_blank">Textac</a>.</p>
 
-      <div class="cta-wrapper">
-        <a href="showcase.html" class="cta" style="font-size:1.125rem; padding:14px 28px;">
-          See My Work
-        </a>
-        <a href="blog.html" class="cta secondary" style="font-size:1.125rem; padding:14px 28px;">
-          Read the Blog
-        </a>
-      </div>
 
-      <!-- Logo scroll -->
-      <section aria-label="Companies I've worked with" class="logo-strip">
-        <div class="marquee">
-          <div class="marquee-inner">
-            <!-- Track 1 -->
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="Allianz" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="Budget Direct" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="Flight Centre" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761540650/fcm-black_yafwon.svg" alt="FCM" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="Liquid Interactive" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="People First Bank" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761543598/qut-black-trimmed_tv8d7l.svg" alt="QUT" style="height:calc(var(--logo-h) * 1.4);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="QBCC" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-
-            <!-- Track 2 duplicate -->
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761540650/fcm-black_yafwon.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761543598/qut-black-trimmed_tv8d7l.svg" alt="" aria-hidden="true" style="height:calc(var(--logo-h) * 1.4);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-          </div>
-        </div>
-      </section>
+    <div class="article-cta">
+      <p>If any part of this sounds familiar and you want to talk it through, I take consulting work through <a href="https://textac.com.au" target="_blank">Textac</a>.</p>
+      <p style="font-size:0.95rem; opacity:.8; margin:0;">You can also reach me directly at <a href="mailto:hello@brendan.pro">hello@brendan.pro</a>.</p>
     </div>
-
-    <!-- About Section -->
-    <section class="about-section">
-      <h2>Twenty Years of Watching What Works, and What Doesn't</h2>
-
-      <p>
-        I've seen what works at enterprise scale. What fails spectacularly.
-        And what mid-market businesses actually need.
-      </p>
-
-      <p>
-        A pattern shows up everywhere I've worked. Teams spending twenty-plus
-        hours a week in Excel doing work that should be automated. Leaders
-        chasing AI before fixing the digital foundation underneath it.
-        Businesses that can't scale without hiring because their processes
-        were never built to scale.
-      </p>
-
-      <p>
-        The idea I keep coming back to is what I call the Missing Middle, the
-        $10,000 to $100,000 improvements that leadership often overlooks as
-        not strategic enough. It's part of what I write about here, alongside
-        how AI is changing who can build what, and what that means for talent
-        and for what good operations should actually look like.
-      </p>
-
-      <p>
-        Consulting work runs through <a href="https://textac.com.au" target="_blank">Textac</a>,
-        the commercial arm of Bluestar Strategies. This site is where I write
-        and where I show what I've built.
-      </p>
-
-      <p>
-        <strong>Industries:</strong> Financial Services, Government and Public Sector,
-        Travel and Corporate Travel, Fitness and Lifestyle, Digital Agencies
-      </p>
-
-      <p>
-        <strong>Expertise:</strong> Business Analysis, Process Optimisation,
-        Digital Transformation, Automation (RPA), Change Management, CX/UX Design
-      </p>
-    </section>
-
-    <!-- Next Steps Section -->
-    <section class="services-section" id="next">
-      <div class="services-inner" style="text-align:center;">
-        <h2 style="margin-bottom:24px;">What next</h2>
-        <p style="font-size:1.125rem; line-height:1.7; max-width:640px; margin:0 auto 32px;">
-          If you want to see the kind of work this thinking produces, the
-          showcase has the projects. If you want to read more of the argument
-          behind it, the blog has the articles.
-        </p>
-        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:32px;">
-          <a href="showcase.html" class="cta" style="font-size:1.1rem; padding:14px 28px;">
-            See the Showcase
-          </a>
-          <a href="blog.html" class="cta secondary" style="font-size:1.1rem; padding:14px 28px;">
-            Read the Blog
-          </a>
-        </div>
-        <p style="font-size:1rem; opacity:.85;">
-          For consulting engagements, my commercial work runs through
-          <a href="https://textac.com.au" target="_blank" style="color:var(--accent-text); font-weight:600;">Textac</a>.
-          For anything else, just email <a href="mailto:hello@brendan.pro" style="color:var(--accent-text); font-weight:600;">hello@brendan.pro</a>.
-        </p>
-      </div>
-    </section>
   </main>
 
-  <!-- Footer -->
   <footer>
     <p style="font-size:1.125rem; font-weight:600; margin-bottom:8px;">Bluestar Strategies Pty Ltd</p>
     <p style="font-size:0.95rem; opacity:.7; margin-bottom:4px;">(Trading as Textac)</p>
@@ -571,17 +420,14 @@
     </p>
   </footer>
 
-  <!-- Theme Switcher JS -->
   <script>
     const icons = {
       sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
       moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
     };
-
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const root = document.documentElement;
-
     function applyTheme(theme){
       if(theme === 'dark'){
         root.setAttribute('data-theme', 'dark');
@@ -591,18 +437,15 @@
         themeIcon.innerHTML = icons.moon;
       }
     }
-
     const savedTheme = localStorage.getItem('theme') ||
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     applyTheme(savedTheme);
-
     themeToggle.addEventListener('click', () => {
       const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
       const next = current === 'dark' ? 'light' : 'dark';
       applyTheme(next);
       localStorage.setItem('theme', next);
     });
-
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 10);

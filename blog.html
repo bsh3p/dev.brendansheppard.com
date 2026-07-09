@@ -1,26 +1,21 @@
 <!--
   VERSION HISTORY
-  v1.0 (13 Mar 2026)  - Original homepage
-  v2.0 (07 Jul 2026)  - Removed colour tester modal, completed theme toggle
-                        script, added Portfolio nav link, AU spelling fixes
-  v2.1 (07 Jul 2026)  - Switched to clean permanent filenames, added Blog
-                        nav link
-  v2.2 (07 Jul 2026)  - Removed Terms/Privacy footer links, Portfolio renamed to Showcase
-  v3.0 (07 Jul 2026)  - Brand separation: removed all Services section and
-                        all paid CTAs. Personal site is now services-free.
-                        Header CTA changed to Get in Touch (mailto). Hero
-                        CTAs updated. See
+  v1.0 (07 Jul 2026)  - Initial blog index page with placeholder entries
+  v1.1 (07 Jul 2026)  - Wired up the five real website articles from
+                        master_publishing_plan_v1_0_12jun26.md (Weeks 1,
+                        4, 8, 12, 16)
+  v1.2 (07 Jul 2026)  - Nav updated to Showcase, removed Terms/Privacy footer links
+  v2.0 (07 Jul 2026)  - Reordered per brand separation strategy (Build
+                        leads, Talent follows). Removed the Ten Years / ITSM
+                        sales article (moved to textac.com.au). Added Right
+                        Tool placeholder for Month 3. Header CTA changed to
+                        Get in Touch. Byline row removed from footer. See
                         Website_and_Brand_Separation_Strategy_v1_0_07Jul26.md
-  v3.1 (07 Jul 2026)  - Get in Touch is now a slide-in contact drawer
+  v2.1 (07 Jul 2026)  - Get in Touch is now a slide-in contact drawer
                         (email with copy-to-clipboard, LinkedIn, Textac
                         link) instead of a plain mailto. Common component
                         shared identically across all site pages.
-  v3.2 (07 Jul 2026)  - Rewrote hero and about copy to remove sales-pitch
-                        voice (dropped the "outmanoeuvre the enterprise"
-                        headline and "problem I see everywhere" framing).
-                        Retired The Enterprise Translator brand name
-                        entirely, site now just reads as Brendan Sheppard.
-  v3.3 (07 Jul 2026)  - Accessibility pass: fixed root font-size (13px to
+  v2.2 (07 Jul 2026)  - Accessibility pass: fixed root font-size (13px to
                         16px, was silently shrinking all rem-based text by
                         ~19% site-wide), added WCAG-compliant text-contrast
                         tokens (--accent-text, --accent-cyan-text,
@@ -28,23 +23,23 @@
                         colour was used as small text, fixing several
                         contrast failures including unreadable button text
                         in dark mode (was 2.64:1, now compliant).
-  v3.4 (08 Jul 2026)  - Swapped consulting@brendan.pro to hello@brendan.pro
+  v2.3 (08 Jul 2026)  - Swapped consulting@brendan.pro to hello@brendan.pro
                         site-wide (friendlier address now that consulting
                         enquiries route through Textac, not the personal
                         site directly).
-  v3.5 (09 Jul 2026)  - Fixed primary button legibility. Near-black text on
+  v2.4 (09 Jul 2026)  - Fixed primary button legibility. Near-black text on
                         the bright purple background passed WCAG's 4.5:1
                         minimum on paper (4.83:1) but was hard to read in
                         practice, a known weak spot in how the standard
                         measures saturated colour combinations. Switched
                         to white text on a deeper, fixed purple (#7C3AED,
                         5.70:1) that reads cleanly in both themes.
-  v3.6 (09 Jul 2026)  - Fixed secondary button legibility (dark background,
+  v2.5 (09 Jul 2026)  - Fixed secondary button legibility (dark background,
                         light purple text). Same colour pair as the primary
                         button bug, just reversed roles, same weak 4.83:1.
                         Switched text to #C084FC (7.24:1) for a comfortable,
                         clearly-purple result.
-  v3.7 (09 Jul 2026)  - New rule: no saturated purple or cyan as small text
+  v2.6 (09 Jul 2026)  - New rule: no saturated purple or cyan as small text
                         on a dark background, regardless of contrast ratio.
                         This was a structural issue, not a one-off, it
                         affected every small link, tag, and label in dark
@@ -60,10 +55,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Brendan Sheppard - Enterprise Business Analyst</title>
+<title>Blog - Brendan Sheppard</title>
 
 <style>
-  /* ---- Base / Reset ---- */
   *, *::before, *::after { box-sizing: border-box; }
   html, body {
     min-height: 100%;
@@ -78,7 +72,7 @@
   :root{
     --bg:#ffffff;
     --fg:#0A0F1C;
-    --accent:#A855F7;  /* PURPLE - Balanced option */
+    --accent:#A855F7;
     --accent-cyan:#00BCD4;
     --accent-hover:#9333EA;
     --accent-text:#9333EA;  /* WCAG-compliant purple for text on light backgrounds */
@@ -88,12 +82,12 @@
     --cta-bg-hover:#6D28D9;  /* fixed button hover state, both themes */
     --logo-strip-bg:#f5f5f5;
     --header-h:72px;
-    --container-w:800px;
+    --container-w:960px;
   }
   [data-theme="dark"]{
     --bg:#0f0f0f;
     --fg:#ffffff;
-    --accent:#C084FC;  /* Lighter purple for dark mode */
+    --accent:#C084FC;
     --accent-hover:#A855F7;
     --accent-text:var(--fg);  /* purple fails as small text on dark bg regardless of ratio, use fg instead */
     --accent-cyan-text:var(--fg);  /* same reasoning, cyan retired as small text on dark bg */
@@ -102,7 +96,6 @@
 
   body{ background:var(--bg); color:var(--fg); }
 
-  /* ---- Fixed Header ---- */
   .header{
     position:fixed; inset:0 0 auto 0; height:var(--header-h);
     display:flex; align-items:center; justify-content:space-between; gap:14px;
@@ -131,14 +124,14 @@
   .theme-btn:hover{ background:rgba(128,128,128,.1); }
   .theme-icon{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 
-  .header .linkedin-icon{
+  .linkedin-icon{
     width:28px; height:28px; display:inline-block;
     background-image:url('https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg');
     background-size:contain; background-repeat:no-repeat;
     filter: brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(1583%) hue-rotate(187deg) brightness(94%) contrast(98%);
     transition: transform .2s ease;
   }
-  .header .linkedin-icon:hover{ transform:scale(1.08); }
+  .linkedin-icon:hover{ transform:scale(1.08); }
 
   .cta{
     background:var(--cta-bg); color:#ffffff; text-decoration:none;
@@ -153,116 +146,71 @@
     box-shadow:0 4px 16px rgba(124,58,237,.5);
   }
 
-  .cta.secondary{
-    background:#0A0F1C; color:#ffffff;
-    box-shadow:0 2px 8px rgba(10,15,28,.2);
-  }
-  .cta.secondary:hover{ background:#1a1f2c; color:#ffffff; }
-  [data-theme="dark"] .cta.secondary{ background:#ffffff; color:#9333EA; }
-  [data-theme="dark"] .cta.secondary:hover{ background:#f0f0f0; }
-
-  /* ---- Main container ---- */
-  .container{
+  .hero{
     max-width:var(--container-w);
     margin:0 auto;
-    padding: calc(var(--header-h) + 48px) 40px 60px;
+    padding: calc(var(--header-h) + 56px) 40px 24px;
     text-align:center;
   }
-  .avatar{
-    width:192px; height:192px; border-radius:50%;
-    object-fit:cover; object-position:top;
-    margin:0 auto 24px;
-    background:transparent;
-  }
-  h1{ color:var(--fg); font-size:2.5rem; margin:0 0 8px; font-weight:700; }
-  .subtitle{ color:var(--accent-text); font-size:1.5rem; margin:0 0 24px; font-weight:600; }
-  .bio{ font-size:1.125rem; line-height:1.7; margin:0 0 20px; opacity:.9; }
-  .cta-wrapper{ margin-top:32px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .hero h1{ color:var(--fg); font-size:2.3rem; margin:0 0 16px; font-weight:700; }
+  .hero .lead{ font-size:1.1rem; line-height:1.7; opacity:.85; max-width:600px; margin:0 auto; }
 
-  /* ---- Logo marquee ---- */
-  .logo-strip{
-    --strip-h: clamp(48px, 6vw, 70px);
-    --logo-h: calc(var(--strip-h) * 0.75);
-    --gap: clamp(48px, 7vw, 70px);
-    --speed: 35s;
-
-    background: var(--logo-strip-bg);
-    padding:16px 0;
-    margin-top:48px;
-    overflow:hidden;
-    width:100vw; margin-left:calc(-50vw + 50%);
-    border-top:1px solid #e9e9e9; border-bottom:1px solid #e9e9e9;
-
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  }
-  [data-theme="dark"] .logo-strip{ border-top:1px solid #333; border-bottom:1px solid #333; }
-
-  .marquee{ overflow:hidden; }
-  .marquee-inner{
-    display:inline-flex; align-items:center; gap:var(--gap);
-    height:var(--strip-h);
-    will-change: transform;
-    animation: marquee var(--speed) linear infinite;
-  }
-  @keyframes marquee { from{ transform: translateX(0) } to{ transform: translateX(-50%) } }
-  .marquee:hover .marquee-inner{ animation-play-state: paused; }
-  .logo-mono{ filter: brightness(0) saturate(100%) invert(3%) sepia(13%) saturate(4851%) hue-rotate(189deg) brightness(97%) contrast(96%); }
-  [data-theme="dark"] .logo-mono{ filter: brightness(0) saturate(100%) invert(100%); }
-
-  /* ---- About Section ---- */
-  .about-section{
-    background:var(--bg);
-    padding: 80px 40px;
+  .filter-bar{
     max-width:var(--container-w);
     margin:0 auto;
+    padding:24px 40px 0;
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
   }
-  .about-section h2{
-    color:var(--accent); font-size:2rem; margin:0 0 32px; text-align:center;
+  .filter-btn{
+    background:var(--logo-strip-bg); color:var(--fg); border:2px solid transparent;
+    padding:8px 16px; border-radius:20px; font-weight:600; font-size:0.85rem;
+    cursor:pointer; transition:all .2s;
   }
-  .about-section p{
-    font-size:1.125rem; line-height:1.8; margin:0 0 24px; text-align:left;
-  }
-  .about-section strong{ color:var(--accent-text); }
+  .filter-btn:hover{ border-color:var(--accent); }
+  .filter-btn.active{ background:var(--cta-bg); color:#ffffff; }
 
-  /* ---- Services Section ---- */
-  .services-section{
-    background:var(--logo-strip-bg);
-    padding:80px 40px;
-    width:100vw; margin-left:calc(-50vw + 50%);
-  }
-  .services-inner{
+  .blog-grid{
     max-width:var(--container-w);
     margin:0 auto;
+    padding: 32px 40px 80px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap:28px;
   }
-  .services-section h2{
-    color:var(--accent); font-size:2rem; margin:0 0 48px; text-align:center;
-  }
-  .service-card{
+
+  .blog-card{
     background:var(--bg);
-    padding:32px;
-    border-radius:12px;
-    margin-bottom:32px;
-    text-align:left;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    border-radius:14px;
     border-left: 4px solid var(--accent);
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    padding:26px;
+    text-align:left;
+    text-decoration:none;
+    color:var(--fg);
+    display:block;
+    transition: transform .2s ease, box-shadow .2s ease;
   }
-  [data-theme="dark"] .service-card{ box-shadow: 0 2px 8px rgba(255,255,255,.06); }
-  .service-card h3{
-    font-size:1.5rem; margin:0 0 12px; color:var(--fg);
-  }
-  .service-card .price{
-    color:var(--accent); font-weight:700; font-size:1.125rem; margin-bottom:12px;
-  }
-  .service-card p{
-    font-size:1.05rem; line-height:1.7; margin:0 0 16px;
-  }
-  .service-card ul{
-    font-size:1.05rem; line-height:1.8; opacity:.9; margin:0 0 24px; padding-left:24px;
-  }
-  .service-card li{ margin-bottom:8px; }
+  .blog-card:hover{ transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,.1); }
+  [data-theme="dark"] .blog-card{ box-shadow: 0 2px 10px rgba(255,255,255,.05); }
+  [data-theme="dark"] .blog-card:hover{ box-shadow:0 8px 20px rgba(255,255,255,.08); }
 
-  /* ---- Footer ---- */
+  .blog-tag{
+    display:inline-block; background:var(--logo-strip-bg); color:var(--accent-text);
+    font-size:0.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    padding:4px 10px; border-radius:6px; margin-bottom:14px;
+  }
+  .blog-card h3{ font-size:1.2rem; margin:0 0 10px; line-height:1.3; }
+  .blog-card .excerpt{ font-size:0.95rem; line-height:1.6; opacity:.85; margin:0 0 16px; }
+  .blog-card .meta{ font-size:0.8rem; opacity:.6; }
+
+  .empty-state{
+    max-width:var(--container-w);
+    margin:0 auto;
+    padding:40px;
+    text-align:center;
+    opacity:.7;
+  }
+
   footer{
     background:var(--logo-strip-bg);
     padding:48px 40px 32px;
@@ -275,23 +223,15 @@
   footer .footer-links{
     display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin-bottom:24px;
   }
-  footer a{
-    color:var(--fg); text-decoration:none; opacity:.8; transition:opacity .2s;
-  }
+  footer a{ color:var(--fg); text-decoration:none; opacity:.8; transition:opacity .2s; }
   footer a:hover{ opacity:1; text-decoration:underline; }
   footer .copyright{ font-size:0.9rem; opacity:.6; margin-top:24px; }
 
-  /* ---- Responsive ---- */
   @media (max-width:768px){
-    .container{ padding: calc(var(--header-h) + 36px) 24px 40px; }
-    .about-section, .services-section{ padding:60px 24px; }
-    h1{ font-size:2rem; }
-    .subtitle{ font-size:1.25rem; }
-    .header-left{ gap:12px; }
-  }
-  @media (max-width:480px){
-    .logo-strip{ --gap:clamp(36px, 9vw, 48px); --speed:45s; }
-    .service-card{ padding:24px; }
+    .hero{ padding: calc(var(--header-h) + 40px) 24px 20px; }
+    .hero h1{ font-size:1.8rem; }
+    .filter-bar{ padding:20px 24px 0; }
+    .blog-grid{ padding:24px 24px 60px; grid-template-columns:1fr; }
   }
 
   /* ---- Contact Drawer ---- */
@@ -377,7 +317,6 @@
 </head>
 
 <body>
-  <!-- Fixed Header -->
   <header class="header" id="header">
     <div class="header-left">
       <a href="index.html" class="nav-link">Home</a>
@@ -427,134 +366,18 @@
   </aside>
 
 
-  <!-- Main content -->
-  <main>
-    <div class="container">
-      <img
-        src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761572854/Headshot_white_tn3o7u.png"
-        alt="Brendan Sheppard"
-        class="avatar"
-      />
-      <h1>Brendan Sheppard</h1>
-      <p class="subtitle">Enterprise Business Analyst | Operations &amp; Process Improvement</p>
+  <section class="hero">
+    <h1>Notes from 20 Years Inside the Enterprise</h1>
+    <p class="lead">
+      War stories, diagnostics, and contrarian takes on operations,
+      automation, and AI governance, written for mid-market leaders who
+      want enterprise thinking without enterprise timelines.
+    </p>
+  </section>
 
-      <p class="bio">
-        Twenty years inside Australia's largest enterprises, including Flight Centre,
-        Heritage Bank, Allianz Partners, and Queensland Government, across business
-        analysis, process improvement, and operational strategy.
-      </p>
-      <p class="bio">
-        This is where I write about what that experience actually looks like in
-        practice, and where I show what I build to test the ideas rather than
-        just argue them.
-      </p>
+  <div class="filter-bar" id="filter-bar"></div>
+  <section class="blog-grid" id="blog-grid"></section>
 
-      <div class="cta-wrapper">
-        <a href="showcase.html" class="cta" style="font-size:1.125rem; padding:14px 28px;">
-          See My Work
-        </a>
-        <a href="blog.html" class="cta secondary" style="font-size:1.125rem; padding:14px 28px;">
-          Read the Blog
-        </a>
-      </div>
-
-      <!-- Logo scroll -->
-      <section aria-label="Companies I've worked with" class="logo-strip">
-        <div class="marquee">
-          <div class="marquee-inner">
-            <!-- Track 1 -->
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="Allianz" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="Budget Direct" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="Flight Centre" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761540650/fcm-black_yafwon.svg" alt="FCM" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="Liquid Interactive" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="People First Bank" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761543598/qut-black-trimmed_tv8d7l.svg" alt="QUT" style="height:calc(var(--logo-h) * 1.4);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="QBCC" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-
-            <!-- Track 2 duplicate -->
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761540650/fcm-black_yafwon.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761543598/qut-black-trimmed_tv8d7l.svg" alt="" aria-hidden="true" style="height:calc(var(--logo-h) * 1.4);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/ddo2giwfv/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- About Section -->
-    <section class="about-section">
-      <h2>Twenty Years of Watching What Works, and What Doesn't</h2>
-
-      <p>
-        I've seen what works at enterprise scale. What fails spectacularly.
-        And what mid-market businesses actually need.
-      </p>
-
-      <p>
-        A pattern shows up everywhere I've worked. Teams spending twenty-plus
-        hours a week in Excel doing work that should be automated. Leaders
-        chasing AI before fixing the digital foundation underneath it.
-        Businesses that can't scale without hiring because their processes
-        were never built to scale.
-      </p>
-
-      <p>
-        The idea I keep coming back to is what I call the Missing Middle, the
-        $10,000 to $100,000 improvements that leadership often overlooks as
-        not strategic enough. It's part of what I write about here, alongside
-        how AI is changing who can build what, and what that means for talent
-        and for what good operations should actually look like.
-      </p>
-
-      <p>
-        Consulting work runs through <a href="https://textac.com.au" target="_blank">Textac</a>,
-        the commercial arm of Bluestar Strategies. This site is where I write
-        and where I show what I've built.
-      </p>
-
-      <p>
-        <strong>Industries:</strong> Financial Services, Government and Public Sector,
-        Travel and Corporate Travel, Fitness and Lifestyle, Digital Agencies
-      </p>
-
-      <p>
-        <strong>Expertise:</strong> Business Analysis, Process Optimisation,
-        Digital Transformation, Automation (RPA), Change Management, CX/UX Design
-      </p>
-    </section>
-
-    <!-- Next Steps Section -->
-    <section class="services-section" id="next">
-      <div class="services-inner" style="text-align:center;">
-        <h2 style="margin-bottom:24px;">What next</h2>
-        <p style="font-size:1.125rem; line-height:1.7; max-width:640px; margin:0 auto 32px;">
-          If you want to see the kind of work this thinking produces, the
-          showcase has the projects. If you want to read more of the argument
-          behind it, the blog has the articles.
-        </p>
-        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:32px;">
-          <a href="showcase.html" class="cta" style="font-size:1.1rem; padding:14px 28px;">
-            See the Showcase
-          </a>
-          <a href="blog.html" class="cta secondary" style="font-size:1.1rem; padding:14px 28px;">
-            Read the Blog
-          </a>
-        </div>
-        <p style="font-size:1rem; opacity:.85;">
-          For consulting engagements, my commercial work runs through
-          <a href="https://textac.com.au" target="_blank" style="color:var(--accent-text); font-weight:600;">Textac</a>.
-          For anything else, just email <a href="mailto:hello@brendan.pro" style="color:var(--accent-text); font-weight:600;">hello@brendan.pro</a>.
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
   <footer>
     <p style="font-size:1.125rem; font-weight:600; margin-bottom:8px;">Bluestar Strategies Pty Ltd</p>
     <p style="font-size:0.95rem; opacity:.7; margin-bottom:4px;">(Trading as Textac)</p>
@@ -571,17 +394,103 @@
     </p>
   </footer>
 
-  <!-- Theme Switcher JS -->
   <script>
+    /* ---------------------------------------------------------------
+       POST LIST
+       Add a new post by adding one entry here. Each post is a separate
+       HTML file (duplicate blog-post-template.html, rename it, fill in
+       the content, then add its details below).
+
+       thread: one of "Talent", "Build", "Strategy", "ITSM"
+       -------------------------------------------------------------- */
+    const postList = [
+      {
+        title: "I Fed Six Months of Support Tickets Into Claude. Here Is What Came Out.",
+        thread: "Build",
+        excerpt: "Every support team sits on a goldmine of data and almost nobody analyses it properly. Here is what a structured AI analysis pipeline surfaced, and what it replaced.",
+        date: "Month 1",
+        url: "blog-six-months-support-tickets-claude.html"
+      },
+      {
+        title: "I Built a Stakeholder Portal in an Afternoon. Here Is Why It Should Not Have Been That Easy.",
+        thread: "Build",
+        excerpt: "The skill required to build something useful has dropped enormously. The organisational pathway to deploy it safely has not moved at all. Here is what that gap actually looks like.",
+        date: "Month 1",
+        url: "blog-stakeholder-portal-afternoon.html"
+      },
+      {
+        title: "The Hidden Builders: Why Your AI Strategy Has a Talent Problem",
+        thread: "Talent",
+        excerpt: "Someone in your business has quietly worked out how to do their job in a fraction of the time using AI. They are not going to tell you, and if they leave, everything they built leaves with them.",
+        date: "Month 2",
+        url: "blog-hidden-builders-talent-problem.html"
+      },
+      {
+        title: "The IT Service Desk Problem Most Businesses Do Not Know They Have",
+        thread: "ITSM",
+        excerpt: "Most businesses know their IT support is not great. Almost none have measured what that is actually costing them. Here is the pattern, and what fixing it actually requires.",
+        date: "Month 5",
+        url: "blog-it-service-desk-problem.html"
+      }
+      // Right Tool anchor article (Month 3) and Strategy anchor article (Month 4)
+      // to be added when published. See master_publishing_plan v2.0.
+    ];
+
+    const threads = ["All", "Build", "Talent", "Right Tool", "Strategy", "ITSM"];
+    const filterBar = document.getElementById('filter-bar');
+    const grid = document.getElementById('blog-grid');
+    let activeFilter = "All";
+
+    function renderFilters(){
+      filterBar.innerHTML = '';
+      threads.forEach(thread => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn' + (thread === activeFilter ? ' active' : '');
+        btn.textContent = thread;
+        btn.addEventListener('click', () => {
+          activeFilter = thread;
+          renderFilters();
+          renderPosts();
+        });
+        filterBar.appendChild(btn);
+      });
+    }
+
+    function renderPosts(){
+      grid.innerHTML = '';
+      const filtered = activeFilter === 'All'
+        ? postList
+        : postList.filter(p => p.thread === activeFilter);
+
+      if(filtered.length === 0){
+        grid.innerHTML = '<div class="empty-state">No posts in this thread yet.</div>';
+        return;
+      }
+
+      filtered.forEach(post => {
+        const card = document.createElement('a');
+        card.className = 'blog-card';
+        card.href = post.url;
+        card.innerHTML = `
+          <span class="blog-tag">${post.thread}</span>
+          <h3>${post.title}</h3>
+          <p class="excerpt">${post.excerpt}</p>
+          <p class="meta">${post.date}</p>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    renderFilters();
+    renderPosts();
+
     const icons = {
       sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
       moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
     };
-
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const root = document.documentElement;
-
     function applyTheme(theme){
       if(theme === 'dark'){
         root.setAttribute('data-theme', 'dark');
@@ -591,18 +500,15 @@
         themeIcon.innerHTML = icons.moon;
       }
     }
-
     const savedTheme = localStorage.getItem('theme') ||
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     applyTheme(savedTheme);
-
     themeToggle.addEventListener('click', () => {
       const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
       const next = current === 'dark' ? 'light' : 'dark';
       applyTheme(next);
       localStorage.setItem('theme', next);
     });
-
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => {
       header.classList.toggle('scrolled', window.scrollY > 10);

@@ -1,0 +1,795 @@
+<!--
+  VERSION HISTORY
+  v1.0 (07 Jul 2026)  - Initial portfolio page with video case study slots
+  v2.0 (07 Jul 2026)  - Nav aligned with homepage pattern
+  v2.1 (07 Jul 2026)  - Switched to clean permanent filenames, added Blog
+                        nav link
+  v3.0 (07 Jul 2026)  - Renamed from Portfolio to Showcase (file and nav), removed Terms/Privacy footer links
+  v4.0 (07 Jul 2026)  - Brand separation: header CTA changed to Get in
+                        Touch, closing CTA replaced with Textac reference
+                        + email. Added UAT case study slot and personal SaaS
+                        slot per new showcase principles. See
+                        Website_and_Brand_Separation_Strategy_v1_0_07Jul26.md
+  v4.1 (07 Jul 2026)  - Get in Touch is now a slide-in contact drawer
+                        (email with copy-to-clipboard, LinkedIn, Textac
+                        link) instead of a plain mailto. Common component
+                        shared identically across all site pages.
+  v4.2 (07 Jul 2026)  - Simplified title tag, dropped the "Mid-Market
+                        Speed" tagline to match the site-wide retirement
+                        of The Enterprise Translator branding.
+  v4.3 (07 Jul 2026)  - Accessibility pass: fixed root font-size (13px to
+                        16px, was silently shrinking all rem-based text by
+                        ~19% site-wide), added WCAG-compliant text-contrast
+                        tokens (--accent-text, --accent-cyan-text,
+                        --on-accent) and applied them wherever accent
+                        colour was used as small text, fixing several
+                        contrast failures including unreadable button text
+                        in dark mode (was 2.64:1, now compliant).
+  v4.4 (08 Jul 2026)  - Rewrote Personal SaaS entry with concrete
+                        governance practices (dev/prod split, RLS from day
+                        one, migrations as code, branch protection, secrets
+                        in encrypted stores), replacing vague "capability
+                        demonstration" copy. Stack placeholder left for
+                        Brendan to fill in.
+  v4.5 (08 Jul 2026)  - Swapped consulting@brendan.pro to hello@brendan.pro
+                        site-wide (friendlier address now that consulting
+                        enquiries route through Textac, not the personal
+                        site directly).
+  v4.6 (09 Jul 2026)  - Fixed primary button legibility. Near-black text on
+                        the bright purple background passed WCAG's 4.5:1
+                        minimum on paper (4.83:1) but was hard to read in
+                        practice, a known weak spot in how the standard
+                        measures saturated colour combinations. Switched
+                        to white text on a deeper, fixed purple (#7C3AED,
+                        5.70:1) that reads cleanly in both themes.
+  v4.7 (09 Jul 2026)  - Fixed secondary button legibility (dark background,
+                        light purple text). Same colour pair as the primary
+                        button bug, just reversed roles, same weak 4.83:1.
+                        Switched text to #C084FC (7.24:1) for a comfortable,
+                        clearly-purple result.
+  v4.8 (09 Jul 2026)  - New rule: no saturated purple or cyan as small text
+                        on a dark background, regardless of contrast ratio.
+                        This was a structural issue, not a one-off, it
+                        affected every small link, tag, and label in dark
+                        mode. --accent-text and --accent-cyan-text now
+                        resolve to white in dark mode instead of the
+                        vibrant accent colours. Secondary button fixed to
+                        match. Added underline cues where colour was
+                        previously the only signal (nav hover, back-link,
+                        contact drawer links).
+-->
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Showcase - Brendan Sheppard</title>
+
+<style>
+  /* ---- Base / Reset ---- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  :root{
+    --bg:#ffffff;
+    --fg:#0A0F1C;
+    --accent:#A855F7;
+    --accent-cyan:#00BCD4;
+    --accent-hover:#9333EA;
+    --accent-text:#9333EA;  /* WCAG-compliant purple for text on light backgrounds */
+    --accent-cyan-text:#00778A;  /* WCAG-compliant teal for text on light backgrounds */
+    --on-accent:#0A0F1C;  /* text colour for use on accent-coloured buttons, both themes */
+    --cta-bg:#7C3AED;  /* fixed button background, both themes, chosen for safe white-text contrast */
+    --cta-bg-hover:#6D28D9;  /* fixed button hover state, both themes */
+    --logo-strip-bg:#f5f5f5;
+    --header-h:72px;
+    --container-w:960px;
+  }
+  [data-theme="dark"]{
+    --bg:#0f0f0f;
+    --fg:#ffffff;
+    --accent:#C084FC;
+    --accent-hover:#A855F7;
+    --accent-text:var(--fg);  /* purple fails as small text on dark bg regardless of ratio, use fg instead */
+    --accent-cyan-text:var(--fg);  /* same reasoning, cyan retired as small text on dark bg */
+    --logo-strip-bg:#1a1a1a;
+  }
+
+  body{ background:var(--bg); color:var(--fg); }
+
+  /* ---- Fixed Header ---- */
+  .header{
+    position:fixed; inset:0 0 auto 0; height:var(--header-h);
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    padding:16px 24px; z-index:1000;
+    transition:backdrop-filter .3s ease, background-color .3s ease;
+  }
+  .header.scrolled{
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255,255,255,.7);
+  }
+  [data-theme="dark"] .header.scrolled{ background: rgba(15,15,15,.7); }
+
+  .header-left{ display:flex; align-items:center; gap:20px; }
+  .header-right{ display:flex; align-items:center; gap:14px; }
+
+  .nav-link{
+    color:var(--fg); text-decoration:none; font-weight:600; font-size:14px; opacity:.8;
+  }
+  .nav-link:hover{ opacity:1; color:var(--accent-text); text-decoration:underline; }
+
+  .theme-btn{
+    width:40px; height:40px; border:none; background:transparent; border-radius:8px; cursor:pointer;
+    display:grid; place-items:center; color:var(--fg);
+  }
+  .theme-btn:hover{ background:rgba(128,128,128,.1); }
+  .theme-icon{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+  .linkedin-icon{
+    width:28px; height:28px; display:inline-block;
+    background-image:url('https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg');
+    background-size:contain; background-repeat:no-repeat;
+    filter: brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(1583%) hue-rotate(187deg) brightness(94%) contrast(98%);
+    transition: transform .2s ease;
+  }
+  .linkedin-icon:hover{ transform:scale(1.08); }
+
+  .cta{
+    background:var(--cta-bg); color:#ffffff; text-decoration:none;
+    padding:10px 18px; border-radius:8px; font-weight:600; font-size:15px;
+    box-shadow:0 2px 8px rgba(124,58,237,.3);
+    transition: all .3s ease;
+    white-space: nowrap;
+  }
+  .cta:hover{
+    background:var(--cta-bg-hover);
+    transform:translateY(-2px);
+    box-shadow:0 4px 16px rgba(124,58,237,.5);
+  }
+
+  /* ---- Hero ---- */
+  .hero{
+    max-width:var(--container-w);
+    margin:0 auto;
+    padding: calc(var(--header-h) + 56px) 40px 40px;
+    text-align:center;
+  }
+  .eyebrow{
+    display:inline-block; color:var(--accent-cyan-text); font-weight:700; font-size:0.85rem;
+    letter-spacing:.08em; text-transform:uppercase; margin-bottom:16px;
+  }
+  .hero h1{ color:var(--fg); font-size:2.5rem; margin:0 0 16px; font-weight:700; line-height:1.15; }
+  .hero .lead{ font-size:1.15rem; line-height:1.7; opacity:.85; max-width:640px; margin:0 auto 32px; }
+
+  /* ---- Case grid ---- */
+  .case-grid{
+    max-width:var(--container-w);
+    margin:0 auto;
+    padding: 0 40px 80px;
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:40px;
+  }
+
+  .case-card{
+    background:var(--bg);
+    border-radius:16px;
+    border-left: 4px solid var(--accent);
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    padding:32px;
+    text-align:left;
+    display:grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap:32px;
+    align-items:start;
+  }
+  [data-theme="dark"] .case-card{ box-shadow: 0 2px 12px rgba(255,255,255,.05); }
+
+  .case-media .video-wrap{
+    position:relative; padding-bottom:56.25%; height:0; overflow:hidden;
+    border-radius:12px; background:#000; margin-bottom:0;
+  }
+  .case-media .video-wrap iframe{
+    position:absolute; top:0; left:0; width:100%; height:100%; border:0;
+  }
+  .video-caption{ font-size:0.85rem; opacity:.6; margin-top:10px; text-align:center; }
+
+  .case-tag{
+    display:inline-block; background:var(--logo-strip-bg); color:var(--accent-text);
+    font-size:0.78rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    padding:4px 10px; border-radius:6px; margin-bottom:12px;
+  }
+  .case-card h3{ font-size:1.4rem; margin:0 0 16px; color:var(--fg); line-height:1.25; }
+  .case-card h4{
+    font-size:0.78rem; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--accent-cyan-text); margin:16px 0 6px; font-weight:700;
+  }
+  .case-card p{ font-size:1rem; line-height:1.65; margin:0 0 4px; opacity:.9; }
+
+  .speed-compare{
+    display:flex; gap:16px; margin-top:20px; padding-top:16px;
+    border-top:1px solid rgba(128,128,128,.2);
+  }
+  .speed-box{ flex:1; }
+  .speed-box .speed-label{ font-size:0.72rem; text-transform:uppercase; letter-spacing:.05em; opacity:.6; margin-bottom:2px; }
+  .speed-box .speed-value{ font-size:1.05rem; font-weight:700; }
+  .speed-box.enterprise .speed-value{ color:var(--fg); opacity:.6; text-decoration: line-through; text-decoration-thickness: 1px; }
+  .speed-box.actual .speed-value{ color:var(--accent-text); }
+
+  /* ---- Closing CTA ---- */
+  .closing-cta{
+    background:var(--logo-strip-bg);
+    padding:72px 40px;
+    width:100vw; margin-left:calc(-50vw + 50%);
+    text-align:center;
+  }
+  .closing-cta h2{ color:var(--fg); font-size:1.8rem; margin:0 0 16px; }
+  .closing-cta p{ font-size:1.1rem; opacity:.85; max-width:560px; margin:0 auto 28px; line-height:1.6; }
+
+  /* ---- Footer ---- */
+  footer{
+    background:var(--logo-strip-bg);
+    padding:48px 40px 32px;
+    text-align:center;
+    border-top:1px solid #e9e9e9;
+  }
+  [data-theme="dark"] footer{ border-top:1px solid #333; }
+  footer p{ margin:0 0 16px; opacity:.8; }
+  footer .footer-links{
+    display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin-bottom:24px;
+  }
+  footer a{ color:var(--fg); text-decoration:none; opacity:.8; transition:opacity .2s; }
+  footer a:hover{ opacity:1; text-decoration:underline; }
+  footer .copyright{ font-size:0.9rem; opacity:.6; margin-top:24px; }
+
+  /* ---- Responsive ---- */
+  @media (max-width:820px){
+    .case-card{ grid-template-columns: 1fr; }
+    .hero{ padding: calc(var(--header-h) + 40px) 24px 32px; }
+    .case-grid{ padding: 0 24px 60px; gap:28px; }
+    .hero h1{ font-size:1.9rem; }
+  }
+
+  /* ---- Contact Drawer ---- */
+  button.cta{ border:none; cursor:pointer; font-family:inherit; }
+
+  .contact-backdrop{
+    position:fixed; inset:0; background:rgba(10,15,28,.55);
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    z-index:2000; opacity:0; transition:opacity .4s ease;
+  }
+  .contact-backdrop.open{ opacity:1; }
+  .contact-backdrop[hidden]{ display:none; }
+
+  .contact-drawer{
+    position:fixed; top:0; right:0; height:100%;
+    width:min(400px, 92vw);
+    background:var(--bg); color:var(--fg);
+    z-index:2001;
+    padding:32px 28px;
+    box-shadow:-16px 0 48px rgba(10,15,28,.18);
+    transform:translateX(100%);
+    transition:transform .5s cubic-bezier(0.16,1,0.3,1);
+    display:flex; flex-direction:column;
+    overflow-y:auto;
+  }
+  .contact-drawer::before{
+    content:''; position:absolute; top:0; left:0; bottom:0; width:3px;
+    background:linear-gradient(180deg, var(--accent), var(--accent-cyan));
+  }
+  .contact-drawer.open{ transform:translateX(0); }
+  .contact-drawer[hidden]{ display:none; }
+
+  .contact-drawer-close{
+    align-self:flex-end; width:36px; height:36px; border:none; background:transparent;
+    border-radius:8px; cursor:pointer; color:var(--fg); opacity:.6;
+    display:grid; place-items:center; margin-bottom:12px; flex-shrink:0;
+  }
+  .contact-drawer-close:hover{ opacity:1; background:rgba(128,128,128,.1); }
+
+  .contact-drawer-body h2{
+    font-size:1.5rem; margin:0 0 8px; color:var(--fg); font-weight:700;
+  }
+  .contact-drawer-body .lead{
+    font-size:.95rem; opacity:.7; line-height:1.6; margin:0 0 32px;
+  }
+
+  .contact-item{ opacity:0; transform:translateY(8px); }
+  .contact-drawer.open .contact-item{ animation:contact-in .45s ease forwards; }
+  @keyframes contact-in{ to{ opacity:1; transform:translateY(0); } }
+
+  .contact-block{ margin-bottom:26px; }
+  .contact-label{
+    display:block; font-size:.72rem; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; opacity:.5; margin-bottom:8px;
+  }
+  .contact-email-row{ display:flex; align-items:center; gap:10px; }
+  .contact-email{
+    font-size:1.08rem; font-weight:600; color:var(--fg); text-decoration:none;
+    word-break:break-all;
+  }
+  .contact-email:hover{ color:var(--accent-text); text-decoration:underline; }
+  .contact-link{
+    font-size:1.02rem; font-weight:600; color:var(--fg); text-decoration:none;
+  }
+  .contact-link:hover{ color:var(--accent-text); text-decoration:underline; }
+
+  .contact-copy{
+    flex-shrink:0; width:34px; height:34px; border-radius:8px;
+    border:1px solid rgba(128,128,128,.25);
+    background:transparent; color:var(--fg); cursor:pointer;
+    display:grid; place-items:center; transition:all .2s ease;
+  }
+  .contact-copy:hover{ border-color:var(--accent); color:var(--accent-text); }
+  .contact-copy.copied{ border-color:var(--accent-cyan-text); color:var(--accent-cyan-text); }
+
+  @media (prefers-reduced-motion: reduce){
+    .contact-backdrop, .contact-drawer{ transition:none !important; }
+    .contact-drawer{ transform:none !important; }
+    .contact-item{ opacity:1 !important; transform:none !important; animation:none !important; }
+  }
+
+</style>
+</head>
+
+<body>
+  <!-- Fixed Header -->
+  <header class="header" id="header">
+    <div class="header-left">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="showcase.html" class="nav-link">Showcase</a>
+      <a href="blog.html" class="nav-link">Blog</a>
+    </div>
+    <div class="header-right">
+      <button class="theme-btn" id="theme-toggle" title="Toggle theme">
+        <svg class="theme-icon" id="theme-icon" viewBox="0 0 24 24"></svg>
+      </button>
+      <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="linkedin-icon" aria-label="LinkedIn Profile"></a>
+      <button type="button" class="cta" id="contact-trigger" aria-haspopup="dialog">Get in Touch</button>
+    </div>
+  </header>
+
+  <!-- Contact Drawer -->
+  <div class="contact-backdrop" id="contact-backdrop" hidden></div>
+  <aside class="contact-drawer" id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="contact-drawer-title" hidden>
+    <button type="button" class="contact-drawer-close" id="contact-drawer-close" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="contact-drawer-body">
+      <h2 id="contact-drawer-title" class="contact-item" style="animation-delay:.05s">Get in Touch</h2>
+      <p class="lead contact-item" style="animation-delay:.1s">The quickest ways to reach me directly.</p>
+
+      <div class="contact-block contact-item" style="animation-delay:.16s">
+        <span class="contact-label">Email</span>
+        <div class="contact-email-row">
+          <a href="mailto:hello@brendan.pro" class="contact-email">hello@brendan.pro</a>
+          <button type="button" class="contact-copy" id="contact-copy-btn" data-copy="hello@brendan.pro" aria-label="Copy email address">
+            <svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="contact-block contact-item" style="animation-delay:.22s">
+        <span class="contact-label">LinkedIn</span>
+        <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="contact-link">linkedin.com/in/brendansheppard</a>
+      </div>
+
+      <div class="contact-block contact-item" style="animation-delay:.28s">
+        <span class="contact-label">Consulting enquiries</span>
+        <a href="https://textac.com.au" target="_blank" rel="noopener noreferrer" class="contact-link">textac.com.au</a>
+      </div>
+    </div>
+  </aside>
+
+
+  <!-- Hero -->
+  <section class="hero">
+    <span class="eyebrow">Proof of Delivery</span>
+    <h1>I don't just talk strategy. Here's what I've actually built.</h1>
+    <p class="lead">
+      Every project below solved a real operational problem, in weeks, not
+      the months an enterprise procurement cycle would take. Watch the
+      walkthrough, see the build, judge the value for yourself.
+    </p>
+  </section>
+
+  <!-- Case Studies -->
+  <section class="case-grid">
+
+    <!-- Case 1: Global Retail Store Coverage Visualiser -->
+    <article class="case-card">
+      <div class="case-media">
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="Global Retail Store Coverage Visualiser walkthrough" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption">2-3 minute walkthrough</p>
+      </div>
+      <div class="case-copy">
+        <span class="case-tag">ITSM &middot; Stakeholder Reporting</span>
+        <h3>Global Store Coverage Visualiser</h3>
+        <h4>The problem</h4>
+        <p>Senior stakeholders needed to see support coverage gaps across global
+        retail stores at a glance, not buried three tabs deep in a spreadsheet.</p>
+        <h4>What I built</h4>
+        <p>An interactive coverage visualiser, built and presented directly to
+        senior stakeholders, showing gaps and overlaps in real time.</p>
+        <h4>Value delivered</h4>
+        <p>[Add the specific outcome here, e.g. faster stakeholder sign-off,
+        hours saved per reporting cycle, or a coverage gap that was closed.]</p>
+        <div class="speed-compare">
+          <div class="speed-box enterprise">
+            <div class="speed-label">Enterprise timeline</div>
+            <div class="speed-value">[X months]</div>
+          </div>
+          <div class="speed-box actual">
+            <div class="speed-label">Actually delivered in</div>
+            <div class="speed-value">[X days/weeks]</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Case: UAT Simplification (PowerPoint + JSM), Horses for Courses -->
+    <article class="case-card">
+      <div class="case-media">
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_UAT" title="UAT simplification walkthrough" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption">5-10 minute walkthrough</p>
+      </div>
+      <div class="case-copy">
+        <span class="case-tag">Process Design &middot; Horses for Courses</span>
+        <h3>UAT Simplification: 20 Excel tabs to a Guided Portal</h3>
+        <h4>The problem</h4>
+        <p>Fifty users completing UAT across twenty Excel tabs. Everyone had
+        edit access. No data validation. Testers had to read instructions
+        before adding a row. Confidence with Excel varied. Leaders were
+        openly concerned about usability.</p>
+        <h4>What I built</h4>
+        <p>A guided testing solution using PowerPoint as the front end and
+        Jira Service Management on the back end. Not the tool I would
+        normally reach for, but the one users already knew, which meant near
+        zero training overhead. Built in a few days.</p>
+        <h4>Why this approach</h4>
+        <p>An AI-native or purpose-built solution would have been overkill
+        for the timeframe and audience. Familiar tooling, plus a proper
+        back-end that gave the team real oversight, delivered a much better
+        experience than the twenty tabs and a much lower risk profile than a
+        rushed build.</p>
+        <div class="speed-compare">
+          <div class="speed-box enterprise">
+            <div class="speed-label">Enterprise timeline</div>
+            <div class="speed-value">[X months]</div>
+          </div>
+          <div class="speed-box actual">
+            <div class="speed-label">Actually delivered in</div>
+            <div class="speed-value">A few days</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Case 2: Case Data Analysis Pipeline -->
+    <article class="case-card">
+      <div class="case-media">
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="Case Data Analysis Pipeline walkthrough" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption">2-3 minute walkthrough</p>
+      </div>
+      <div class="case-copy">
+        <span class="case-tag">ITSM &middot; Process Automation</span>
+        <h3>Case Data Analysis Pipeline</h3>
+        <h4>The problem</h4>
+        <p>Thousands of support tickets sat unanalysed. No one had the hours
+        spare to find the patterns hiding in the raw exports.</p>
+        <h4>What I built</h4>
+        <p>A pipeline that takes raw ticket exports straight into trend
+        analysis, SOP recommendations, knowledge article gap detection, and
+        intake form designs with branching logic.</p>
+        <h4>Value delivered</h4>
+        <p>[Add the specific outcome here, e.g. reduction in repeat tickets,
+        hours of manual analysis removed per month.]</p>
+        <div class="speed-compare">
+          <div class="speed-box enterprise">
+            <div class="speed-label">Enterprise timeline</div>
+            <div class="speed-value">[X months]</div>
+          </div>
+          <div class="speed-box actual">
+            <div class="speed-label">Actually delivered in</div>
+            <div class="speed-value">[X days/weeks]</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Case 3: Confluence-to-Stakeholder Portal -->
+    <article class="case-card">
+      <div class="case-media">
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" title="Confluence Stakeholder Portal walkthrough" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption">2-3 minute walkthrough</p>
+      </div>
+      <div class="case-copy">
+        <span class="case-tag">ITSM &middot; Knowledge Management</span>
+        <h3>Confluence-to-Stakeholder Portal</h3>
+        <h4>The problem</h4>
+        <p>Stakeholders needed visibility into documentation living in
+        Confluence, without needing a Confluence login or training.</p>
+        <h4>What I built</h4>
+        <p>A portal that surfaces the right Confluence content to the right
+        audience automatically, no manual copy-paste required.</p>
+        <h4>Value delivered</h4>
+        <p>[Add the specific outcome here, e.g. a publishing deadline met,
+        stakeholder engagement uplift.]</p>
+        <div class="speed-compare">
+          <div class="speed-box enterprise">
+            <div class="speed-label">Enterprise timeline</div>
+            <div class="speed-value">[X months]</div>
+          </div>
+          <div class="speed-box actual">
+            <div class="speed-label">Actually delivered in</div>
+            <div class="speed-value">[X days/weeks]</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Case 4: AI Governance Policy Suite -->
+    <article class="case-card">
+      <div class="case-media">
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_4" title="AI Governance Policy Suite walkthrough" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption">2-3 minute walkthrough</p>
+      </div>
+      <div class="case-copy">
+        <span class="case-tag">Textac &middot; AI Governance</span>
+        <h3>AI Governance Policy Suite</h3>
+        <h4>The problem</h4>
+        <p>Mid-market businesses want to use AI safely, but have no
+        acceptable use policy, no role-based access model, and no data
+        retention rules.</p>
+        <h4>What I built</h4>
+        <p>A complete four-document governance suite: acceptable use policy,
+        staff acknowledgement, data retention rules, and a managers guide,
+        with role-based access controls built in.</p>
+        <h4>Value delivered</h4>
+        <p>[Add the specific outcome here, e.g. days to roll out versus the
+        months an enterprise policy review would take.]</p>
+        <div class="speed-compare">
+          <div class="speed-box enterprise">
+            <div class="speed-label">Enterprise timeline</div>
+            <div class="speed-value">[X months]</div>
+          </div>
+          <div class="speed-box actual">
+            <div class="speed-label">Actually delivered in</div>
+            <div class="speed-value">[X days/weeks]</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Case: Personal SaaS (capability demonstration, personal project) -->
+    <article class="case-card">
+      <div class="case-media">
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_SAAS" title="Personal SaaS walkthrough" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption">5-10 minute walkthrough</p>
+      </div>
+      <div class="case-copy">
+        <span class="case-tag">Personal Project &middot; Full-Stack SaaS</span>
+        <h3>Multi-Environment SaaS Application</h3>
+        <h4>The problem</h4>
+        <p>A personal project, built to answer a specific question. Can
+        someone with a business analyst background and one more technical
+        collaborator ship a proper multi-environment SaaS product, with the
+        deployment discipline you would expect from something built for
+        actual use, without going through a full engineering team?</p>
+        <h4>What I built</h4>
+        <p>A full SaaS application on [add stack, e.g. Supabase, GitHub and
+        Vercel]. The point of the project was not the feature set. It was
+        the practices underneath it. Separate development and production
+        databases from day one, not two schemas in one project. Row-level
+        security enabled before any user existed, because it is far harder
+        to retrofit than to start with. Schema changes committed as
+        migration files, not made by hand in a dashboard. Branch protection
+        requiring a review before anything merges to production. Secrets in
+        encrypted environment stores, never in the source code.</p>
+        <h4>Why this matters</h4>
+        <p>Most of the "AI-assisted build" conversation stops at the static
+        HTML file. This project was the next step. The interesting problem
+        is not how fast you can generate a working app. It is how you keep
+        the fast, ungoverned moment of describing what you want separate
+        from the moment it reaches real users or real data. Staging
+        environments, required review and automated checks are all different
+        implementations of that one idea. This was the smallest version of
+        that principle applied to a real build, and the answer to what a
+        small team actually needs to build safely at scale.</p>
+        <div class="speed-compare">
+          <div class="speed-box enterprise">
+            <div class="speed-label">Traditional build</div>
+            <div class="speed-value">[Engineering team, months]</div>
+          </div>
+          <div class="speed-box actual">
+            <div class="speed-label">Solo build</div>
+            <div class="speed-value">[Add duration]</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Case 5: Jira KB Transform Tool -->
+    <article class="case-card">
+      <div class="case-media">
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_5" title="Jira Knowledge Base Transform Tool walkthrough" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption">2-3 minute walkthrough</p>
+      </div>
+      <div class="case-copy">
+        <span class="case-tag">ITSM &middot; Tooling</span>
+        <h3>Jira Knowledge Base Transform Tool</h3>
+        <h4>The problem</h4>
+        <p>SOPs sitting in a Confluence knowledge base needed to move into
+        Jira for import, one at a time, by hand.</p>
+        <h4>What I built</h4>
+        <p>A transform tool that turns a knowledge base export straight into
+        a Jira-ready import file, no manual reformatting.</p>
+        <h4>Value delivered</h4>
+        <p>[Add the specific outcome here, e.g. time saved per import batch.]</p>
+        <div class="speed-compare">
+          <div class="speed-box enterprise">
+            <div class="speed-label">Enterprise timeline</div>
+            <div class="speed-value">[X months]</div>
+          </div>
+          <div class="speed-box actual">
+            <div class="speed-label">Actually delivered in</div>
+            <div class="speed-value">[X days/weeks]</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="closing-cta">
+    <h2>Recognise any of these?</h2>
+    <p>
+      If any of these problems look like your business, my consulting work
+      runs through <a href="https://textac.com.au" target="_blank" style="color:var(--accent-text); font-weight:600;">Textac</a>.
+      For anything else, or just to talk something through, you can reach
+      me at <a href="mailto:hello@brendan.pro" style="color:var(--accent-text); font-weight:600;">hello@brendan.pro</a>.
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p style="font-size:1.125rem; font-weight:600; margin-bottom:8px;">Bluestar Strategies Pty Ltd</p>
+    <p style="font-size:0.95rem; opacity:.7; margin-bottom:4px;">(Trading as Textac)</p>
+    <p>ABN: 39 662 710 303</p>
+
+    <div class="footer-links">
+      <a href="mailto:hello@brendan.pro">Email</a>
+      <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+
+    <p class="copyright">
+      &copy; 2026 Bluestar Strategies Pty Ltd. All rights reserved.<br>
+      Business consulting and process optimisation services for Australian mid-market businesses.
+    </p>
+  </footer>
+
+  <!-- Theme Switcher JS -->
+  <script>
+    const icons = {
+      sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
+      moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    };
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const root = document.documentElement;
+
+    function applyTheme(theme){
+      if(theme === 'dark'){
+        root.setAttribute('data-theme', 'dark');
+        themeIcon.innerHTML = icons.sun;
+      } else {
+        root.removeAttribute('data-theme');
+        themeIcon.innerHTML = icons.moon;
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem('theme', next);
+    });
+
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+  </script>
+
+  <!-- Contact Drawer Script -->
+  <script>
+    (function(){
+      const trigger = document.getElementById('contact-trigger');
+      const backdrop = document.getElementById('contact-backdrop');
+      const drawer = document.getElementById('contact-drawer');
+      const closeBtn = document.getElementById('contact-drawer-close');
+      const copyBtn = document.getElementById('contact-copy-btn');
+      let lastFocused = null;
+
+      function openDrawer(){
+        lastFocused = document.activeElement;
+        backdrop.hidden = false;
+        drawer.hidden = false;
+        requestAnimationFrame(() => {
+          backdrop.classList.add('open');
+          drawer.classList.add('open');
+        });
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+        document.addEventListener('keydown', onKeydown);
+      }
+
+      function closeDrawer(){
+        backdrop.classList.remove('open');
+        drawer.classList.remove('open');
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', onKeydown);
+        setTimeout(() => {
+          backdrop.hidden = true;
+          drawer.hidden = true;
+          if(lastFocused) lastFocused.focus();
+        }, 500);
+      }
+
+      function onKeydown(e){
+        if(e.key === 'Escape') closeDrawer();
+      }
+
+      if(trigger){ trigger.addEventListener('click', openDrawer); }
+      if(closeBtn){ closeBtn.addEventListener('click', closeDrawer); }
+      if(backdrop){ backdrop.addEventListener('click', closeDrawer); }
+      if(copyBtn){
+        copyBtn.addEventListener('click', () => {
+          const text = copyBtn.getAttribute('data-copy');
+          navigator.clipboard.writeText(text).then(() => {
+            copyBtn.classList.add('copied');
+            copyBtn.querySelector('.icon-copy').style.display = 'none';
+            copyBtn.querySelector('.icon-check').style.display = 'block';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.querySelector('.icon-copy').style.display = 'block';
+              copyBtn.querySelector('.icon-check').style.display = 'none';
+            }, 1800);
+          });
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
