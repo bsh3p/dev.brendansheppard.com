@@ -69,6 +69,7 @@
     min-height: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     font-size: 16px;
@@ -210,6 +211,11 @@
   .logo-mono{ filter: brightness(0) saturate(100%) invert(3%) sepia(13%) saturate(4851%) hue-rotate(189deg) brightness(97%) contrast(96%); }
   [data-theme="dark"] .logo-mono{ filter: brightness(0) saturate(100%) invert(100%); }
 
+  /* Theme-aware logo pairs — light version visible by default, dark version hidden */
+  .logo-dark { display: none; }
+  [data-theme="dark"] .logo-light { display: none; }
+  [data-theme="dark"] .logo-dark { display: inline; }
+
   /* ---- About Section ---- */
   .about-section{
     background:var(--bg);
@@ -288,6 +294,16 @@
     h1{ font-size:2rem; }
     .subtitle{ font-size:1.25rem; }
     .header-left{ gap:12px; }
+  }
+  @media (max-width:600px){
+    .header{ padding:12px 16px; gap:8px; }
+    .header-left{ gap:8px; }
+    .header-right{ gap:8px; }
+    .nav-link{ font-size:13px; }
+    .cta{ font-size:13px; padding:8px 12px; }
+    .container{ padding: calc(var(--header-h) + 24px) 16px 32px; }
+    .about-section{ padding:48px 16px; }
+    .services-section{ padding:48px 16px; }
   }
   @media (max-width:480px){
     .logo-strip{ --gap:clamp(36px, 9vw, 48px); --speed:45s; }
@@ -469,8 +485,11 @@
             <img src="https://res.cloudinary.com/textac/image/upload/v1761540650/fcm-black_yafwon.svg" alt="FCM" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="Liquid Interactive" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="People First Bank" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761543598/qut-black-trimmed_tv8d7l.png" alt="QUT" style="height:calc(var(--logo-h) * 1.4);width:auto;object-fit:contain" loading="lazy" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1783943098/qut-6_ryd2cj.svg" alt="QUT" class="logo-light" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1783943736/QUT_Dark_Mode_yq08dy.svg" alt="QUT" class="logo-dark" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="QBCC" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761632182/LFG_1_plgryq.svg" alt="LFG" class="logo-light" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1783944142/LFG_Logo_-_White_ijeq2k.svg" alt="LFG" class="logo-dark" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
 
             <!-- Track 2 duplicate -->
             <img src="https://res.cloudinary.com/textac/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
@@ -479,8 +498,11 @@
             <img src="https://res.cloudinary.com/textac/image/upload/v1761540650/fcm-black_yafwon.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761543598/qut-black-trimmed_tv8d7l.png" alt="" aria-hidden="true" style="height:calc(var(--logo-h) * 1.4);width:auto;object-fit:contain" loading="lazy" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1783943098/qut-6_ryd2cj.svg" alt="" aria-hidden="true" class="logo-light" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1783943736/QUT_Dark_Mode_yq08dy.svg" alt="" aria-hidden="true" class="logo-dark" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761632182/LFG_1_plgryq.svg" alt="" aria-hidden="true" class="logo-light" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1783944142/LFG_Logo_-_White_ijeq2k.svg" alt="" aria-hidden="true" class="logo-dark" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
           </div>
         </div>
       </section>
