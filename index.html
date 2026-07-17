@@ -1,423 +1,79 @@
-<!--
-  VERSION HISTORY
-  v1.0 (13 Mar 2026)  - Original homepage
-  v2.0 (07 Jul 2026)  - Removed colour tester modal, completed theme toggle
-                        script, added Portfolio nav link, AU spelling fixes
-  v2.1 (07 Jul 2026)  - Switched to clean permanent filenames, added Blog
-                        nav link
-  v2.2 (07 Jul 2026)  - Removed Terms/Privacy footer links, Portfolio renamed to Showcase
-  v3.0 (07 Jul 2026)  - Brand separation: removed all Services section and
-                        all paid CTAs. Personal site is now services-free.
-                        Header CTA changed to Get in Touch (mailto). Hero
-                        CTAs updated. See
-                        Website_and_Brand_Separation_Strategy_v1_0_07Jul26.md
-  v3.1 (07 Jul 2026)  - Get in Touch is now a slide-in contact drawer
-                        (email with copy-to-clipboard, LinkedIn, Textac
-                        link) instead of a plain mailto. Common component
-                        shared identically across all site pages.
-  v3.2 (07 Jul 2026)  - Rewrote hero and about copy to remove sales-pitch
-                        voice (dropped the "outmanoeuvre the enterprise"
-                        headline and "problem I see everywhere" framing).
-                        Retired The Enterprise Translator brand name
-                        entirely, site now just reads as Brendan Sheppard.
-  v3.3 (07 Jul 2026)  - Accessibility pass: fixed root font-size (13px to
-                        16px, was silently shrinking all rem-based text by
-                        ~19% site-wide), added WCAG-compliant text-contrast
-                        tokens (--accent-text, --accent-cyan-text,
-                        --on-accent) and applied them wherever accent
-                        colour was used as small text, fixing several
-                        contrast failures including unreadable button text
-                        in dark mode (was 2.64:1, now compliant).
-  v3.4 (08 Jul 2026)  - Swapped consulting@brendan.pro to hello@brendan.pro
-                        site-wide (friendlier address now that consulting
-                        enquiries route through Textac, not the personal
-                        site directly).
-  v3.5 (09 Jul 2026)  - Fixed primary button legibility. Near-black text on
-                        the bright purple background passed WCAG's 4.5:1
-                        minimum on paper (4.83:1) but was hard to read in
-                        practice, a known weak spot in how the standard
-                        measures saturated colour combinations. Switched
-                        to white text on a deeper, fixed purple (#7C3AED,
-                        5.70:1) that reads cleanly in both themes.
-  v3.6 (09 Jul 2026)  - Fixed secondary button legibility (dark background,
-                        light purple text). Same colour pair as the primary
-                        button bug, just reversed roles, same weak 4.83:1.
-                        Switched text to #C084FC (7.24:1) for a comfortable,
-                        clearly-purple result.
-  v3.7 (09 Jul 2026)  - New rule: no saturated purple or cyan as small text
-                        on a dark background, regardless of contrast ratio.
-                        This was a structural issue, not a one-off, it
-                        affected every small link, tag, and label in dark
-                        mode. --accent-text and --accent-cyan-text now
-                        resolve to white in dark mode instead of the
-                        vibrant accent colours. Secondary button fixed to
-                        match. Added underline cues where colour was
-                        previously the only signal (nav hover, back-link,
-                        contact drawer links).
--->
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Brendan Sheppard - Enterprise Business Analyst</title>
+<meta name="description" content="Enterprise business analyst with twenty years across Australia's largest enterprises, based in Brisbane, Australia." />
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><circle cx='16' cy='16' r='14' fill='%23A855F7'/></svg>" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><circle cx='16' cy='16' r='14' fill='%237C3AED'/></svg>" media="(prefers-color-scheme: light)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  /* Site defaults to dark. Runs synchronously before first paint to avoid
+     a flash — only an explicit saved 'light' choice opts out of dark.
+     Kept as a plain inline script (not a module import) specifically so
+     it executes before anything else, including CSS. */
+  (function(){
+    try{
+      var t = localStorage.getItem('theme') || 'dark';
+      if(t !== 'light') document.documentElement.setAttribute('data-theme','dark');
+    }catch(e){
+      document.documentElement.setAttribute('data-theme','dark');
+    }
+  })();
+</script>
 
-<style>
-  /* ---- Base / Reset ---- */
-  *, *::before, *::after { box-sizing: border-box; }
-  html, body {
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-    font-size: 16px;
-    line-height: 1.4;
-  }
-
-  :root{
-    --bg:#ffffff;
-    --fg:#0A0F1C;
-    --accent:#A855F7;  /* PURPLE - Balanced option */
-    --accent-cyan:#00BCD4;
-    --accent-hover:#9333EA;
-    --accent-text:#9333EA;  /* WCAG-compliant purple for text on light backgrounds */
-    --accent-cyan-text:#00778A;  /* WCAG-compliant teal for text on light backgrounds */
-    --on-accent:#0A0F1C;  /* text colour for use on accent-coloured buttons, both themes */
-    --cta-bg:#7C3AED;  /* fixed button background, both themes, chosen for safe white-text contrast */
-    --cta-bg-hover:#6D28D9;  /* fixed button hover state, both themes */
-    --logo-strip-bg:#f5f5f5;
-    --header-h:72px;
-    --container-w:800px;
-  }
-  [data-theme="dark"]{
-    --bg:#0f0f0f;
-    --fg:#ffffff;
-    --accent:#C084FC;  /* Lighter purple for dark mode */
-    --accent-hover:#A855F7;
-    --accent-text:var(--fg);  /* purple fails as small text on dark bg regardless of ratio, use fg instead */
-    --accent-cyan-text:var(--fg);  /* same reasoning, cyan retired as small text on dark bg */
-    --logo-strip-bg:#1a1a1a;
-  }
-
-  body{ background:var(--bg); color:var(--fg); }
-
-  /* ---- Fixed Header ---- */
-  .header{
-    position:fixed; inset:0 0 auto 0; height:var(--header-h);
-    display:flex; align-items:center; justify-content:space-between; gap:14px;
-    padding:16px 24px; z-index:1000;
-    transition:backdrop-filter .3s ease, background-color .3s ease;
-  }
-  .header.scrolled{
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    background: rgba(255,255,255,.7);
-  }
-  [data-theme="dark"] .header.scrolled{ background: rgba(15,15,15,.7); }
-
-  .header-left{ display:flex; align-items:center; gap:20px; }
-  .header-right{ display:flex; align-items:center; gap:14px; }
-
-  .nav-link{
-    color:var(--fg); text-decoration:none; font-weight:600; font-size:14px; opacity:.8;
-  }
-  .nav-link:hover{ opacity:1; color:var(--accent-text); text-decoration:underline; }
-
-  .theme-btn{
-    width:40px; height:40px; border:none; background:transparent; border-radius:8px; cursor:pointer;
-    display:grid; place-items:center; color:var(--fg);
-  }
-  .theme-btn:hover{ background:rgba(128,128,128,.1); }
-  .theme-icon{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-
-  .header .linkedin-icon{
-    width:28px; height:28px; display:inline-block;
-    background-image:url('https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg');
-    background-size:contain; background-repeat:no-repeat;
-    filter: brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(1583%) hue-rotate(187deg) brightness(94%) contrast(98%);
-    transition: transform .2s ease;
-  }
-  .header .linkedin-icon:hover{ transform:scale(1.08); }
-
-  .cta{
-    background:var(--cta-bg); color:#ffffff; text-decoration:none;
-    padding:10px 18px; border-radius:8px; font-weight:600; font-size:15px;
-    box-shadow:0 2px 8px rgba(124,58,237,.3);
-    transition: all .3s ease;
-    white-space: nowrap;
-  }
-  .cta:hover{
-    background:var(--cta-bg-hover);
-    transform:translateY(-2px);
-    box-shadow:0 4px 16px rgba(124,58,237,.5);
-  }
-
-  .cta.secondary{
-    background:#0A0F1C; color:#ffffff;
-    box-shadow:0 2px 8px rgba(10,15,28,.2);
-  }
-  .cta.secondary:hover{ background:#1a1f2c; color:#ffffff; }
-  [data-theme="dark"] .cta.secondary{ background:#ffffff; color:#9333EA; }
-  [data-theme="dark"] .cta.secondary:hover{ background:#f0f0f0; }
-
-  /* ---- Main container ---- */
-  .container{
-    max-width:var(--container-w);
-    margin:0 auto;
-    padding: calc(var(--header-h) + 48px) 40px 60px;
-    text-align:center;
-  }
-  .avatar{
-    width:192px; height:192px; border-radius:50%;
-    object-fit:cover; object-position:top;
-    margin:0 auto 24px;
-    background:transparent;
-  }
-  h1{ color:var(--fg); font-size:2.5rem; margin:0 0 8px; font-weight:700; }
-  .subtitle{ color:var(--accent-text); font-size:1.5rem; margin:0 0 24px; font-weight:600; }
-  .bio{ font-size:1.125rem; line-height:1.7; margin:0 0 20px; opacity:.9; }
-  .cta-wrapper{ margin-top:32px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
-
-  /* ---- Logo marquee ---- */
-  .logo-strip{
-    --strip-h: clamp(48px, 6vw, 70px);
-    --logo-h: calc(var(--strip-h) * 0.75);
-    --gap: clamp(48px, 7vw, 70px);
-    --speed: 35s;
-
-    background: var(--logo-strip-bg);
-    padding:16px 0;
-    margin-top:48px;
-    overflow:hidden;
-    width:100vw; margin-left:calc(-50vw + 50%);
-    border-top:1px solid #e9e9e9; border-bottom:1px solid #e9e9e9;
-
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  }
-  [data-theme="dark"] .logo-strip{ border-top:1px solid #333; border-bottom:1px solid #333; }
-
-  .marquee{ overflow:hidden; }
-  .marquee-inner{
-    display:inline-flex; align-items:center; gap:var(--gap);
-    height:var(--strip-h);
-    will-change: transform;
-    animation: marquee var(--speed) linear infinite;
-  }
-  @keyframes marquee { from{ transform: translateX(0) } to{ transform: translateX(-50%) } }
-  .marquee:hover .marquee-inner{ animation-play-state: paused; }
-  .logo-mono{ filter: brightness(0) saturate(100%) invert(3%) sepia(13%) saturate(4851%) hue-rotate(189deg) brightness(97%) contrast(96%); }
-  [data-theme="dark"] .logo-mono{ filter: brightness(0) saturate(100%) invert(100%); }
-
-  /* Theme-aware logo pairs — light version visible by default, dark version hidden */
-  .logo-dark { display: none; }
-  [data-theme="dark"] .logo-light { display: none; }
-  [data-theme="dark"] .logo-dark { display: inline; }
-
-  /* ---- About Section ---- */
-  .about-section{
-    background:var(--bg);
-    padding: 80px 40px;
-    max-width:var(--container-w);
-    margin:0 auto;
-  }
-  .about-section h2{
-    color:var(--accent); font-size:2rem; margin:0 0 32px; text-align:center;
-  }
-  .about-section p{
-    font-size:1.125rem; line-height:1.8; margin:0 0 24px; text-align:left;
-  }
-  .about-section strong{ color:var(--accent-text); }
-
-  /* ---- Services Section ---- */
-  .services-section{
-    background:var(--logo-strip-bg);
-    padding:80px 40px;
-    width:100vw; margin-left:calc(-50vw + 50%);
-  }
-  .services-inner{
-    max-width:var(--container-w);
-    margin:0 auto;
-  }
-  .services-section h2{
-    color:var(--accent); font-size:2rem; margin:0 0 48px; text-align:center;
-  }
-  .service-card{
-    background:var(--bg);
-    padding:32px;
-    border-radius:12px;
-    margin-bottom:32px;
-    text-align:left;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    border-left: 4px solid var(--accent);
-  }
-  [data-theme="dark"] .service-card{ box-shadow: 0 2px 8px rgba(255,255,255,.06); }
-  .service-card h3{
-    font-size:1.5rem; margin:0 0 12px; color:var(--fg);
-  }
-  .service-card .price{
-    color:var(--accent); font-weight:700; font-size:1.125rem; margin-bottom:12px;
-  }
-  .service-card p{
-    font-size:1.05rem; line-height:1.7; margin:0 0 16px;
-  }
-  .service-card ul{
-    font-size:1.05rem; line-height:1.8; opacity:.9; margin:0 0 24px; padding-left:24px;
-  }
-  .service-card li{ margin-bottom:8px; }
-
-  /* ---- Footer ---- */
-  footer{
-    background:var(--logo-strip-bg);
-    padding:48px 40px 32px;
-    width:100vw; margin-left:calc(-50vw + 50%);
-    text-align:center;
-    border-top:1px solid #e9e9e9;
-  }
-  [data-theme="dark"] footer{ border-top:1px solid #333; }
-  footer p{ margin:0 0 16px; opacity:.8; }
-  footer .footer-links{
-    display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin-bottom:24px;
-  }
-  footer a{
-    color:var(--fg); text-decoration:none; opacity:.8; transition:opacity .2s;
-  }
-  footer a:hover{ opacity:1; text-decoration:underline; }
-  footer .copyright{ font-size:0.9rem; opacity:.6; margin-top:24px; }
-
-  /* ---- Responsive ---- */
-  @media (max-width:768px){
-    .container{ padding: calc(var(--header-h) + 36px) 24px 40px; }
-    .about-section, .services-section{ padding:60px 24px; }
-    h1{ font-size:2rem; }
-    .subtitle{ font-size:1.25rem; }
-    .header-left{ gap:12px; }
-  }
-  @media (max-width:600px){
-    .header{ padding:12px 16px; gap:8px; }
-    .header-left{ gap:8px; }
-    .header-right{ gap:8px; }
-    .nav-link{ font-size:13px; }
-    .cta{ font-size:13px; padding:8px 12px; }
-    .container{ padding: calc(var(--header-h) + 24px) 16px 32px; }
-    .about-section{ padding:48px 16px; }
-    .services-section{ padding:48px 16px; }
-  }
-  @media (max-width:480px){
-    .logo-strip{ --gap:clamp(36px, 9vw, 48px); --speed:45s; }
-    .service-card{ padding:24px; }
-  }
-
-  /* ---- Contact Drawer ---- */
-  button.cta{ border:none; cursor:pointer; font-family:inherit; }
-
-  .contact-backdrop{
-    position:fixed; inset:0; background:rgba(10,15,28,.55);
-    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
-    z-index:2000; opacity:0; transition:opacity .4s ease;
-  }
-  .contact-backdrop.open{ opacity:1; }
-  .contact-backdrop[hidden]{ display:none; }
-
-  .contact-drawer{
-    position:fixed; top:0; right:0; height:100%;
-    width:min(400px, 92vw);
-    background:var(--bg); color:var(--fg);
-    z-index:2001;
-    padding:32px 28px;
-    box-shadow:-16px 0 48px rgba(10,15,28,.18);
-    transform:translateX(100%);
-    transition:transform .5s cubic-bezier(0.16,1,0.3,1);
-    display:flex; flex-direction:column;
-    overflow-y:auto;
-  }
-  .contact-drawer::before{
-    content:''; position:absolute; top:0; left:0; bottom:0; width:3px;
-    background:linear-gradient(180deg, var(--accent), var(--accent-cyan));
-  }
-  .contact-drawer.open{ transform:translateX(0); }
-  .contact-drawer[hidden]{ display:none; }
-
-  .contact-drawer-close{
-    align-self:flex-end; width:36px; height:36px; border:none; background:transparent;
-    border-radius:8px; cursor:pointer; color:var(--fg); opacity:.6;
-    display:grid; place-items:center; margin-bottom:12px; flex-shrink:0;
-  }
-  .contact-drawer-close:hover{ opacity:1; background:rgba(128,128,128,.1); }
-
-  .contact-drawer-body h2{
-    font-size:1.5rem; margin:0 0 8px; color:var(--fg); font-weight:700;
-  }
-  .contact-drawer-body .lead{
-    font-size:.95rem; opacity:.7; line-height:1.6; margin:0 0 32px;
-  }
-
-  .contact-item{ opacity:0; transform:translateY(8px); }
-  .contact-drawer.open .contact-item{ animation:contact-in .45s ease forwards; }
-  @keyframes contact-in{ to{ opacity:1; transform:translateY(0); } }
-
-  .contact-block{ margin-bottom:26px; }
-  .contact-label{
-    display:block; font-size:.72rem; font-weight:700; letter-spacing:.06em;
-    text-transform:uppercase; opacity:.5; margin-bottom:8px;
-  }
-  .contact-email-row{ display:flex; align-items:center; gap:10px; }
-  .contact-email{
-    font-size:1.08rem; font-weight:600; color:var(--fg); text-decoration:none;
-    word-break:break-all;
-  }
-  .contact-email:hover{ color:var(--accent-text); text-decoration:underline; }
-  .contact-link{
-    font-size:1.02rem; font-weight:600; color:var(--fg); text-decoration:none;
-  }
-  .contact-link:hover{ color:var(--accent-text); text-decoration:underline; }
-
-  .contact-copy{
-    flex-shrink:0; width:34px; height:34px; border-radius:8px;
-    border:1px solid rgba(128,128,128,.25);
-    background:transparent; color:var(--fg); cursor:pointer;
-    display:grid; place-items:center; transition:all .2s ease;
-  }
-  .contact-copy:hover{ border-color:var(--accent); color:var(--accent-text); }
-  .contact-copy.copied{ border-color:var(--accent-cyan-text); color:var(--accent-cyan-text); }
-
-  @media (prefers-reduced-motion: reduce){
-    .contact-backdrop, .contact-drawer{ transition:none !important; }
-    .contact-drawer{ transform:none !important; }
-    .contact-item{ opacity:1 !important; transform:none !important; animation:none !important; }
-  }
-
-</style>
+  <script type="module" crossorigin src="/assets/main-UUm91_j5.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-f97qquOj.css">
 </head>
-
 <body>
-  <!-- Fixed Header -->
-  <header class="header" id="header">
+  <div class="bg-bloom" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+    <header class="header" id="header">
     <div class="header-left">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="showcase.html" class="nav-link">Showcase</a>
-      <a href="blog.html" class="nav-link">Blog</a>
+      <a href="/index.html" class="site-logo" aria-label="Brendan Sheppard — home">Brendan Sheppard</a>
     </div>
     <div class="header-right">
-      <button class="theme-btn" id="theme-toggle" title="Toggle theme">
-        <svg class="theme-icon" id="theme-icon" viewBox="0 0 24 24"></svg>
+      <button class="theme-btn" id="theme-toggle-desktop" title="Toggle theme" aria-label="Toggle light or dark theme">
+        <svg class="theme-icon" id="theme-icon-desktop" viewBox="0 0 24 24"></svg>
       </button>
-      <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="linkedin-icon" aria-label="LinkedIn Profile"></a>
-      <button type="button" class="cta" id="contact-trigger" aria-haspopup="dialog">Get in Touch</button>
+      <button type="button" class="btn btn-primary cta-trigger" id="contact-trigger-desktop" aria-haspopup="dialog">Get in Touch</button>
+      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span>
+      </button>
     </div>
   </header>
 
-  <!-- Contact Drawer -->
-  <div class="contact-backdrop" id="contact-backdrop" hidden></div>
+  <!-- Single-page site: no nav links left to show, so this drawer is now
+       purely the narrow-width (<470px) fallback for Theme + Contact,
+       which is exactly what it still does below their own breakpoints. -->
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu" hidden>
+    <button type="button" class="mobile-nav-close" id="mobile-nav-close" aria-label="Close menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="mobile-nav-utility mobile-nav-theme-row">
+      <span class="mobile-nav-theme-label">
+        <svg class="theme-icon" id="theme-icon-mobile" viewBox="0 0 24 24"></svg>
+        <span id="theme-label-mobile">Dark mode</span>
+      </span>
+      <button class="theme-switch" id="theme-toggle-mobile" aria-label="Toggle light or dark theme" role="switch" aria-checked="false"></button>
+    </div>
+    <button type="button" class="btn btn-primary mobile-nav-contact" id="contact-trigger-mobile">Get in Touch</button>
+  </nav>
+  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop" hidden></div>
+
+
+    <div class="contact-backdrop" id="contact-backdrop" hidden></div>
   <aside class="contact-drawer" id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="contact-drawer-title" hidden>
     <button type="button" class="contact-drawer-close" id="contact-drawer-close" aria-label="Close">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="contact-drawer-body">
       <h2 id="contact-drawer-title" class="contact-item" style="animation-delay:.05s">Get in Touch</h2>
-      <p class="lead contact-item" style="animation-delay:.1s">The quickest ways to reach me directly.</p>
+      <p class="drawer-lead contact-item" style="animation-delay:.1s">The quickest ways to reach me directly.</p>
 
       <div class="contact-block contact-item" style="animation-delay:.16s">
         <span class="contact-label">Email</span>
@@ -438,240 +94,165 @@
   </aside>
 
 
-  <!-- Main content -->
   <main>
-    <div class="container">
-      <img
-        src="https://res.cloudinary.com/textac/image/upload/v1761572854/Headshot_white_tn3o7u.png"
-        alt="Brendan Sheppard"
-        class="avatar"
-      />
-      <h1>Brendan Sheppard</h1>
-      <p class="subtitle">Enterprise Business Analyst | Operations &amp; Process Improvement</p>
-
-      <p class="bio">
-        Twenty years inside Australia's largest enterprises, including Flight Centre,
-        Heritage Bank, Allianz Partners, and Queensland Government, across business
-        analysis, process improvement, and operational strategy.
-      </p>
-      <p class="bio">
-        This is where I write about what that experience actually looks like in
-        practice, and where I show what I build to test the ideas rather than
-        just argue them.
-      </p>
-
-      <div class="cta-wrapper">
-        <a href="showcase.html" class="cta" style="font-size:1.125rem; padding:14px 28px;">
-          See My Work
-        </a>
-        <a href="blog.html" class="cta secondary" style="font-size:1.125rem; padding:14px 28px;">
-          Read the Blog
-        </a>
-      </div>
-
-      <!-- Logo scroll -->
-      <section aria-label="Companies I've worked with" class="logo-strip">
-        <div class="marquee">
-          <div class="marquee-inner">
-            <!-- Track 1 -->
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="Allianz" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="Budget Direct" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="Flight Centre" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761540650/fcm-black_yafwon.svg" alt="FCM" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="Liquid Interactive" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="People First Bank" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1783943098/qut-6_ryd2cj.svg" alt="QUT" class="logo-light" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1783943736/qut-6-edited_1_ukhguq.svg" alt="QUT" class="logo-dark" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="QBCC" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761632182/LFG_1_plgryq.svg" alt="LFG" class="logo-light" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1783944142/LFG_Logo_-_White_ijeq2k.svg" alt="LFG" class="logo-dark" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-
-            <!-- Track 2 duplicate -->
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761540650/fcm-black_yafwon.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1783943098/qut-6_ryd2cj.svg" alt="" aria-hidden="true" class="logo-light" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1783943736/qut-6-edited_1_ukhguq.svg" alt="" aria-hidden="true" class="logo-dark" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="" aria-hidden="true" class="logo-mono" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1761632182/LFG_1_plgryq.svg" alt="" aria-hidden="true" class="logo-light" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
-            <img src="https://res.cloudinary.com/textac/image/upload/v1783944142/LFG_Logo_-_White_ijeq2k.svg" alt="" aria-hidden="true" class="logo-dark" style="height:var(--logo-h);width:auto;object-fit:contain" loading="lazy" />
+    <!-- Hero: three grid areas (copy / media / caption) as siblings so the
+         caption can relocate between mobile (near top) and desktop (below
+         the photo) via CSS grid-template-areas alone — see hero-grid in
+         layout.css -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1 class="reveal d1">Twenty years making enterprise operations <span class="grad">make sense.</span></h1>
+          <p class="lead reveal d2">
+            Business analysis, process improvement and operational strategy inside
+            Australia's largest enterprises, including Flight Centre, Heritage Bank,
+            Allianz Partners and Queensland Government.
+          </p>
+          <p class="lead-sub reveal d2">
+            If my background looks like a fit for a role or a problem you're
+            working through, I'd like to hear about it.
+          </p>
+          <div class="hero-ctas reveal d3">
+            <button type="button" class="btn btn-primary" data-open-contact>Get in Touch</button>
+            <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Connect on LinkedIn</a>
           </div>
         </div>
-      </section>
-    </div>
-
-    <!-- About Section -->
-    <section class="about-section">
-      <h2>Twenty Years of Watching What Works, and What Doesn't</h2>
-
-      <p>
-        I've seen what works at enterprise scale. What fails spectacularly.
-        And what mid-market businesses actually need.
-      </p>
-
-      <p>
-        A pattern shows up everywhere I've worked. Teams spending twenty-plus
-        hours a week in Excel doing work that should be automated. Leaders
-        chasing AI before fixing the digital foundation underneath it.
-        Businesses that can't scale without hiring because their processes
-        were never built to scale.
-      </p>
-
-      <p>
-        The idea I keep coming back to is what I call the Missing Middle, the
-        $10,000 to $100,000 improvements that leadership often overlooks as
-        not strategic enough. It's part of what I write about here, alongside
-        how AI is changing who can build what, and what that means for talent
-        and for what good operations should actually look like.
-      </p>
-
-      <p>
-        <strong>Industries:</strong> Financial Services, Government and Public Sector,
-        Travel and Corporate Travel, Fitness and Lifestyle, Digital Agencies
-      </p>
-
-      <p>
-        <strong>Expertise:</strong> Business Analysis, Process Optimisation,
-        Digital Transformation, Automation (RPA), Change Management, CX/UX Design
-      </p>
+        <div class="hero-media reveal d2">
+          <div class="status-pill status-pill--limited">
+            <span class="status-dot" aria-hidden="true"></span>
+            Wrapping up a contract soon &mdash; open to new opportunities
+          </div>
+          <div class="portrait-ring">
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761572854/Headshot_white_tn3o7u.png" alt="Brendan Sheppard" class="portrait" />
+          </div>
+        </div>
+        <p class="hero-caption reveal">
+          <span class="eyebrow-line-inner">
+            <span class="eyebrow-role">Enterprise Business Analyst</span><span class="eyebrow-sep" aria-hidden="true">&middot;</span><span class="eyebrow-loc">Brisbane, Australia</span>
+          </span>
+        </p>
+      </div>
     </section>
 
-    <!-- Next Steps Section -->
-    <section class="services-section" id="next">
-      <div class="services-inner" style="text-align:center;">
-        <h2 style="margin-bottom:24px;">What next</h2>
-        <p style="font-size:1.125rem; line-height:1.7; max-width:640px; margin:0 auto 32px;">
-          If you want to see the kind of work this thinking produces, the
-          showcase has the projects. If you want to read more of the argument
-          behind it, the blog has the articles.
-        </p>
-        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:32px;">
-          <a href="showcase.html" class="cta" style="font-size:1.1rem; padding:14px 28px;">
-            See the Showcase
-          </a>
-          <a href="blog.html" class="cta secondary" style="font-size:1.1rem; padding:14px 28px;">
-            Read the Blog
-          </a>
+    <!-- Logo marquee -->
+    <section class="logo-section" aria-label="Companies I've worked with">
+      <span class="eyebrow">Experience across</span>
+      <div class="logo-strip">
+        <div class="marquee-inner">
+          <div class="marquee-track">
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="Allianz" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="Budget Direct" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="Flight Centre" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761540650/fcm-black_yafwon.svg" alt="FCM" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="Liquid Interactive" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="People First Bank" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img id="logopairv0-light" src="https://res.cloudinary.com/textac/image/upload/v1783943098/qut-6_ryd2cj.svg" alt="QUT" class="logo-light" loading="lazy" onerror="this.style.display='none'; var d=document.getElementById('logopairv0-dark'); if(d) d.style.display='inline';" />
+            <img id="logopairv0-dark" src="https://res.cloudinary.com/textac/image/upload/v1783943736/qut-6-edited_1_ukhguq.svg" alt="QUT" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairv0-light'); if(l) l.style.display='inline';" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="QBCC" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img id="logopairv1-light" src="https://res.cloudinary.com/textac/image/upload/v1761632182/LFG_1_plgryq.svg" alt="LFG" class="logo-light" loading="lazy" onerror="this.style.display='none'; var d=document.getElementById('logopairv1-dark'); if(d) d.style.display='inline';" />
+            <img id="logopairv1-dark" src="https://res.cloudinary.com/textac/image/upload/v1783944142/LFG_Logo_-_White_ijeq2k.svg" alt="LFG" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairv1-light'); if(l) l.style.display='inline';" />
+          </div>
+          <div class="marquee-track" aria-hidden="true">
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761540650/fcm-black_yafwon.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img id="logopairh0-light" src="https://res.cloudinary.com/textac/image/upload/v1783943098/qut-6_ryd2cj.svg" alt="" aria-hidden="true" class="logo-light" loading="lazy" onerror="this.style.display='none'; var d=document.getElementById('logopairh0-dark'); if(d) d.style.display='inline';" />
+            <img id="logopairh0-dark" src="https://res.cloudinary.com/textac/image/upload/v1783943736/qut-6-edited_1_ukhguq.svg" alt="" aria-hidden="true" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairh0-light'); if(l) l.style.display='inline';" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img id="logopairh1-light" src="https://res.cloudinary.com/textac/image/upload/v1761632182/LFG_1_plgryq.svg" alt="" aria-hidden="true" class="logo-light" loading="lazy" onerror="this.style.display='none'; var d=document.getElementById('logopairh1-dark'); if(d) d.style.display='inline';" />
+            <img id="logopairh1-dark" src="https://res.cloudinary.com/textac/image/upload/v1783944142/LFG_Logo_-_White_ijeq2k.svg" alt="" aria-hidden="true" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairh1-light'); if(l) l.style.display='inline';" />
+          </div>
         </div>
-        <p style="font-size:1rem; opacity:.85;">
-          For anything else, just email <a href="mailto:hello@brendan.pro" style="color:var(--accent-text); font-weight:600;">hello@brendan.pro</a>.
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section section-alt">
+      <div class="container about-grid">
+        <div class="about-copy">
+          <span class="eyebrow reveal">About</span>
+          <h2 class="section-title reveal">Twenty years of watching what works, and what doesn't</h2>
+          <p class="reveal">
+            I've seen what works at enterprise scale. What fails spectacularly.
+            And what businesses of every size actually need.
+          </p>
+          <p class="reveal">
+            A pattern shows up everywhere I've worked. Teams spending twenty-plus
+            hours a week in Excel doing work that should be automated. Leaders
+            chasing AI before fixing the digital foundation underneath it.
+            Operations that can't scale without hiring because their processes
+            were never built to scale.
+          </p>
+          <div class="callout reveal">
+            The idea I keep coming back to is what I call the <strong>Missing
+            Middle</strong>: the $10,000 to $100,000 improvements that leadership
+            often overlooks as not strategic enough.
+          </div>
+          <p class="reveal">
+            That's the lens I bring to any team or project: fix the digital
+            foundation before layering AI on top of it, and look for the
+            improvements that are too small for a boardroom deck but too
+            big to keep ignoring.
+          </p>
+        </div>
+        <div>
+          <div class="card facet-card reveal d1">
+            <h3>Expertise</h3>
+            <div class="chips">
+              <span class="chip">Business Analysis</span>
+              <span class="chip">Process Optimisation</span>
+              <span class="chip">Digital Transformation</span>
+              <span class="chip">Automation (RPA)</span>
+              <span class="chip">Change Management</span>
+              <span class="chip">CX/UX Design</span>
+            </div>
+          </div>
+          <div class="card facet-card reveal d2">
+            <h3>Industries</h3>
+            <div class="chips">
+              <span class="chip">Financial Services</span>
+              <span class="chip">Government &amp; Public Sector</span>
+              <span class="chip">Travel &amp; Corporate Travel</span>
+              <span class="chip">Fitness &amp; Lifestyle</span>
+              <span class="chip">Digital Agencies</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact band -->
+    <section class="section contact-band">
+      <div class="container">
+        <span class="eyebrow reveal">What next</span>
+        <h2 class="reveal">Think I'd be useful inside your team?</h2>
+        <p class="reveal d1">
+          If my experience looks like a fit for a role or a problem you're
+          working on, I'd like to hear about it.
         </p>
+        <div class="btn-row reveal d2">
+          <button type="button" class="btn btn-primary" data-open-contact>Get in touch</button>
+          <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Connect on LinkedIn</a>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer>
+    <footer>
+    <p class="footer-brand">Brendan Sheppard</p>
     <div class="footer-links">
-      <a href="mailto:hello@brendan.pro">Email</a>
+      <span class="footer-email-wrap">
+        <a href="mailto:hello@brendan.pro" id="footer-email-link" data-copy="hello@brendan.pro">Email</a>
+        <span class="footer-email-tooltip" id="footer-email-tooltip" role="status">Copied hello@brendan.pro</span>
+      </span>
       <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
-
-    <p class="copyright">
-      &copy; 2026 Brendan Sheppard. All rights reserved.<br>
-    </p>
+    <p class="copyright">&copy; 2026 Brendan Sheppard. All rights reserved.</p>
   </footer>
 
-  <!-- Theme Switcher JS -->
-  <script>
-    const icons = {
-      sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
-      moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
-    };
-
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-    const root = document.documentElement;
-
-    function applyTheme(theme){
-      if(theme === 'dark'){
-        root.setAttribute('data-theme', 'dark');
-        themeIcon.innerHTML = icons.sun;
-      } else {
-        root.removeAttribute('data-theme');
-        themeIcon.innerHTML = icons.moon;
-      }
-    }
-
-    const savedTheme = localStorage.getItem('theme') ||
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    applyTheme(savedTheme);
-
-    themeToggle.addEventListener('click', () => {
-      const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-      const next = current === 'dark' ? 'light' : 'dark';
-      applyTheme(next);
-      localStorage.setItem('theme', next);
-    });
-
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 10);
-    });
-  </script>
-
-  <!-- Contact Drawer Script -->
-  <script>
-    (function(){
-      const trigger = document.getElementById('contact-trigger');
-      const backdrop = document.getElementById('contact-backdrop');
-      const drawer = document.getElementById('contact-drawer');
-      const closeBtn = document.getElementById('contact-drawer-close');
-      const copyBtn = document.getElementById('contact-copy-btn');
-      let lastFocused = null;
-
-      function openDrawer(){
-        lastFocused = document.activeElement;
-        backdrop.hidden = false;
-        drawer.hidden = false;
-        requestAnimationFrame(() => {
-          backdrop.classList.add('open');
-          drawer.classList.add('open');
-        });
-        document.body.style.overflow = 'hidden';
-        closeBtn.focus();
-        document.addEventListener('keydown', onKeydown);
-      }
-
-      function closeDrawer(){
-        backdrop.classList.remove('open');
-        drawer.classList.remove('open');
-        document.body.style.overflow = '';
-        document.removeEventListener('keydown', onKeydown);
-        setTimeout(() => {
-          backdrop.hidden = true;
-          drawer.hidden = true;
-          if(lastFocused) lastFocused.focus();
-        }, 500);
-      }
-
-      function onKeydown(e){
-        if(e.key === 'Escape') closeDrawer();
-      }
-
-      if(trigger){ trigger.addEventListener('click', openDrawer); }
-      if(closeBtn){ closeBtn.addEventListener('click', closeDrawer); }
-      if(backdrop){ backdrop.addEventListener('click', closeDrawer); }
-      if(copyBtn){
-        copyBtn.addEventListener('click', () => {
-          const text = copyBtn.getAttribute('data-copy');
-          navigator.clipboard.writeText(text).then(() => {
-            copyBtn.classList.add('copied');
-            copyBtn.querySelector('.icon-copy').style.display = 'none';
-            copyBtn.querySelector('.icon-check').style.display = 'block';
-            setTimeout(() => {
-              copyBtn.classList.remove('copied');
-              copyBtn.querySelector('.icon-copy').style.display = 'block';
-              copyBtn.querySelector('.icon-check').style.display = 'none';
-            }, 1800);
-          });
-        });
-      }
-    })();
-  </script>
 
 </body>
 </html>
