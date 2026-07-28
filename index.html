@@ -1,4 +1,7 @@
-<!-- About section copy revised v1.1, 18 Jul 2026: removed Missing Middle/Textac framing, reworked to career versatility angle, added Systems facet card, renamed Expertise to Core Skills -->
+<!-- v1.1, 18 Jul 2026: removed Missing Middle/Textac framing, reworked About copy to career versatility angle, added Systems facet card, renamed Expertise to Core Skills -->
+<!-- v1.2, 25 Jul 2026: centred hero role/location caption (scoped CSS patch), added external-link icon to all LinkedIn links, simplified mobile theme toggle from switch+label to icon-only button matching desktop -->
+<!-- v1.3, 25 Jul 2026: split Claude Enterprise/LibreChat out of Systems into a new 4th "AI Tools" facet card -->
+<!-- v1.4, 25 Jul 2026: external-link icon now only on the contact-drawer LinkedIn link (removed from other 3); renamed "AI Tools" card to "AI and Automation" and added n8n, Pabbly, Zapier, Make -->
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
@@ -28,6 +31,24 @@
 
   <script type="module" crossorigin src="/assets/main-UUm91_j5.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/main-f97qquOj.css">
+  <style>
+    /* Patch v1.2, 25 Jul 2026: centre the role/location line under the
+       portrait — it was rendering left-aligned once it wrapped to two
+       lines on narrow screens. Scoped override, not a stylesheet edit. */
+    .hero-caption { text-align: center; }
+    .eyebrow-line-inner {
+      display: inline-flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    /* External-link glyph appended to LinkedIn links */
+    .icon-external {
+      margin-left: 6px;
+      vertical-align: -2px;
+      flex-shrink: 0;
+    }
+  </style>
 </head>
 <body>
   <div class="bg-bloom" aria-hidden="true"></div>
@@ -42,7 +63,8 @@
         <svg class="theme-icon" id="theme-icon-desktop" viewBox="0 0 24 24"></svg>
       </button>
       <button type="button" class="btn btn-primary cta-trigger" id="contact-trigger-desktop" aria-haspopup="dialog">Get in Touch</button>
-      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+
+<button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
         <span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span>
       </button>
     </div>
@@ -56,13 +78,10 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="mobile-nav-utility mobile-nav-theme-row">
-      <span class="mobile-nav-theme-label">
+      <button class="theme-btn" id="theme-toggle-mobile" title="Toggle theme" aria-label="Toggle light or dark theme">
         <svg class="theme-icon" id="theme-icon-mobile" viewBox="0 0 24 24"></svg>
-        <span id="theme-label-mobile">Dark mode</span>
-      </span>
-      <button class="theme-switch" id="theme-toggle-mobile" aria-label="Toggle light or dark theme" role="switch" aria-checked="false"></button>
-
-</div>
+      </button>
+    </div>
     <button type="button" class="btn btn-primary mobile-nav-contact" id="contact-trigger-mobile">Get in Touch</button>
   </nav>
   <div class="mobile-nav-backdrop" id="mobile-nav-backdrop" hidden></div>
@@ -90,13 +109,11 @@
 
       <div class="contact-block contact-item" style="animation-delay:.22s">
         <span class="contact-label">LinkedIn</span>
-        <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="contact-link">linkedin.com/in/brendansheppard</a>
+        <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="contact-link">linkedin.com/in/brendansheppard<svg class="icon-external" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
       </div>
     </div>
   </aside>
-
-
-  <main>
+<main>
     <!-- Hero: three grid areas (copy / media / caption) as siblings so the
          caption can relocate between mobile (near top) and desktop (below
          the photo) via CSS grid-template-areas alone — see hero-grid in
@@ -123,7 +140,7 @@
           <div class="status-pill status-pill--limited">
             <span class="status-dot" aria-hidden="true"></span>
             Wrapping up a contract soon &mdash; open to new opportunities
-</div>
+          </div>
           <div class="portrait-ring">
             <img src="https://res.cloudinary.com/textac/image/upload/v1761572854/Headshot_white_tn3o7u.png" alt="Brendan Sheppard" class="portrait" />
           </div>
@@ -149,7 +166,7 @@
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="Liquid Interactive" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="People First Bank" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img id="logopairv0-light" src="https://res.cloudinary.com/textac/image/upload/v1783943098/qut-6_ryd2cj.svg" alt="QUT" class="logo-light" loading="lazy" onerror="this.style.display='none'; var d=document.getElementById('logopairv0-dark'); if(d) d.style.display='inline';" />
-            <img id="logopairv0-dark" src="https://res.cloudinary.com/textac/image/upload/v1783943736/qut-6-edited_1_ukhguq.svg" alt="QUT" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairv0-light'); if(l) l.style.display='inline';" />
+<img id="logopairv0-dark" src="https://res.cloudinary.com/textac/image/upload/v1783943736/qut-6-edited_1_ukhguq.svg" alt="QUT" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairv0-light'); if(l) l.style.display='inline';" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="QBCC" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img id="logopairv1-light" src="https://res.cloudinary.com/textac/image/upload/v1761632182/LFG_1_plgryq.svg" alt="LFG" class="logo-light" loading="lazy" onerror="this.style.display='none'; var d=document.getElementById('logopairv1-dark'); if(d) d.style.display='inline';" />
             <img id="logopairv1-dark" src="https://res.cloudinary.com/textac/image/upload/v1783944142/LFG_Logo_-_White_ijeq2k.svg" alt="LFG" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairv1-light'); if(l) l.style.display='inline';" />
@@ -157,7 +174,7 @@
           <div class="marquee-track" aria-hidden="true">
             <img src="https://res.cloudinary.com/textac/image/upload/v1761531976/allianz-black_fhzl8z.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532578/budget-direct-black_boldgt.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
-<img src="https://res.cloudinary.com/textac/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
+            <img src="https://res.cloudinary.com/textac/image/upload/v1761532579/fc-black_cxbh7a.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761540650/fcm-black_yafwon.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="" aria-hidden="true" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
@@ -171,7 +188,7 @@
       </div>
     </section>
 
-    <!-- About -->
+<!-- About -->
     <section class="section section-alt">
       <div class="container about-grid">
         <div class="about-copy">
@@ -199,7 +216,7 @@
           <p class="reveal">
             That's the lens I bring to any team or project: understand how
             the business actually runs before touching the process, and
-treat the platform as a tool for the outcome, not the outcome
+            treat the platform as a tool for the outcome, not the outcome
             itself.
           </p>
         </div>
@@ -241,14 +258,23 @@ treat the platform as a tool for the outcome, not the outcome
               <span class="chip">Visio &amp; LucidChart</span>
               <span class="chip">Slack</span>
               <span class="chip">UiPath</span>
+            </div>
+          </div>
+          <div class="card facet-card reveal d4">
+            <h3>AI and Automation</h3>
+            <div class="chips">
               <span class="chip">Claude Enterprise</span>
+              <span class="chip">LibreChat</span>
+              <span class="chip">n8n</span>
+              <span class="chip">Pabbly</span>
+              <span class="chip">Zapier</span>
+              <span class="chip">Make</span>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- Contact band -->
+<!-- Contact band -->
     <section class="section contact-band">
       <div class="container">
         <span class="eyebrow reveal">What next</span>
