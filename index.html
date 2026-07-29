@@ -2,6 +2,7 @@
 <!-- v1.2, 25 Jul 2026: centred hero role/location caption (scoped CSS patch), added external-link icon to all LinkedIn links, simplified mobile theme toggle from switch+label to icon-only button matching desktop -->
 <!-- v1.3, 25 Jul 2026: split Claude Enterprise/LibreChat out of Systems into a new 4th "AI Tools" facet card -->
 <!-- v1.4, 25 Jul 2026: external-link icon now only on the contact-drawer LinkedIn link (removed from other 3); renamed "AI Tools" card to "AI and Automation" and added n8n, Pabbly, Zapier, Make -->
+<!-- v1.5, 25 Jul 2026: hid duplicate Email/LinkedIn footer links on mobile (contact-band CTAs above already cover this); removed non-functional hover/tap highlight from facet-card and chip elements via pointer-events:none -->
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
@@ -48,6 +49,19 @@
       vertical-align: -2px;
       flex-shrink: 0;
     }
+    /* Patch v1.5, 25 Jul 2026: Email/LinkedIn in the footer duplicate the
+       contact-band CTAs directly above on mobile — hide on small screens */
+    @media (max-width: 768px) {
+      footer .footer-links { display: none; }
+    }
+    /* Patch v1.5: Core Skills/Industries/Systems/AI cards and their pills
+       aren't interactive, but touch devices were firing a hover/active
+       highlight on tap anyway. pointer-events:none stops the browser
+       matching :hover/:active on these elements at all, so no state
+       change fires regardless of what triggers it underneath. */
+    .facet-card, .chip {
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -63,8 +77,7 @@
         <svg class="theme-icon" id="theme-icon-desktop" viewBox="0 0 24 24"></svg>
       </button>
       <button type="button" class="btn btn-primary cta-trigger" id="contact-trigger-desktop" aria-haspopup="dialog">Get in Touch</button>
-
-<button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
         <span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span>
       </button>
     </div>
@@ -113,7 +126,9 @@
       </div>
     </div>
   </aside>
-<main>
+
+
+  <main>
     <!-- Hero: three grid areas (copy / media / caption) as siblings so the
          caption can relocate between mobile (near top) and desktop (below
          the photo) via CSS grid-template-areas alone — see hero-grid in
@@ -166,7 +181,7 @@
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/liquid-black_l8fhgy.svg" alt="Liquid Interactive" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761532580/pfb-black_d1qsug.svg" alt="People First Bank" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img id="logopairv0-light" src="https://res.cloudinary.com/textac/image/upload/v1783943098/qut-6_ryd2cj.svg" alt="QUT" class="logo-light" loading="lazy" onerror="this.style.display='none'; var d=document.getElementById('logopairv0-dark'); if(d) d.style.display='inline';" />
-<img id="logopairv0-dark" src="https://res.cloudinary.com/textac/image/upload/v1783943736/qut-6-edited_1_ukhguq.svg" alt="QUT" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairv0-light'); if(l) l.style.display='inline';" />
+            <img id="logopairv0-dark" src="https://res.cloudinary.com/textac/image/upload/v1783943736/qut-6-edited_1_ukhguq.svg" alt="QUT" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairv0-light'); if(l) l.style.display='inline';" />
             <img src="https://res.cloudinary.com/textac/image/upload/v1761531951/qbcc-black_f9dvaw.svg" alt="QBCC" class="logo-mono" loading="lazy" onerror="this.style.display='none'" />
             <img id="logopairv1-light" src="https://res.cloudinary.com/textac/image/upload/v1761632182/LFG_1_plgryq.svg" alt="LFG" class="logo-light" loading="lazy" onerror="this.style.display='none'; var d=document.getElementById('logopairv1-dark'); if(d) d.style.display='inline';" />
             <img id="logopairv1-dark" src="https://res.cloudinary.com/textac/image/upload/v1783944142/LFG_Logo_-_White_ijeq2k.svg" alt="LFG" class="logo-dark" loading="lazy" onerror="this.style.display='none'; var l=document.getElementById('logopairv1-light'); if(l) l.style.display='inline';" />
@@ -188,7 +203,7 @@
       </div>
     </section>
 
-<!-- About -->
+    <!-- About -->
     <section class="section section-alt">
       <div class="container about-grid">
         <div class="about-copy">
@@ -274,7 +289,8 @@
         </div>
       </div>
     </section>
-<!-- Contact band -->
+
+    <!-- Contact band -->
     <section class="section contact-band">
       <div class="container">
         <span class="eyebrow reveal">What next</span>
