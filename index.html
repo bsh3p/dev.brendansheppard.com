@@ -43,12 +43,6 @@
       flex-wrap: wrap;
       width: 100%;
     }
-    /* External-link glyph appended to LinkedIn links */
-    .icon-external {
-      margin-left: 6px;
-      vertical-align: -2px;
-      flex-shrink: 0;
-    }
     /* Patch v1.5, 25 Jul 2026: Email/LinkedIn in the footer duplicate the
        contact-band CTAs directly above on mobile — hide on small screens */
     @media (max-width: 600px) {
@@ -122,7 +116,12 @@
 
       <div class="contact-block contact-item" style="animation-delay:.22s">
         <span class="contact-label">LinkedIn</span>
-        <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="contact-link">linkedin.com/in/brendansheppard<svg class="icon-external" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+        <div class="contact-email-row">
+          <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="contact-email">linkedin.com/in/brendansheppard</a>
+          <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="contact-copy" aria-label="Open LinkedIn profile">
+            <svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </aside>
