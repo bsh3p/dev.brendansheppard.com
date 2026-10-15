@@ -698,21 +698,31 @@
   </footer>
 
 
-<!-- Runtime email assembly: fills contact details from fragments so the
-     literal address never appears in the static HTML. Scrapers see nothing,
-     but the bundle (deferred module) executes after this and reads the
-     finished values on click. -->
+<!-- click-to-reveal email: the email address is assembled from fragments
+     and only placed into the DOM on user click. The static HTML contains
+     zero trace of the address — scrapers and crawlers find nothing. -->
   <script>
     (function() {
       var parts = ['hello', String.fromCharCode(64), 'brendan', '.', 'pro'];
       var email = parts.join('');
+
+      /* Drawer: show "Click to reveal" until tapped */
       var drawerLink = document.getElementById('contact-email-link');
       if (drawerLink) {
-        drawerLink.textContent = email;
-        drawerLink.href = 'mailto:' + email;
+        drawerLink.textContent = 'Click to reveal';
+        drawerLink.href = '#';
+        drawerLink.style.cursor = 'pointer';
+        drawerLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          this.textContent = email;
+          this.href = 'mailto:' + email;
+          var btn = document.getElementById('contact-copy-btn');
+          if (btn) btn.setAttribute('data-copy', email);
+        });
       }
-      var copyBtn = document.getElementById('contact-copy-btn');
-      if (copyBtn) copyBtn.setAttribute('data-copy', email);
+
+      /* Footer: runtime assembly only (link text is "Email", not the
+         address itself, so no click-to-reveal needed) */
       var footerLink = document.getElementById('footer-email-link');
       if (footerLink) {
         footerLink.href = 'mailto:' + email;
