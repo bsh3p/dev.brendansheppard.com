@@ -56,6 +56,16 @@
     .facet-card, .chip {
       pointer-events: none;
     }
+  /* Patch v1.6: About grid columns should visually end at roughly the
+       same height. Stretch both columns to full row height, then let the
+       right column distribute its cards evenly so there's no dead space
+       at the bottom. */
+    .about-grid { align-items: stretch; }
+    .about-grid > div:last-child {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
   </style>
 </head>
 <body>
