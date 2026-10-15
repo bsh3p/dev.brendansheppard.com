@@ -248,6 +248,14 @@
     @media (max-width: 700px) {
       .facet-grid { grid-template-columns: 1fr; }
     }
+    /* Envelope button (mobile-only contact drawer trigger).
+       Visible below 600px where the header CTA is hidden.
+       If more nav items are added later, re-enable the hidden
+       hamburger (#hamburger-btn) and remove this button and rule. */
+    #contact-btn-mobile { display: none; }
+    @media (max-width: 599px) {
+      #contact-btn-mobile { display: inline-flex; }
+    }
   </style>
 </head>
 <body>
@@ -263,8 +271,15 @@
         <svg class="theme-icon" id="theme-icon-desktop" viewBox="0 0 24 24"></svg>
       </button>
       <button type="button" class="btn btn-primary cta-trigger" id="contact-trigger-desktop" aria-haspopup="dialog">Get in Touch</button>
-      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" style="display:none" aria-expanded="false" aria-controls="mobile-nav">
         <span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span>
+      </button>
+      <!-- Mobile-only envelope button: opens the contact drawer directly
+           instead of a hamburger menu with only one option (Get in Touch).
+           If more nav items are added later, re-enable the hamburger above
+           and remove data-open-contact from this button. -->
+      <button type="button" class="hamburger-btn" id="contact-btn-mobile" data-open-contact aria-label="Get in Touch" title="Get in Touch">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
       </button>
     </div>
   </header>
