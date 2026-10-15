@@ -237,6 +237,17 @@
     [data-theme="dark"] {
       --accent-cyan-text: #67e8f9;
     }
+    /* Facet cards grid: 2 columns wide, 1 column narrow.
+       CRITICAL: never use inline style for grid layouts — inline styles
+       can't respond to media queries and WILL overflow on mobile. */
+    .facet-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap, 24px);
+    }
+    @media (max-width: 700px) {
+      .facet-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -543,7 +554,7 @@
       <div class="container">
         <span class="eyebrow reveal">Tools and expertise</span>
         <h2 class="section-title reveal">The platforms, systems and methods I work with</h2>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap,24px)">
+        <div class="facet-grid">
           <div class="card facet-card reveal d1">
             <h3>Core Skills</h3>
             <div class="chips">
