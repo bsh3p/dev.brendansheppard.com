@@ -321,8 +321,8 @@
       <div class="contact-block contact-item" style="animation-delay:.16s">
         <span class="contact-label">Email</span>
         <div class="contact-email-row">
-          <a href="mailto:hello@brendan.pro" class="contact-email">hello@brendan.pro</a>
-          <button type="button" class="contact-copy" id="contact-copy-btn" data-copy="hello@brendan.pro" aria-label="Copy email address">
+          <a href="mailto:" class="contact-email" id="contact-email-link"></a>
+          <button type="button" class="contact-copy" id="contact-copy-btn" data-copy="" aria-label="Copy email address">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             <svg class="icon-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
           </button>
@@ -689,14 +689,39 @@
       <a href="/work/">Work</a>
       <a href="/cv/">CV</a>
       <span class="footer-email-wrap">
-        <a href="mailto:hello@brendan.pro" id="footer-email-link" data-copy="hello@brendan.pro">Email</a>
-        <span class="footer-email-tooltip" id="footer-email-tooltip" role="status">Copied hello@brendan.pro</span>
+        <a href="mailto:" id="footer-email-link" data-copy="">Email</a>
+        <span class="footer-email-tooltip" id="footer-email-tooltip" role="status"></span>
       </span>
       <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
     <p class="copyright">&copy; 2026 Brendan Sheppard. All rights reserved.</p>
   </footer>
 
+
+<!-- Runtime email assembly: fills contact details from fragments so the
+     literal address never appears in the static HTML. Scrapers see nothing,
+     but the bundle (deferred module) executes after this and reads the
+     finished values on click. -->
+  <script>
+    (function() {
+      var parts = ['hello', String.fromCharCode(64), 'brendan', '.', 'pro'];
+      var email = parts.join('');
+      var drawerLink = document.getElementById('contact-email-link');
+      if (drawerLink) {
+        drawerLink.textContent = email;
+        drawerLink.href = 'mailto:' + email;
+      }
+      var copyBtn = document.getElementById('contact-copy-btn');
+      if (copyBtn) copyBtn.setAttribute('data-copy', email);
+      var footerLink = document.getElementById('footer-email-link');
+      if (footerLink) {
+        footerLink.href = 'mailto:' + email;
+        footerLink.setAttribute('data-copy', email);
+      }
+      var tooltip = document.getElementById('footer-email-tooltip');
+      if (tooltip) tooltip.textContent = 'Copied ' + email;
+    })();
+  </script>
 
 <!-- Smart chip packer: reorders pills into optimal rows for any viewport
          width. Uses best-fit-decreasing bin packing so each row fills as
