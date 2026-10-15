@@ -343,5 +343,77 @@
   </footer>
 
 
+<!-- Smart chip packer: reorders pills into optimal rows for any viewport
+         width. Uses best-fit-decreasing bin packing so each row fills as
+         tightly as possible — no wasted space at the end of a row. -->
+  <script>
+    (function() {
+      'use strict';
+      var GAP = 8; // matches .chips { gap: 8px }
+
+      function measureAndPack(container) {
+        // Force natural widths first (rendered but unconstrained)
+        var chips = Array.from(container.children);
+        if (!chips.length) return;
+        chips.forEach(function(c) { c.style.flex = 'none'; });
+        container.style.display = 'flex';
+        container.style.flexWrap = 'wrap';
+
+        var items = chips.map(function(c) {
+          return { el: c, w: c.offsetWidth };
+        });
+
+        // best-fit decreasing: sort biggest first
+        items.sort(function(a, b) { return b.w - a.w; });
+
+        var cw = container.offsetWidth;
+        var rows = [];
+
+        items.forEach(function(item) {
+          var placed = false;
+          for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var used = row.reduce(function(s, x) { return s + x.w; }, 0);
+            var gaps = row.length * GAP;
+            var room = cw - used - gaps - GAP; // minus the gap this new chip would add
+            if (item.w <= room) {
+              row.push(item);
+              placed = true;
+              break;
+            }
+          }
+          if (!placed) rows.push([item]);
+        });
+
+        // Flatten rows and reorder DOM
+        var ordered = [];
+        rows.forEach(function(row) {
+          row.forEach(function(item) { ordered.push(item.el); });
+        });
+        ordered.forEach(function(el) { container.appendChild(el); });
+      }
+
+      function packAll() {
+        var containers = document.querySelectorAll('.chips');
+        containers.forEach(measureAndPack);
+      }
+
+      var timer;
+      window.addEventListener('resize', function() {
+        clearTimeout(timer);
+        timer = setTimeout(packAll, 120);
+      });
+
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        packAll();
+        document.fonts.ready.then(packAll);
+      } else {
+        document.addEventListener('DOMContentLoaded', function() {
+          packAll();
+          document.fonts.ready.then(packAll);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
