@@ -1,15 +1,13 @@
-<!-- v1.1, 18 Jul 2026: removed Missing Middle/Textac framing, reworked About copy to career versatility angle, added Systems facet card, renamed Expertise to Core Skills -->
-<!-- v1.2, 25 Jul 2026: centred hero role/location caption (scoped CSS patch), added external-link icon to all LinkedIn links, simplified mobile theme toggle from switch+label to icon-only button matching desktop -->
-<!-- v1.3, 25 Jul 2026: split Claude Enterprise/LibreChat out of Systems into a new 4th "AI Tools" facet card -->
-<!-- v1.4, 25 Jul 2026: external-link icon now only on the contact-drawer LinkedIn link (removed from other 3); renamed "AI Tools" card to "AI and Automation" and added n8n, Pabbly, Zapier, Make -->
-<!-- v1.5, 25 Jul 2026: hid duplicate Email/LinkedIn footer links on mobile (contact-band CTAs above already cover this); removed non-functional hover/tap highlight from facet-card and chip elements via pointer-events:none -->
+<!-- brendansheppard.com, home
+     v2.0, 15 Oct 2026: evidence-first rebuild. Proof bar, evidence blocks,
+     first 90 days, how I work, certifications. Years claim corrected. -->
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Brendan Sheppard - Enterprise Business Analyst</title>
-<meta name="description" content="Enterprise business analyst with twenty years across Australia's largest enterprises, based in Brisbane, Australia." />
+<title>Brendan Sheppard - Business Analyst, Brisbane</title>
+<meta name="description" content="Nine years as a business analyst on enterprise programmes, including Flight Centre, People First Bank, Allianz Partners and Queensland Government." />
 <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='23' text-anchor='middle' font-family='sans-serif' font-size='22' font-weight='bold' fill='%23A855F7'>B</text></svg>" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='23' text-anchor='middle' font-family='sans-serif' font-size='22' font-weight='bold' fill='%237C3AED'>B</text></svg>" media="(prefers-color-scheme: light)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -84,6 +82,161 @@
       font-weight: 500;
       line-height: 1.3;
     }
+  /* Patch v2.0, 15 Oct 2026: new components for the evidence-first
+     rebuild. All styles use existing design tokens only. */
+    /* About section: single column when facet cards are moved out */
+    .about-solo {
+      display: block;
+      max-width: 68ch;
+    }
+    /* Proof bar: three numbered tiles in a row */
+    .proof-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap, 24px);
+    }
+    @media (max-width: 700px) {
+      .proof-bar { grid-template-columns: 1fr; }
+    }
+    .proof-tile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .proof-num {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--accent-text);
+    }
+    .proof-label {
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+    }
+    /* Evidence grid: three cards in a row on wide screens */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap, 24px);
+    }
+    @media (max-width: 800px) {
+      .evidence-grid { grid-template-columns: 1fr; }
+    }
+    .evidence-card .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .evidence-meta {
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--accent-text);
+    }
+    /* Steps list for First 90 Days */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .steps li {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .step-num {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      font-family: var(--font-display);
+      font-size: .85rem;
+      font-weight: 700;
+      background: var(--accent);
+      color: var(--on-accent);
+      margin-top: .1rem;
+    }
+    .step-text {
+      flex: 1;
+      font-size: .95rem;
+      line-height: 1.55;
+      color: var(--fg);
+    }
+    /* Principles grid for How I Work */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 700px) {
+      .principles-grid { grid-template-columns: 1fr; }
+    }
+    .principles-grid .card {
+      padding: 1.25rem;
+    }
+    .principle-num {
+      font-family: var(--font-display);
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--accent-text);
+      margin-bottom: .35rem;
+    }
+    .principle-text {
+      font-size: .9rem;
+      line-height: 1.5;
+      color: var(--fg);
+    }
+    /* Facet cards intro */
+    .tools-heading {
+      font-size: .95rem;
+      line-height: 1.5;
+      color: var(--fg);
+      margin-bottom: 0;
+    }
+    /* Practical bits card */
+    .practical-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 500px) {
+      .practical-grid { grid-template-columns: 1fr; }
+    }
+    .practical-item dt {
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--accent-text);
+      margin-bottom: .2rem;
+    }
+    .practical-item dd {
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+      margin: 0;
+    }
+    /* Cyan text contrast fix on light theme */
+    :root {
+      --accent-cyan-text: #00707A;
+    }
+    [data-theme="dark"] {
+      --accent-cyan-text: #67e8f9;
+    }
   </style>
 </head>
 <body>
@@ -155,25 +308,19 @@
 
 
   <main>
-    <!-- Hero: three grid areas (copy / media / caption) as siblings so the
-         caption can relocate between mobile (near top) and desktop (below
-         the photo) via CSS grid-template-areas alone — see hero-grid in
-         layout.css -->
+    <!-- Hero -->
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <h1 class="reveal d1">Twenty years making enterprise operations <span class="grad">make sense.</span></h1>
+          <h1 class="reveal d1">Nine years asking the same question inside Australia's biggest enterprises: <span class="grad">will this still work when I leave?</span></h1>
           <p class="lead reveal d2">
-            Business analysis, process improvement and operational strategy inside
-            Australia's largest enterprises, including Flight Centre, Heritage Bank,
-            Allianz Partners and Queensland Government.
+            I've worked inside some of Australia's largest enterprises — Flight Centre, People First Bank, Allianz Partners, Queensland Government — as a business analyst on transformation programmes that had to deliver. I'm looking for the role where the process has to still work six months after the project closes.
           </p>
           <p class="lead-sub reveal d2">
-            If my background looks like a fit for a role or a problem you're
-            working through, I'd like to hear about it.
+            If that sounds like the problem you're hiring for, I'd like to hear about it.
           </p>
           <div class="hero-ctas reveal d3">
-            <button type="button" class="btn btn-primary" data-open-contact>Get in Touch</button>
+            <button type="button" class="btn btn-primary" data-open-contact>Start a Conversation</button>
             <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Connect on LinkedIn</a>
           </div>
         </div>
@@ -199,7 +346,7 @@
 
     <!-- Logo marquee -->
     <section class="logo-section" aria-label="Companies I've worked with">
-      <span class="eyebrow">Experience across</span>
+      <span class="eyebrow">Eight years on the front line. Nine as a business analyst.</span>
       <div class="logo-strip">
         <div class="marquee-inner">
           <div class="marquee-track">
@@ -232,33 +379,171 @@
       </div>
     </section>
 
+    <!-- Proof bar -->
+    <section class="section">
+      <div class="container">
+        <div class="proof-bar">
+          <div class="proof-tile reveal d1">
+            <span class="proof-num">$22bn</span>
+            <span class="proof-label">Banking merger — processes, systems and 149 stores integrated end to end</span>
+          </div>
+          <div class="proof-tile reveal d2">
+            <span class="proof-num">149</span>
+            <span class="proof-label">Retail stores rolled out across four continents in a single programme</span>
+          </div>
+          <div class="proof-tile reveal d3">
+            <span class="proof-num">$50,000</span>
+            <span class="proof-label">Saved in year one by redirecting manual contact centre work to automation</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- About -->
     <section class="section section-alt">
-      <div class="container about-grid">
-        <div class="about-copy">
+      <div class="container">
+        <div class="about-copy about-solo">
           <span class="eyebrow reveal">About</span>
-          <h2 class="section-title reveal">Twenty years of watching what works, and what doesn't</h2>
+          <h2 class="section-title reveal">I did the job before I analysed it</h2>
           <p class="reveal">
-            I've worked inside global travel, banking, insurance, government
-            and fitness businesses, as an employee and as a contractor.
-            Enterprise transformation programmes, aged care reform, a $22bn
-            banking merger, retail rollouts across four continents.
+            I've worked inside global travel, banking, insurance, government and fitness businesses, as an employee and as a contractor. Enterprise transformation programmes, aged care reform, a $22bn banking merger, retail rollouts across four continents.
           </p>
           <p class="reveal">
-            A pattern shows up everywhere I've worked. The tools and the org
-            charts change, but the underlying problems repeat. Manual work
-            that should be automated. Support processes that were never
-            designed to scale. Technology decisions made without the people
-            who'll actually use the system in the room.
+            A pattern shows up everywhere I've worked. The tools and the org charts change, but the underlying problems repeat. Manual work that should be automated. Support processes that were never designed to scale. Technology decisions made without the people who'll actually use the system in the room.
           </p>
-          <div class="callout reveal">
-            Working across multiple industries and various platforms has given me the confidence to walk into any engagement, ask the right questions and deliver value through quality outcomes and risk mitigation.
-          </div>
+          <!-- FILL: personal paragraph. The page works without it, but it is
+               the part people remember. -->
           <p class="reveal">
             Whether hybrid or fully remote, I have the experience, motivation and skillset to leverage technology and make a difference.
           </p>
         </div>
-        <div>
+      </div>
+    </section>
+
+    <!-- Evidence blocks -->
+    <section class="section">
+      <div class="container">
+        <span class="eyebrow reveal">Recent work</span>
+        <h2 class="section-title reveal">Three programmes that show how I work</h2>
+        <div class="evidence-grid">
+          <div class="card evidence-card reveal d1">
+            <div class="card-body">
+              <span class="evidence-meta">Scale</span>
+              <h3 style="font-size:1.15rem;font-weight:600;line-height:1.3;color:var(--fg);margin:0">$22bn banking merger</h3>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">Situation</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0">One of Australia's largest banking mergers needed a business analyst who could join a programme already running to build the target operating model.</p>
+              </div>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">What I did</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0">Worked across business, technology and operations to map current-state processes across 149 stores, identify duplications and design the future-state model. Ran workshops with stakeholders who had never met before the merger was announced.</p>
+              </div>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">The result</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0"><!-- FILL: go-live outcome sentence --></p>
+              </div>
+            </div>
+          </div>
+          <div class="card evidence-card reveal d2">
+            <div class="card-body">
+              <span class="evidence-meta">Money</span>
+              <h3 style="font-size:1.15rem;font-weight:600;line-height:1.3;color:var(--fg);margin:0">$50,000 saved through automation</h3>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">Situation</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0">An insurance contact centre was processing thousands of police-report-related identity checks manually. Every claim meant a phone call, a form and twenty minutes of data entry.</p>
+              </div>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">What I did</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0">Analysed the case type volume, complexity and failure rate, then worked with the automation team to identify what a bot could handle instead of a person.</p>
+              </div>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">The result</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0">$50,000 saved in the first year. Contact centre agents redirected to the cases that need judgement, not data entry.</p>
+              </div>
+            </div>
+          </div>
+          <div class="card evidence-card reveal d3">
+            <div class="card-body">
+              <span class="evidence-meta">The Build</span>
+              <h3 style="font-size:1.15rem;font-weight:600;line-height:1.3;color:var(--fg);margin:0">Agentic help desk for a global travel company</h3>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">Situation</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0">A global travel company's IT service desk was mostly logging and forwarding tickets. Resolutions were rare, escalations were the norm.</p>
+              </div>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">What I did</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0">Redesigned the intake workflow, built triage criteria so first-level agents could actually resolve, and integrated knowledge base search into the ticket form so agents had answers before they clicked assign.<!-- FILL: ticket-analysis sentence --></p>
+              </div>
+              <div>
+                <p class="evidence-meta" style="margin-bottom:.25rem">The result</p>
+                <p style="font-size:.9rem;line-height:1.5;color:var(--fg);margin:0">Live in a global enterprise, with a human escalation path on phone and chat.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- First 90 Days -->
+    <section class="section section-alt">
+      <div class="container">
+        <span class="eyebrow reveal">First 90 days</span>
+        <h2 class="section-title reveal">What I do when I start</h2>
+        <p class="reveal d1" style="font-size:.95rem;line-height:1.55;color:var(--fg)">
+          Every engagement is different, but the first few weeks follow the same pattern.
+        </p>
+        <ol class="steps reveal d2">
+          <li>
+            <span class="step-num">1</span>
+            <span class="step-text">Learn the process that runs in practice, not the one documented in Confluence. They are never the same.</span>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <span class="step-text">Find the person everyone goes to when things break. They've been working around the broken system for years and know every fix.</span>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <span class="step-text">Build a shared language across business, technology and operations so "done" means the same thing to everyone.</span>
+          </li>
+        </ol>
+        <p class="reveal d3" style="font-size:.9rem;line-height:1.5;color:var(--fg);font-style:italic;margin-top:1rem">
+          Twenty minutes is usually enough to tell whether I'm the right person for the work. If I'm not, I'll say so.
+        </p>
+      </div>
+    </section>
+
+    <!-- How I Work -->
+    <section class="section">
+      <div class="container">
+        <span class="eyebrow reveal">How I work</span>
+        <h2 class="section-title reveal">Four things I bring to every engagement</h2>
+        <div class="principles-grid">
+          <div class="card reveal d1">
+            <p class="principle-num">01</p>
+            <p class="principle-text">I start by understanding what problem you're actually solving. Sometimes the brief doesn't match what's needed.</p>
+          </div>
+          <div class="card reveal d2">
+            <p class="principle-num">02</p>
+            <p class="principle-text">I document what exists before designing what should replace it. The current state is never the same as the last steering deck.</p>
+          </div>
+          <div class="card reveal d3">
+            <p class="principle-num">03</p>
+            <p class="principle-text">I work alongside your teams, not in a separate room. The output is what ships, not what's approved.</p>
+          </div>
+          <div class="card reveal d4">
+            <p class="principle-num">04</p>
+            <p class="principle-text">I tell you when I don't know. If a subject is outside my experience, I'll find the right person or say so.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Facet cards -->
+    <section class="section section-alt">
+      <div class="container">
+        <span class="eyebrow reveal">Tools and expertise</span>
+        <h2 class="section-title reveal">The platforms, systems and methods I work with</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--gap,24px)">
           <div class="card facet-card reveal d1">
             <h3>Core Skills</h3>
             <div class="chips">
@@ -304,11 +589,46 @@
               <span class="chip">ChatGPT</span>
               <span class="chip">Gemini</span>
               <span class="chip">Hermes</span>
+              <span class="chip">Agentforce</span>
+              <span class="chip">Salesforce Service Cloud</span>
+              <span class="chip">UiPath</span>
               <span class="chip">n8n</span>
               <span class="chip">Pabbly</span>
               <span class="chip">Zapier</span>
             </div>
           </div>
+        </div>
+        <div style="margin-top:var(--gap,24px)">
+          <div class="card facet-card reveal d1">
+            <h3>Certifications</h3>
+            <div class="chips">
+              <span class="chip">CBAP</span>
+              <span class="chip">PMI-PBA</span>
+              <span class="chip">Agile Analysis (IIBA-AAC)</span>
+              <span class="chip">Scrum CSPO</span>
+              <span class="chip">Prosci Change Management</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Practical bits -->
+    <section class="section">
+      <div class="container">
+        <span class="eyebrow reveal">Practical bits</span>
+        <h2 class="section-title reveal">The details that usually come up</h2>
+        <div class="card reveal d1" style="padding:1.5rem">
+          <dl class="practical-grid">
+            <div class="practical-item">
+              <dt>Location</dt>
+              <dd>Brisbane based.</dd>
+            </div>
+            <div class="practical-item">
+              <dt>Rate</dt>
+              <dd>Happy to discuss once I understand the scope.</dd>
+            </div>
+          </dl>
         </div>
       </div>
     </section>
@@ -317,13 +637,12 @@
     <section class="section contact-band">
       <div class="container">
         <span class="eyebrow reveal">What next</span>
-        <h2 class="reveal">Think I'd be useful inside your team?</h2>
+        <h2 class="reveal">You are probably weighing up a shortlist.</h2>
         <p class="reveal d1">
-          If my experience looks like a fit for a role or a problem you're
-          working on, I'd like to hear about it.
+          If my experience looks like a fit for a role or a problem you're working on, I'd like to hear about it.
         </p>
         <div class="btn-row reveal d2">
-          <button type="button" class="btn btn-primary" data-open-contact>Get in touch</button>
+          <button type="button" class="btn btn-primary" data-open-contact>Get in Touch</button>
           <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Connect on LinkedIn</a>
         </div>
       </div>
@@ -333,6 +652,8 @@
     <footer>
     <p class="footer-brand">Brendan Sheppard</p>
     <div class="footer-links">
+      <a href="/work/">Work</a>
+      <a href="/cv/">CV</a>
       <span class="footer-email-wrap">
         <a href="mailto:hello@brendan.pro" id="footer-email-link" data-copy="hello@brendan.pro">Email</a>
         <span class="footer-email-tooltip" id="footer-email-tooltip" role="status">Copied hello@brendan.pro</span>
