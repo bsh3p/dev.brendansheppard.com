@@ -66,6 +66,24 @@
       flex-direction: column;
       justify-content: space-between;
     }
+  /* Patch v1.6: status pill split into two centred lines — title bold +
+       slightly larger, secondary line at base font size */
+    .status-pill-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .status-pill-title {
+      font-size: .95rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .status-pill-sub {
+      font-size: .82rem;
+      font-weight: 500;
+      line-height: 1.3;
+    }
   </style>
 </head>
 <body>
@@ -162,7 +180,10 @@
         <div class="hero-media reveal d2">
           <div class="status-pill status-pill--limited">
             <span class="status-dot" aria-hidden="true"></span>
-            Wrapping up a contract soon &mdash; open to new opportunities
+            <span class="status-pill-text">
+              <strong class="status-pill-title">Wrapping up a contract soon</strong>
+              <span class="status-pill-sub">open to new opportunities</span>
+            </span>
           </div>
           <div class="portrait-ring">
             <img src="https://res.cloudinary.com/textac/image/upload/v1761572854/Headshot_white_tn3o7u.png" alt="Brendan Sheppard" class="portrait" />
