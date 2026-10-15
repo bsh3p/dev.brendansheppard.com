@@ -256,6 +256,14 @@
     @media (max-width: 599px) {
       #contact-btn-mobile { display: inline-flex; }
     }
+    /* Vertically centre the envelope icon inside the button.
+       .hamburger-btn is not a flex container (it used absolute
+       positioning for the three bars), so the SVG won't centre
+       without explicit flex alignment. */
+    #contact-btn-mobile {
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
