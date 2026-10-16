@@ -237,6 +237,14 @@
     [data-theme="dark"] {
       --accent-cyan-text: #67e8f9;
     }
+    /* Patch v2.1, 16 Oct 2026: dotted section background — mirrors the
+       fixed bg-grid dot pattern (26px grid, var(--dot)) but scoped to
+       the section itself, so dots render at any scroll position. The
+       page-level bg-grid only shows dots near the top of the viewport. */
+    .section-dotted {
+      background-image: radial-gradient(var(--dot) 1px, transparent 1.5px);
+      background-size: 26px 26px;
+    }
     /* Facet cards grid: 2 columns wide, 1 column narrow.
        CRITICAL: never use inline style for grid layouts — inline styles
        can't respond to media queries and WILL overflow on mobile. */
@@ -415,8 +423,14 @@
 
     
 
+    <!-- FILL: new section — add content here -->
+    <section class="section">
+      <div class="container">
+      </div>
+    </section>
+
     <!-- About -->
-    <section class="section section-alt">
+    <section class="section section-dotted">
       <div class="container">
         <div class="about-copy about-solo">
           <span class="eyebrow reveal">About</span>
