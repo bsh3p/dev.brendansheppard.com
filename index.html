@@ -264,6 +264,48 @@
       align-items: center;
       justify-content: center;
     }
+  /* Patch v2.1, 17 Oct 2026: Why I'm Different section — three
+       accent-left cards in a row, number above claim. */
+    .why-section .container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap, 24px);
+    }
+    @media (max-width: 800px) {
+      .why-grid { grid-template-columns: 1fr; }
+    }
+    .card-accent-left {
+      border-left: 4px solid var(--accent);
+      padding-left: 22px;
+    }
+    .why-card {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .why-num {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--accent-text);
+    }
+    .why-claim {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--fg-heading, var(--fg));
+    }
+    .why-body {
+      font-size: .875rem;
+      line-height: 1.55;
+      color: var(--fg);
+    }
   </style>
 </head>
 <body>
@@ -415,9 +457,32 @@
 
     
 
-    <!-- FILL: new section — add content here -->
-    <section class="section">
+    <!-- Why I'm Different -->
+    <section class="section why-section" aria-labelledby="why-title">
       <div class="container">
+        <h2 class="eyebrow" id="why-title">Why I Am Different</h2>
+
+        <div class="why-grid">
+
+          <article class="card card-accent-left why-card reveal d1">
+            <p class="why-num">$50,000</p>
+            <h3 class="why-claim">I challenge the brief.</h3>
+            <p class="why-body">The stated problem is rarely the real one. At People First Bank, inside a $22bn merger programme, I questioned work everyone had accepted as manual and automated it out.</p>
+          </article>
+
+          <article class="card card-accent-left why-card reveal d2">
+            <p class="why-num">10 roles</p>
+            <h3 class="why-claim">Five industries, as an employee, a contractor and on the agency side.</h3>
+            <p class="why-body">Most people can compare an approach to one way of working. I've seen ten.</p>
+          </article>
+
+          <article class="card card-accent-left why-card reveal d3">
+            <p class="why-num">149 stores</p>
+            <h3 class="why-claim">I join programmes already in flight.</h3>
+            <p class="why-body">Salesforce to more than 800 staff across four continents at Flight Centre. I led requirements, UAT and implementation, and replaced a UK chat platform along the way.</p>
+          </article>
+
+        </div>
       </div>
     </section>
 
