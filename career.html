@@ -1,0 +1,537 @@
+<!-- brendansheppard.com, career map (dev only)
+     v1.0, 19 Oct 2026: career map page per Brendan_Sheppard_Career_Map.md spec.
+     Dev-only: not copied to prod until Brendan confirms role data + content. -->
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brendan Sheppard - Career map</title>
+<meta name="description" content="A career map of the roles, systems and industries Brendan Sheppard has worked across." />
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='23' text-anchor='middle' font-family='sans-serif' font-size='22' font-weight='bold' fill='%23A855F7'>B</text></svg>" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='23' text-anchor='middle' font-family='sans-serif' font-size='22' font-weight='bold' fill='%237C3AED'>B</text></svg>" media="(prefers-color-scheme: light)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  /* Site defaults to dark. Runs synchronously before first paint to avoid
+     a flash — only an explicit saved 'light' choice opts out of dark.
+     Kept as a plain inline script (not a module import) specifically so
+     it executes before anything else, including CSS. */
+  (function(){
+    try{
+      var t = localStorage.getItem('theme') || 'dark';
+      if(t !== 'light') document.documentElement.setAttribute('data-theme','dark');
+    }catch(e){
+      document.documentElement.setAttribute('data-theme','dark');
+    }
+  })();
+</script>
+
+  <script type="module" crossorigin src="/assets/main-UUm91_j5.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-f97qquOj.css">
+  <style>
+    /* Patch v1.0, 19 Oct 2026: career map page components.
+       All styles use existing design tokens only. */
+    /* Header nav links — desktop shows them next to Get in Touch; the
+       compiled bundle closes the mobile drawer on any a.nav-link click. */
+    .header-right .nav-link {
+      display: none;
+      align-items: center;
+      padding: 10px 14px;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--fg);
+      opacity: .78;
+      text-decoration: none;
+      border-radius: var(--radius);
+      transition: opacity .2s, background .2s;
+    }
+    @media (width >= 470px) {
+      .header-right .nav-link { display: inline-flex; }
+    }
+    .header-right .nav-link:hover { opacity: 1; background: var(--surface); }
+    .header-right .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
+
+    /* Mobile drawer nav links */
+    .mobile-nav .nav-link {
+      display: block;
+      padding: 14px 2px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--fg);
+      opacity: .85;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-nav .nav-link:hover,
+    .mobile-nav .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
+    .mobile-nav .mobile-nav-links { margin-bottom: 4px; }
+
+    /* Career map hero */
+    .career-hero { padding: calc(var(--header-h) + clamp(48px, 9vw, 110px)) 0 clamp(32px, 5vw, 56px); }
+    .career-hero .container { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.25rem; }
+    .career-hero h1 { margin: 0; max-width: 18ch; font-size: clamp(2rem, 6.4vw, 3.4rem); font-weight: 700; line-height: 1.08; letter-spacing: -.03em; }
+    .career-hero p { margin: 0; max-width: 560px; opacity: .82; font-size: 1.05rem; line-height: 1.7; }
+
+    /* Filter bar */
+    .filters { margin-top: clamp(20px, 3vw, 32px); }
+    .filters .container { display: flex; flex-direction: column; gap: 1.25rem; }
+    .filter-group { display: flex; flex-direction: column; gap: .6rem; }
+    .filter-label {
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--accent-cyan-text);
+    }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    /* Segmented Contract/Permanent toggle */
+    .seg { display: inline-flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 4px; }
+    .seg button {
+      border: none;
+      background: transparent;
+      color: var(--fg);
+      opacity: .65;
+      font-size: .85rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .2s, opacity .2s, color .2s;
+    }
+    .seg button:hover { opacity: 1; }
+    .seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); opacity: 1; }
+
+    /* Filter chips (interactive — NOT .chip, which is pointer-events:none) */
+    .filter-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: .82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, color .2s, opacity .2s;
+      opacity: .8;
+    }
+    .filter-chip:hover { border-color: var(--accent); opacity: 1; }
+    .filter-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); opacity: 1; }
+
+    /* Role cards grid */
+    .roles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap, 24px); }
+    @media (max-width: 800px) { .roles-grid { grid-template-columns: 1fr; } }
+    .role-card { display: flex; flex-direction: column; gap: .55rem; }
+    .role-card .role-title { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; line-height: 1.2; color: var(--accent-text); margin: 0; }
+    .role-card .role-company { font-size: .95rem; font-weight: 600; color: var(--fg); margin: 0; }
+    .role-card .role-dates { font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--fg); opacity: .6; margin: 0; }
+    .role-card .role-summary { font-size: .875rem; line-height: 1.55; color: var(--fg); opacity: .85; margin: 0; }
+    .role-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+    .role-tag {
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      opacity: .85;
+    }
+    .role-tag--type { border-color: var(--accent); color: var(--accent-text); }
+
+    /* Systems strip — horizontal swipe */
+    .systems-strip {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 2px 12px;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+    }
+    .systems-strip::-webkit-scrollbar { height: 6px; }
+    .systems-strip::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+    .systems-strip .filter-chip { flex-shrink: 0; scroll-snap-align: start; }
+
+    /* Credentials cards */
+    .cred-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap, 24px); }
+    @media (max-width: 800px) { .cred-grid { grid-template-columns: 1fr; } }
+    .cred-card h3 { font-size: 1.05rem; }
+    .cred-card p { margin-top: 6px; }
+
+    /* Contact band — same flex column patch as index.html (patch v2.1) */
+    .contact-band .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .contact-band p { margin: 0; }
+
+    /* Section headings reuse the site's section-title + eyebrow patterns */
+  </style>
+</head>
+<body>
+  <div class="bg-bloom" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+    <header class="header" id="header">
+    <div class="header-left">
+      <a href="/index.html" class="site-logo" aria-label="Brendan Sheppard — home">Brendan Sheppard</a>
+    </div>
+    <div class="header-right">
+      <a href="/index.html" class="nav-link">Home</a>
+      <a href="/career.html" class="nav-link" aria-current="page">Career</a>
+      <button class="theme-btn" id="theme-toggle-desktop" title="Toggle theme" aria-label="Toggle light or dark theme">
+        <svg class="theme-icon" id="theme-icon-desktop" viewBox="0 0 24 24"></svg>
+      </button>
+      <button type="button" class="btn btn-primary cta-trigger" id="contact-trigger-desktop" aria-haspopup="dialog">Get in Touch</button>
+      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menu" hidden>
+    <button type="button" class="mobile-nav-close" id="mobile-nav-close" aria-label="Close menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="mobile-nav-links">
+      <a href="/index.html" class="nav-link">Home</a>
+      <a href="/career.html" class="nav-link" aria-current="page">Career</a>
+    </div>
+    <div class="mobile-nav-utility mobile-nav-theme-row">
+      <button class="theme-btn" id="theme-toggle-mobile" title="Toggle theme" aria-label="Toggle light or dark theme">
+        <svg class="theme-icon" id="theme-icon-mobile" viewBox="0 0 24 24"></svg>
+      </button>
+    </div>
+    <button type="button" class="btn btn-primary mobile-nav-contact" id="contact-trigger-mobile">Get in Touch</button>
+  </nav>
+  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop" hidden></div>
+
+
+    <div class="contact-backdrop" id="contact-backdrop" hidden></div>
+  <aside class="contact-drawer" id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="contact-drawer-title" hidden>
+    <button type="button" class="contact-drawer-close" id="contact-drawer-close" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="contact-drawer-body">
+      <h2 id="contact-drawer-title" class="contact-item" style="animation-delay:.05s">Get in Touch</h2>
+      <p class="drawer-lead contact-item" style="animation-delay:.1s">The quickest ways to reach me directly.</p>
+
+      <div class="contact-block contact-item" style="animation-delay:.16s">
+        <span class="contact-label">Email</span>
+        <div class="contact-email-row">
+          <a href="mailto:" class="contact-email" id="contact-email-link"></a>
+          <button type="button" class="contact-copy" id="contact-copy-btn" data-copy="" aria-label="Copy email address">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <svg class="icon-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="contact-block contact-item" style="animation-delay:.22s">
+        <span class="contact-label">LinkedIn</span>
+        <div class="contact-email-row">
+          <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="contact-copy" aria-label="Open LinkedIn profile">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+
+  <main>
+    <!-- Career map hero -->
+    <section class="career-hero">
+      <div class="container">
+        <span class="eyebrow reveal">Career map</span>
+        <h1 class="reveal d1">Select a role to jump to its detail.</h1>
+        <p class="reveal d2">Time is compressed before 2021. The filters below highlight matching roles.</p>
+        <p class="reveal d2">Contract&#8202;·&#8202;Permanent&#8202;·&#8202;Systems&#8202;·&#8202;Industries</p>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters" aria-label="Filter roles">
+      <div class="container">
+        <div class="filter-group reveal d1">
+          <span class="filter-label">Engagement</span>
+          <div class="filter-row">
+            <div class="seg" role="group" aria-label="Engagement type">
+              <button type="button" data-filter-type="all" aria-pressed="true">All</button>
+              <button type="button" data-filter-type="Contract" aria-pressed="false">Contract</button>
+              <button type="button" data-filter-type="Permanent" aria-pressed="false">Permanent</button>
+            </div>
+          </div>
+        </div>
+        <div class="filter-group reveal d2">
+          <span class="filter-label">System</span>
+          <div class="filter-row" id="filter-systems"></div>
+        </div>
+        <div class="filter-group reveal d3">
+          <span class="filter-label">Industry</span>
+          <div class="filter-row" id="filter-industries"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent roles -->
+    <section class="section section-alt" aria-labelledby="recent-title">
+      <div class="container">
+        <span class="eyebrow reveal">Recent roles</span>
+        <h2 class="section-title reveal" id="recent-title">Oct 2021 to now</h2>
+        <div class="roles-grid" id="recent-roles"></div>
+      </div>
+    </section>
+
+    <!-- Earlier career -->
+    <section class="section" aria-labelledby="earlier-title">
+      <div class="container">
+        <span class="eyebrow reveal">Earlier career</span>
+        <h2 class="section-title reveal" id="earlier-title">2009 to 2021</h2>
+        <div class="roles-grid" id="earlier-roles"></div>
+      </div>
+    </section>
+
+    <!-- Systems by role -->
+    <section class="section section-alt" aria-labelledby="systems-title">
+      <div class="container">
+        <span class="eyebrow reveal">Systems by role</span>
+        <h2 class="section-title reveal" id="systems-title">Select a system to filter the page</h2>
+        <p class="section-lead reveal d1" style="margin:0 0 18px">Swipe sideways to see every role.</p>
+        <div class="systems-strip reveal d1" id="systems-strip"></div>
+      </div>
+    </section>
+
+    <!-- Credentials -->
+    <section class="section" aria-labelledby="credentials-title">
+      <div class="container">
+        <span class="eyebrow reveal">Credentials</span>
+        <h2 class="section-title reveal" id="credentials-title">Certifications, awards and volunteering</h2>
+        <!-- FILL: credential entries (certifications, awards, volunteering) -->
+        <div class="cred-grid" id="credentials"></div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section contact-band">
+      <div class="container">
+        <span class="eyebrow reveal">Get in touch</span>
+        <p class="reveal d1">
+          Contact details are available on request via LinkedIn or brendansheppard.com.
+        </p>
+        <div class="btn-row reveal d2">
+          <button type="button" class="btn btn-primary" data-open-contact>Get in Touch</button>
+          <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Connect on LinkedIn</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+    <footer>
+    <p class="footer-brand">Brendan Sheppard</p>
+    <div class="footer-links">
+      <a href="/work/">Work</a>
+      <a href="/cv/">CV</a>
+      <span class="footer-email-wrap">
+        <a href="mailto:" id="footer-email-link" data-copy="">Email</a>
+        <span class="footer-email-tooltip" id="footer-email-tooltip" role="status"></span>
+      </span>
+      <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+    <p class="copyright">&copy; 2026 Brendan Sheppard. All rights reserved.</p>
+  </footer>
+
+
+<!-- click-to-reveal email: the email address is assembled from fragments
+     and only placed into the DOM on user click. The static HTML contains
+     zero trace of the address — scrapers and crawlers find nothing. -->
+  <script>
+    (function() {
+      var parts = ['hello', String.fromCharCode(64), 'brendan', '.', 'pro'];
+      var email = parts.join('');
+
+      /* Drawer: show "Click to reveal" until tapped */
+      var drawerLink = document.getElementById('contact-email-link');
+      if (drawerLink) {
+        drawerLink.textContent = 'Click to reveal';
+        drawerLink.href = '#';
+        drawerLink.style.cursor = 'pointer';
+        drawerLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          this.textContent = email;
+          this.href = 'mailto:' + email;
+          var btn = document.getElementById('contact-copy-btn');
+          if (btn) btn.setAttribute('data-copy', email);
+        });
+      }
+
+      /* Footer: runtime assembly only (link text is "Email", not the
+         address itself, so no click-to-reveal needed) */
+      var footerLink = document.getElementById('footer-email-link');
+      if (footerLink) {
+        footerLink.href = 'mailto:' + email;
+        footerLink.setAttribute('data-copy', email);
+      }
+      var tooltip = document.getElementById('footer-email-tooltip');
+      if (tooltip) tooltip.textContent = 'Copied ' + email;
+    })();
+  </script>
+
+<!-- Career map renderer: ROLES below is the single source of truth for the
+     page. Entries are rendered into the Recent roles / Earlier career grids
+     and drive the System and Industry filters. -->
+  <script>
+    (function() {
+      'use strict';
+
+      /* FILL: role entries. Copy this shape for each role.
+         band: "recent" (Oct 2021 to now) or "earlier" (2009 to 2021).
+         end: use "now" for the current role.
+      var ROLES = [
+        {
+          title: "Senior Business Analyst",
+          company: "Example Co",
+          start: "Oct 2021",
+          end: "now",
+          band: "recent",
+          type: "Contract",            // "Contract" | "Permanent"
+          industry: "Insurance",
+          systems: ["Salesforce", "Jira"],
+          summary: "One line on what the role involved."
+        }
+      ];
+      */
+      var ROLES = [];
+
+      var state = { type: 'all', system: 'all', industry: 'all' };
+
+      function esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      function roleCard(r) {
+        var dates = r.end === 'now'
+          ? r.start + ' — now'
+          : r.start + ' — ' + r.end;
+        var tags = ['<span class="role-tag role-tag--type">' + esc(r.type) + '</span>'];
+        tags.push('<span class="role-tag">' + esc(r.industry) + '</span>');
+        (r.systems || []).forEach(function(s) {
+          tags.push('<span class="role-tag">' + esc(s) + '</span>');
+        });
+        return (
+          '<article class="card role-card reveal d1">' +
+            '<p class="role-title">' + esc(r.title) + '</p>' +
+            '<p class="role-company">' + esc(r.company) + '</p>' +
+            '<p class="role-dates">' + esc(dates) + '</p>' +
+            (r.summary ? '<p class="role-summary">' + esc(r.summary) + '</p>' : '') +
+            '<div class="role-tags">' + tags.join('') + '</div>' +
+          '</article>'
+        );
+      }
+
+      function visible(role) {
+        if (state.type !== 'all' && role.type !== state.type) return false;
+        if (state.system !== 'all' && (role.systems || []).indexOf(state.system) === -1) return false;
+        if (state.industry !== 'all' && role.industry !== state.industry) return false;
+        return true;
+      }
+
+      function render() {
+        var recent = document.getElementById('recent-roles');
+        var earlier = document.getElementById('earlier-roles');
+        if (!recent || !earlier) return;
+        var recentHtml = '', earlierHtml = '';
+        ROLES.forEach(function(r) {
+          if (!visible(r)) return;
+          var card = roleCard(r);
+          if (r.band === 'recent') recentHtml += card;
+          else earlierHtml += card;
+        });
+        recent.innerHTML = recentHtml;
+        earlier.innerHTML = earlierHtml;
+        document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('in'); });
+      }
+
+      function buildFilters() {
+        var systems = {}, industries = {};
+        ROLES.forEach(function(r) {
+          (r.systems || []).forEach(function(s) { systems[s] = true; });
+          if (r.industry) industries[r.industry] = true;
+        });
+        var sysEl = document.getElementById('filter-systems');
+        var indEl = document.getElementById('filter-industries');
+        var strip = document.getElementById('systems-strip');
+        if (sysEl) {
+          sysEl.innerHTML = '<button type="button" class="filter-chip" data-system="all" aria-pressed="true">All</button>' +
+            Object.keys(systems).sort().map(function(s) {
+              return '<button type="button" class="filter-chip" data-system="' + esc(s) + '" aria-pressed="false">' + esc(s) + '</button>';
+            }).join('');
+        }
+        if (indEl) {
+          indEl.innerHTML = '<button type="button" class="filter-chip" data-industry="all" aria-pressed="true">All</button>' +
+            Object.keys(industries).sort().map(function(i) {
+              return '<button type="button" class="filter-chip" data-industry="' + esc(i) + '" aria-pressed="false">' + esc(i) + '</button>';
+            }).join('');
+        }
+        if (strip) {
+          strip.innerHTML = Object.keys(systems).sort().map(function(s) {
+            return '<button type="button" class="filter-chip" data-system="' + esc(s) + '" aria-pressed="false">' + esc(s) + '</button>';
+          }).join('');
+        }
+      }
+
+      function bindFilters() {
+        document.querySelectorAll('.seg button').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            document.querySelectorAll('.seg button').forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
+            btn.setAttribute('aria-pressed', 'true');
+            state.type = btn.getAttribute('data-filter-type');
+            render();
+          });
+        });
+        function bindChips(attr, key) {
+          document.querySelectorAll('[data-' + attr + ']').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              var val = btn.getAttribute('data-' + attr);
+              var parent = btn.parentElement;
+              if (parent) {
+                parent.querySelectorAll('[data-' + attr + ']').forEach(function(b) {
+                  b.setAttribute('aria-pressed', 'false');
+                });
+              }
+              btn.setAttribute('aria-pressed', 'true');
+              state[key] = val === 'all' ? 'all' : val;
+              // Keep the systems-strip in sync with the filter chips
+              if (attr === 'system') {
+                document.querySelectorAll('[data-system]').forEach(function(b) {
+                  b.setAttribute('aria-pressed', String(b.getAttribute('data-system') === state.system));
+                });
+              }
+              render();
+            });
+          });
+        }
+        bindChips('system', 'system');
+        bindChips('industry', 'industry');
+      }
+
+      buildFilters();
+      bindFilters();
+      render();
+
+      /* Credentials — FILL: cards. */
+      var credEl = document.getElementById('credentials');
+      if (credEl) {
+        /* FILL: add .cred-card article blocks here once content exists */
+        credEl.innerHTML = '';
+      }
+    })();
+  </script>
+</body>
+</html>

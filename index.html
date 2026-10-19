@@ -1,6 +1,9 @@
 <!-- brendansheppard.com, home
      v2.0, 15 Oct 2026: evidence-first rebuild. Proof bar, evidence blocks,
-     first 90 days, how I work, certifications. Years claim corrected. -->
+     first 90 days, how I work, certifications. Years claim corrected.
+     v2.8, 19 Oct 2026: career map page added — header Career nav link,
+     mobile hamburger restored (2+ nav items), envelope button removed.
+     Dev only: career.html not yet on prod. -->
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
@@ -248,22 +251,40 @@
     @media (max-width: 700px) {
       .facet-grid { grid-template-columns: 1fr; }
     }
-    /* Envelope button (mobile-only contact drawer trigger).
-       Visible below 600px where the header CTA is hidden.
-       If more nav items are added later, re-enable the hidden
-       hamburger (#hamburger-btn) and remove this button and rule. */
-    #contact-btn-mobile { display: none; }
-    @media (max-width: 599px) {
-      #contact-btn-mobile { display: inline-flex; }
-    }
-    /* Vertically centre the envelope icon inside the button.
-       .hamburger-btn is not a flex container (it used absolute
-       positioning for the three bars), so the SVG won't centre
-       without explicit flex alignment. */
-    #contact-btn-mobile {
+    /* Header nav links — desktop shows them next to Get in Touch; the
+       compiled bundle closes the mobile drawer on any a.nav-link click. */
+    .header-right .nav-link {
+      display: none;
       align-items: center;
-      justify-content: center;
+      padding: 10px 14px;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--fg);
+      opacity: .78;
+      text-decoration: none;
+      border-radius: var(--radius);
+      transition: opacity .2s, background .2s;
     }
+    @media (width >= 470px) {
+      .header-right .nav-link { display: inline-flex; }
+    }
+    .header-right .nav-link:hover { opacity: 1; background: var(--surface); }
+    .header-right .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
+
+    /* Mobile drawer nav links */
+    .mobile-nav .nav-link {
+      display: block;
+      padding: 14px 2px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--fg);
+      opacity: .85;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-nav .nav-link:hover,
+    .mobile-nav .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
+    .mobile-nav .mobile-nav-links { margin-bottom: 4px; }
   /* Patch v2.1, 17 Oct 2026: Why I'm Different section — three
        accent-left cards in a row, number above claim. */
     /* Patch v2.1, 17 Oct 2026: contact band — consistent vertical
@@ -424,30 +445,27 @@
       <a href="/index.html" class="site-logo" aria-label="Brendan Sheppard — home">Brendan Sheppard</a>
     </div>
     <div class="header-right">
+      <a href="/career.html" class="nav-link">Career</a>
       <button class="theme-btn" id="theme-toggle-desktop" title="Toggle theme" aria-label="Toggle light or dark theme">
         <svg class="theme-icon" id="theme-icon-desktop" viewBox="0 0 24 24"></svg>
       </button>
       <button type="button" class="btn btn-primary cta-trigger" id="contact-trigger-desktop" aria-haspopup="dialog">Get in Touch</button>
-      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" style="display:none" aria-expanded="false" aria-controls="mobile-nav">
+      <button type="button" class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
         <span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span>
-      </button>
-      <!-- Mobile-only envelope button: opens the contact drawer directly
-           instead of a hamburger menu with only one option (Get in Touch).
-           If more nav items are added later, re-enable the hamburger above
-           and remove data-open-contact from this button. -->
-      <button type="button" class="hamburger-btn" id="contact-btn-mobile" data-open-contact aria-label="Get in Touch" title="Get in Touch">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>
       </button>
     </div>
   </header>
 
-  <!-- Single-page site: no nav links left to show, so this drawer is now
-       purely the narrow-width (<470px) fallback for Theme + Contact,
-       which is exactly what it still does below their own breakpoints. -->
+  <!-- Mobile nav: now two pages (Home + Career) plus contact, so the
+       hamburger drawer is the right pattern again. -->
   <nav class="mobile-nav" id="mobile-nav" aria-label="Menu" hidden>
     <button type="button" class="mobile-nav-close" id="mobile-nav-close" aria-label="Close menu">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
+    <div class="mobile-nav-links">
+      <a href="/index.html" class="nav-link" aria-current="page">Home</a>
+      <a href="/career.html" class="nav-link">Career</a>
+    </div>
     <div class="mobile-nav-utility mobile-nav-theme-row">
       <button class="theme-btn" id="theme-toggle-mobile" title="Toggle theme" aria-label="Toggle light or dark theme">
         <svg class="theme-icon" id="theme-icon-mobile" viewBox="0 0 24 24"></svg>
