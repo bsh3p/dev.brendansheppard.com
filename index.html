@@ -397,6 +397,22 @@
       padding-top: clamp(24px, 3vw, 40px);
       padding-bottom: clamp(64px, 9vw, 104px);
     }
+  /* Patch v2.7, 19 Oct 2026: dev-only — profile portrait at half size.
+     Compiled widths min(260px,58vw) / min(320px,68vw) halve to
+     min(130px,29vw) / min(160px,34vw). Overrides all three breakpoint
+     states (mobile, 900-1024 single col, 1025+ two col). The half-size
+     portrait also makes the media column shorter than the copy column,
+     which stretches grid row 1 and floats the caption far below the
+     photo — anchor the media block to the bottom of its row so the
+     caption gap stays at the 35px row-gap. */
+    .portrait { width: min(130px, 29vw); }
+    @media (width >= 900px) and (width <= 1024px) {
+      .portrait { width: min(130px, 29vw); }
+    }
+    @media (width >= 1025px) {
+      .portrait { width: min(160px, 34vw); }
+      .hero-media { align-self: end; }
+    }
   </style>
 </head>
 <body>
