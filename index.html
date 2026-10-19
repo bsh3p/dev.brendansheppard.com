@@ -355,6 +355,26 @@
     @media (width >= 64rem)  { .header { padding: 0 max(calc((100vw - 64rem) / 2 + clamp(20px, 4vw, 40px)), clamp(14px, 3vw, 32px)); }  .logo-strip { max-width: 64rem; } }
     @media (width >= 80rem)  { .header { padding: 0 max(calc((100vw - 80rem) / 2 + clamp(20px, 4vw, 40px)), clamp(14px, 3vw, 32px)); }  .logo-strip { max-width: 80rem; } }
     @media (width >= 96rem)  { .header { padding: 0 max(calc((100vw - 96rem) / 2 + clamp(20px, 4vw, 40px)), clamp(14px, 3vw, 32px)); }  .logo-strip { max-width: 96rem; } }
+  /* Patch v2.4, 19 Oct 2026: hero caption gap under the portrait.
+     The compiled @900px 2-column switch fires while the container is
+     still capped at 48rem (768px), so the media column (271px) is
+     narrower than the 320px portrait and the caption drops 180-220px
+     below the photo. Keep the hero single-column until 1025px, then go
+     2-column with a tighter row gap so the caption sits ~35px under the
+     portrait — matching the pill-to-photo gap above. */
+    @media (width >= 900px) and (width <= 1024px) {
+      .hero-grid { grid-template-columns: 1fr; grid-template-areas: "media" "caption" "copy"; gap: clamp(20px, 4vw, 32px); }
+      .hero-copy { text-align: center; align-self: auto; }
+      .hero-caption { align-self: auto; }
+      .hero h1 { margin-top: 14px; }
+      .hero-ctas { justify-content: center; }
+      .portrait { width: min(260px, 58vw); }
+    }
+    @media (width >= 1025px) {
+      .hero-grid { grid-template: "copy media" "copy caption" / 1.15fr .85fr; align-items: start; column-gap: clamp(28px, 5vw, 64px); row-gap: 35px; }
+      .hero-copy { text-align: left; align-self: center; }
+      .hero-caption { align-self: start; }
+    }
   </style>
 </head>
 <body>
