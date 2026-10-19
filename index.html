@@ -332,6 +332,17 @@
       line-height: 1.55;
       color: var(--fg);
     }
+  /* Patch v2.5, 19 Oct 2026: why-card titles on one line. The compiled
+     @max-width:800px grid breakpoint fires while the container is still
+     capped at 48rem, squeezing cards to ~216px and wrapping titles to
+     2-3 lines. Single column until 1025px (same logic as the hero v2.4
+     fix), 3-col after, and cap the title at 1.5rem so the longest title
+     fits one line in the narrowest 3-col card (~294px). */
+    .why-grid { grid-template-columns: 1fr; }
+    .why-num { font-size: 1.5rem; }
+    @media (width >= 1025px) {
+      .why-grid { grid-template-columns: repeat(3, 1fr); }
+    }
   /* Patch v2.2, 19 Oct 2026: balance whitespace above and below the logo
      marquee. The hero contributes ~80px bottom padding and the first
      .section contributes ~104px top, so the band needs ~20px more top
