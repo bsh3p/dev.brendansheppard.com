@@ -80,7 +80,7 @@
   .wrap {
     max-width: var(--container-w);
     margin: 0 auto;
-    padding: calc(var(--header-h) + clamp(20px, 3vw, 40px)) clamp(20px, 4vw, 40px) 80px;
+    padding: calc(72px + clamp(20px, 3vw, 40px)) clamp(20px, 4vw, 40px) 80px;
   }
 
   /* Facts strip */
@@ -191,7 +191,7 @@
 
   /* Responsive overrides */
   @media (max-width: 640px) {
-    .wrap { padding-block: 20px 56px; }
+    .wrap { padding-bottom: 56px; }
     section { margin-top: 48px; }
     .facts { gap: 16px 20px; grid-template-columns: 1fr 1fr; }
     .sec-head { flex-direction: column; }
