@@ -386,6 +386,17 @@
       .hero-copy { text-align: left; align-self: center; }
       .hero-caption { align-self: start; }
     }
+  /* Patch v2.6, 19 Oct 2026: section padding sweep. The contact band
+     follows the Tools section — both transparent .section — so their
+     paddings stacked (104+104=208px) with no alt-panel to break the
+     whitespace, making the gap above "What next" read too large. Reduce
+     the band's top padding so the perceived gap matches the other
+     sections (~145px desktop, tracked across widths: tools pb 104 +
+     band pt ~40). */
+    .contact-band {
+      padding-top: clamp(24px, 3vw, 40px);
+      padding-bottom: clamp(64px, 9vw, 104px);
+    }
   </style>
 </head>
 <body>
