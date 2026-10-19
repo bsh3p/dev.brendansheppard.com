@@ -219,6 +219,8 @@
     .mhint { display: inline; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  /* Keep theme toggle visible on mobile — compiled stylesheet hides .theme-btn below 600px */
+  #theme-toggle-desktop { display: grid; }
 </style>
 </head>
 <body>

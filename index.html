@@ -434,6 +434,12 @@
       .portrait { width: min(160px, 34vw); }
       .hero-media { align-self: end; }
     }
+  /* Patch v2.8, 20 Oct 2026: keep theme toggle visible on mobile. The
+     compiled stylesheet hides .theme-btn below 600px. For multi-page
+     sites (Home + Career) the desktop header toggle should stay visible
+     at every width; the mobile nav drawer toggle is an extra, not the
+     only option. */
+    #theme-toggle-desktop { display: grid; }
   </style>
 </head>
 <body>
@@ -715,7 +721,7 @@
     <footer>
     <p class="footer-brand">Brendan Sheppard</p>
     <div class="footer-links">
-      <a href="/work/">Work</a>
+      <a href="/career.html">Career</a>
       <a href="/cv/">CV</a>
       <span class="footer-email-wrap">
         <a href="mailto:" id="footer-email-link" data-copy="">Email</a>
