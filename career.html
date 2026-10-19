@@ -1,6 +1,6 @@
 <!-- brendansheppard.com, career map (dev only)
-     v1.0, 19 Oct 2026: career map page per Brendan_Sheppard_Career_Map.md spec.
-     Dev-only: not copied to prod until Brendan confirms role data + content. -->
+     v2.0, 20 Oct 2026: full career map from brendan_sheppard_career_map_v8_20oct26.txt.
+     Dev only: not copied to prod until Brendan confirms. -->
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
@@ -15,9 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
   /* Site defaults to dark. Runs synchronously before first paint to avoid
-     a flash — only an explicit saved 'light' choice opts out of dark.
-     Kept as a plain inline script (not a module import) specifically so
-     it executes before anything else, including CSS. */
+     a flash — only an explicit saved 'light' choice opts out of dark. */
   (function(){
     try{
       var t = localStorage.getItem('theme') || 'dark';
@@ -27,141 +25,206 @@
     }
   })();
 </script>
+<script type="module" crossorigin src="/assets/main-UUm91_j5.js"></script>
+<link rel="stylesheet" crossorigin href="/assets/main-f97qquOj.css">
+<style>
+  /* Career map — extra tokens not covered by the compiled stylesheet */
+  :root {
+    --muted: #4B5263;
+    --border-strong: #C9CCD3;
+    --accent-soft: #F3E8FF;
+    --cyan-soft: #E0F7FA;
+  }
+  [data-theme="dark"] {
+    --muted: #A9B0C3;
+    --border-strong: #3B4562;
+    --accent-soft: #2A1F45;
+    --cyan-soft: #0F2A33;
+  }
 
-  <script type="module" crossorigin src="/assets/main-UUm91_j5.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/main-f97qquOj.css">
-  <style>
-    /* Patch v1.0, 19 Oct 2026: career map page components.
-       All styles use existing design tokens only. */
-    /* Header nav links — desktop shows them next to Get in Touch; the
-       compiled bundle closes the mobile drawer on any a.nav-link click. */
-    .header-right .nav-link {
-      display: none;
-      align-items: center;
-      padding: 10px 14px;
-      font-size: .9rem;
-      font-weight: 600;
-      color: var(--fg);
-      opacity: .78;
-      text-decoration: none;
-      border-radius: var(--radius);
-      transition: opacity .2s, background .2s;
-    }
-    @media (width >= 470px) {
-      .header-right .nav-link { display: inline-flex; }
-    }
-    .header-right .nav-link:hover { opacity: 1; background: var(--surface); }
-    .header-right .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
+  /* Header nav links — same as home page */
+  .header-right .nav-link {
+    display: none;
+    align-items: center;
+    padding: 10px 14px;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--fg);
+    opacity: .78;
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: opacity .2s, background .2s;
+  }
+  @media (width >= 470px) {
+    .header-right .nav-link { display: inline-flex; }
+  }
+  .header-right .nav-link:hover { opacity: 1; background: var(--surface); }
+  .header-right .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
 
-    /* Mobile drawer nav links */
-    .mobile-nav .nav-link {
-      display: block;
-      padding: 14px 2px;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--fg);
-      opacity: .85;
-      text-decoration: none;
-      border-bottom: 1px solid var(--border);
-    }
-    .mobile-nav .nav-link:hover,
-    .mobile-nav .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
-    .mobile-nav .mobile-nav-links { margin-bottom: 4px; }
+  /* Mobile drawer nav links */
+  .mobile-nav .nav-link {
+    display: block;
+    padding: 14px 2px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--fg);
+    opacity: .85;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-nav .nav-link:hover,
+  .mobile-nav .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
+  .mobile-nav .mobile-nav-links { margin-bottom: 4px; }
 
-    /* Career map hero */
-    .career-hero { padding: calc(var(--header-h) + clamp(48px, 9vw, 110px)) 0 clamp(32px, 5vw, 56px); }
-    .career-hero .container { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.25rem; }
-    .career-hero h1 { margin: 0; max-width: 18ch; font-size: clamp(2rem, 6.4vw, 3.4rem); font-weight: 700; line-height: 1.08; letter-spacing: -.03em; }
-    .career-hero p { margin: 0; max-width: 560px; opacity: .82; font-size: 1.05rem; line-height: 1.7; }
+  /* Career map layout — content area wrapper */
+  .wrap {
+    max-width: var(--container-w);
+    margin: 0 auto;
+    padding: 24px clamp(20px, 4vw, 40px) 80px;
+  }
 
-    /* Filter bar */
-    .filters { margin-top: clamp(20px, 3vw, 32px); }
-    .filters .container { display: flex; flex-direction: column; gap: 1.25rem; }
-    .filter-group { display: flex; flex-direction: column; gap: .6rem; }
-    .filter-label {
-      font-size: .75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      color: var(--accent-cyan-text);
-    }
-    .filter-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  /* Facts strip */
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px 28px; }
+  .fact { min-width: 0; }
+  .fact b { display: block; font-family: var(--font-display); font-size: 1.6rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .fact span { font-size: .8rem; color: var(--muted); }
+  .facts + section { margin-top: 40px; }
 
-    /* Filter chips (interactive — NOT .chip, which is pointer-events:none) */
-    .filter-chip {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--fg);
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: .82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: border-color .2s, background .2s, color .2s, opacity .2s;
-      opacity: .8;
-    }
-    .filter-chip:hover { border-color: var(--accent); opacity: 1; }
-    .filter-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); opacity: 1; }
+  /* Section headings */
+  section { margin-top: 64px; }
+  .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-bottom: 20px; }
+  .sec-head h2 { font-family: var(--font-display); letter-spacing: -.02em; margin: 0; font-size: clamp(1.5rem, 3.2vw, 2rem); font-weight: 600; }
+  .sec-head p { margin: 0; color: var(--muted); font-size: .9rem; }
 
-    /* Role cards grid */
-    .roles-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap, 24px); }
-    @media (max-width: 800px) { .roles-grid { grid-template-columns: 1fr; } }
-    .role-card { display: flex; flex-direction: column; gap: .55rem; }
-    .role-card .role-title { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; line-height: 1.2; color: var(--accent-text); margin: 0; }
-    .role-card .role-company { font-size: .95rem; font-weight: 600; color: var(--fg); margin: 0; }
-    .role-card .role-dates { font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--fg); opacity: .6; margin: 0; }
-    .role-card .role-summary { font-size: .875rem; line-height: 1.55; color: var(--fg); opacity: .85; margin: 0; }
-    .role-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
-    .role-tag {
-      font-size: .72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--fg);
-      opacity: .85;
-    }
-    .role-tag--type { border-color: var(--accent); color: var(--accent-text); }
+  /* Career map Gantt */
+  .map { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 16px 12px; box-shadow: var(--shadow-card); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .78rem; color: var(--muted); margin-bottom: 12px; }
+  .legend i { display: inline-block; width: 22px; height: 8px; border-radius: 4px; margin-right: 6px; vertical-align: middle; }
+  .axis, .row { display: grid; grid-template-columns: minmax(118px, 32%) 1fr; column-gap: 12px; }
+  .axis { margin-bottom: 4px; }
+  .track { position: relative; height: 100%; min-height: 34px; }
+  .axis .track { min-height: 22px; }
+  .tick { position: absolute; top: 0; transform: translateX(-50%); font-size: .75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .tick.first { transform: none; }
+  .gridline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border); }
+  .break { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed var(--border-strong); }
+  .row { width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--border); padding: 5px 4px; cursor: pointer; align-items: center; transition: opacity .2s, background .15s; border-radius: 0; }
+  .row:hover { background: var(--surface); }
+  .row .who { min-width: 0; line-height: 1.25; }
+  .row .who b { display: block; font-size: .85rem; font-weight: 600; overflow-wrap: anywhere; }
+  .row .who span { font-size: .72rem; color: var(--muted); }
+  .bar-seg { position: absolute; top: 50%; height: 14px; transform: translateY(-50%); border-radius: 7px; min-width: 9px; background: var(--accent); }
+  .bar-seg.perm { background: var(--accent-cyan); }
+  .bar-seg.now::after { content: ""; position: absolute; right: -5px; top: 50%; width: 10px; height: 10px; transform: translateY(-50%); border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); }
+  .row.dim { opacity: .22; }
+  .row.hit { background: var(--accent-soft); }
+  .mapstatus { margin-left: auto; color: var(--accent-text); font-weight: 600; }
+  .mapstatus:empty { display: none; }
 
-    /* Systems strip — horizontal swipe */
-    .systems-strip {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 4px 2px 12px;
-      scroll-snap-type: x proximity;
-      -webkit-overflow-scrolling: touch;
-    }
-    .systems-strip::-webkit-scrollbar { height: 6px; }
-    .systems-strip::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
-    .systems-strip .filter-chip { flex-shrink: 0; scroll-snap-align: start; }
+  /* Filters */
+  .filters { margin-top: 20px; padding: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); display: grid; gap: 14px; }
+  .filter-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .filter-label { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); min-width: 78px; }
+  .chip { background: var(--bg); border: 1px solid var(--border-strong); border-radius: 999px; padding: 5px 12px; font-size: .82rem; font-weight: 500; cursor: pointer; transition: border-color .15s, background .15s; }
+  .chip:hover { border-color: var(--accent); }
+  .chip[aria-pressed="true"] { background: var(--cta-bg); border-color: var(--cta-bg); color: var(--cta-fg); }
+  .clear { margin-left: auto; background: none; border: 0; color: var(--accent-text); font-weight: 600; font-size: .85rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .status { font-size: .85rem; color: var(--muted); min-height: 1.4em; }
 
-    /* Credentials cards */
-    .cred-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap, 24px); }
-    @media (max-width: 800px) { .cred-grid { grid-template-columns: 1fr; } }
-    .cred-card h3 { font-size: 1.05rem; }
-    .cred-card p { margin-top: 6px; }
+  /* Recent roles — expandable cards */
+  .cards { display: grid; gap: 14px; }
+  details.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: opacity .2s, border-color .2s; scroll-margin-top: 16px; }
+  details.card[open] { border-color: var(--accent); }
+  details.card summary { list-style: none; cursor: pointer; padding: 18px 20px; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: start; }
+  details.card summary::-webkit-details-marker { display: none; }
+  .card h3 { font-family: var(--font-display); letter-spacing: -.02em; margin: 0; font-size: 1.25rem; font-weight: 700; }
+  .card .role { font-weight: 500; }
+  .card .when { text-align: right; font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .card .when b { display: block; color: var(--fg); font-weight: 600; }
+  .card .hl { grid-column: 1 / -1; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+  .hl strong { color: var(--accent-text); font-family: var(--font-display); font-size: 1.05rem; }
+  .tag { font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-radius: 6px; padding: 3px 8px; border: 1px solid var(--border-strong); color: var(--muted); background: var(--bg); }
+  .tag.contract { color: var(--accent-text); border-color: var(--accent); }
+  .tag.perm { color: var(--accent-cyan-text); border-color: var(--accent-cyan); }
+  .toggle { grid-column: 1 / -1; font-size: .8rem; color: var(--accent-text); font-weight: 600; }
+  details.card[open] .toggle::before { content: "Hide detail"; }
+  details.card:not([open]) .toggle::before { content: "Show detail"; }
+  .body { padding: 0 20px 20px; }
+  .body ul { margin: 0 0 16px; padding-left: 1.2rem; }
+  .body li { margin-bottom: 6px; max-width: 75ch; }
+  .sys { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sys .chip { font-size: .76rem; padding: 3px 10px; }
 
-    /* Contact band — same flex column patch as index.html (patch v2.1) */
-    .contact-band .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.25rem;
-    }
-    .contact-band p { margin: 0; }
+  /* Earlier career */
+  .earlier { display: grid; gap: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  .earlier div { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 12px 20px; border-top: 1px solid var(--border); transition: opacity .2s; }
+  .earlier div:first-child { border-top: 0; }
+  .earlier .date { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  .earlier div > span:first-child { min-width: 0; }
 
-    /* Section headings reuse the site's section-title + eyebrow patterns */
-  </style>
+  /* Systems matrix */
+  .scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+  .mhint { display: none; }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: .85rem; }
+  th, td { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--border); }
+  thead th { font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 700; vertical-align: bottom; background: var(--surface); }
+  th.sysname, td.sysname { text-align: left; position: sticky; left: 0; background: var(--bg); white-space: nowrap; box-shadow: 1px 0 0 var(--border); }
+  thead th.sysname { background: var(--surface); }
+  tr.cat th { position: sticky; left: 0; text-align: left; background: var(--surface); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); }
+  td button { background: none; border: 0; padding: 0; cursor: pointer; font-weight: 600; text-align: left; }
+  td button:hover { color: var(--accent-text); }
+  .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+  .cnt { color: var(--muted); font-variant-numeric: tabular-nums; }
+  tr.dimrow { opacity: .28; }
+  td.colmatch, th.colmatch { box-shadow: inset 0 -2px 0 var(--accent); }
+
+  /* Credentials */
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 20px; }
+  .list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 20px; }
+  .list h3 { font-family: var(--font-body); font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); margin: 0; padding-top: 14px; }
+  .list div { display: flex; justify-content: space-between; gap: 14px; min-width: 0; padding: 10px 0; border-top: 1px solid var(--border); }
+  .list h3 + div { border-top: 0; margin-top: 4px; }
+  .list span:last-child { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  /* Footer note inside career page */
+  .footnote { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: .85rem; }
+
+  /* Responsive overrides */
+  @media (max-width: 640px) {
+    .wrap { padding-block: 20px 56px; }
+    section { margin-top: 48px; }
+    .facts { gap: 16px 20px; grid-template-columns: 1fr 1fr; }
+    .sec-head { flex-direction: column; }
+    .sec-head p { margin-top: 4px; }
+    .filter-label { min-width: 100%; }
+    .chip { padding: 8px 12px; min-height: 36px; }
+    .sys .chip { padding: 6px 10px; min-height: 32px; }
+    .map { padding: 12px; }
+    .axis { grid-template-columns: 1fr; }
+    .axis > div:first-child { display: none; }
+    .row { grid-template-columns: minmax(0, 1fr); row-gap: 2px; padding: 9px 2px 7px; }
+    .row .who { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; }
+    .row .who b { display: inline; font-size: .9rem; }
+    .row .who span { display: inline; font-size: .78rem; }
+    .track { min-height: 22px; }
+    .tick.minor, .gridline.minor { display: none; }
+    details.card summary { grid-template-columns: 1fr; padding: 16px; }
+    .card .when { text-align: left; white-space: normal; }
+    .body { padding: 0 16px 16px; }
+    .earlier div { grid-template-columns: 1fr; padding: 12px 16px; }
+    .earlier .date { text-align: left; white-space: normal; }
+    .list { padding: 6px 16px; }
+    .list div { flex-direction: column; gap: 2px; }
+    .mhint { display: inline; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
 </head>
 <body>
   <div class="bg-bloom" aria-hidden="true"></div>
   <div class="bg-grid" aria-hidden="true"></div>
 
-    <header class="header" id="header">
+  <header class="header" id="header">
     <div class="header-left">
       <a href="/index.html" class="site-logo" aria-label="Brendan Sheppard — home">Brendan Sheppard</a>
     </div>
@@ -195,8 +258,7 @@
   </nav>
   <div class="mobile-nav-backdrop" id="mobile-nav-backdrop" hidden></div>
 
-
-    <div class="contact-backdrop" id="contact-backdrop" hidden></div>
+  <div class="contact-backdrop" id="contact-backdrop" hidden></div>
   <aside class="contact-drawer" id="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="contact-drawer-title" hidden>
     <button type="button" class="contact-drawer-close" id="contact-drawer-close" aria-label="Close">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -204,7 +266,6 @@
     <div class="contact-drawer-body">
       <h2 id="contact-drawer-title" class="contact-item" style="animation-delay:.05s">Get in Touch</h2>
       <p class="drawer-lead contact-item" style="animation-delay:.1s">The quickest ways to reach me directly.</p>
-
       <div class="contact-block contact-item" style="animation-delay:.16s">
         <span class="contact-label">Email</span>
         <div class="contact-email-row">
@@ -215,7 +276,6 @@
           </button>
         </div>
       </div>
-
       <div class="contact-block contact-item" style="animation-delay:.22s">
         <span class="contact-label">LinkedIn</span>
         <div class="contact-email-row">
@@ -227,86 +287,54 @@
     </div>
   </aside>
 
-
   <main>
-    <!-- Career map hero -->
-    <section class="career-hero">
-      <div class="container">
-        <span class="eyebrow reveal">Career map</span>
-        <h1 class="reveal d1">Select a role to jump to its detail.</h1>
-        <p class="reveal d2">Time is compressed before 2021. The filters below highlight matching roles.</p>
-        <p class="reveal d2">Systems and industries — use the filters below to find matching roles.</p>
-      </div>
-    </section>
+    <div class="wrap">
+      <h1 class="sr" style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">Brendan Sheppard career map</h1>
 
-    <!-- Filters -->
-    <section class="filters" aria-label="Filter roles">
-      <div class="container">
-        <div class="filter-group reveal d2">
-          <span class="filter-label">System</span>
-          <div class="filter-row" id="filter-systems"></div>
+      <div class="facts" id="facts"></div>
+
+      <section>
+        <div class="sec-head"><h2>Career map</h2><p>Select a role to jump to its detail. Time is compressed before 2021. The filters below highlight matching roles.</p></div>
+        <div class="map">
+          <div class="legend"><span><i style="background:var(--accent)"></i>Contract</span><span><i style="background:var(--accent-cyan)"></i>Permanent</span><span id="mapStatus" class="mapstatus" aria-live="polite"></span></div>
+          <div id="map"></div>
         </div>
-        <div class="filter-group reveal d3">
-          <span class="filter-label">Industry</span>
-          <div class="filter-row" id="filter-industries"></div>
+      </section>
+
+      <div class="filters" role="group" aria-label="Filters">
+        <div class="filter-row"><span class="filter-label">System</span><span id="sysChips" class="filter-row"></span></div>
+        <div class="filter-row"><span class="filter-label">Industry</span><span id="indChips" class="filter-row"></span><button class="clear" id="clear" type="button" hidden>Clear filters</button></div>
+        <div class="status" id="status" aria-live="polite"></div>
+      </div>
+
+      <section>
+        <div class="sec-head"><h2>Recent roles</h2><p>Oct 2021 to now</p></div>
+        <div class="cards" id="cards"></div>
+      </section>
+
+      <section>
+        <div class="sec-head"><h2>Earlier career</h2><p>2009 to 2021</p></div>
+        <div class="earlier" id="earlier"></div>
+      </section>
+
+      <section>
+        <div class="sec-head"><h2>Systems by role</h2><p>Select a system to filter the page.<span class="mhint"> Swipe sideways to see every role.</span></p></div>
+        <div class="scroll"><table id="matrix"></table></div>
+      </section>
+
+      <section>
+        <div class="sec-head"><h2>Credentials</h2><p>Certifications, awards and volunteering</p></div>
+        <div class="two">
+          <div class="list" id="certs"></div>
+          <div class="list" id="awards"></div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Recent roles -->
-    <section class="section section-alt" aria-labelledby="recent-title">
-      <div class="container">
-        <span class="eyebrow reveal">Recent roles</span>
-        <h2 class="section-title reveal" id="recent-title">Oct 2021 to now</h2>
-        <div class="roles-grid" id="recent-roles"></div>
-      </div>
-    </section>
-
-    <!-- Earlier career -->
-    <section class="section" aria-labelledby="earlier-title">
-      <div class="container">
-        <span class="eyebrow reveal">Earlier career</span>
-        <h2 class="section-title reveal" id="earlier-title">2009 to 2021</h2>
-        <div class="roles-grid" id="earlier-roles"></div>
-      </div>
-    </section>
-
-    <!-- Systems by role -->
-    <section class="section section-alt" aria-labelledby="systems-title">
-      <div class="container">
-        <span class="eyebrow reveal">Systems by role</span>
-        <h2 class="section-title reveal" id="systems-title">Select a system to filter the page</h2>
-        <p class="section-lead reveal d1" style="margin:0 0 18px">Swipe sideways to see every role.</p>
-        <div class="systems-strip reveal d1" id="systems-strip"></div>
-      </div>
-    </section>
-
-    <!-- Credentials -->
-    <section class="section" aria-labelledby="credentials-title">
-      <div class="container">
-        <span class="eyebrow reveal">Credentials</span>
-        <h2 class="section-title reveal" id="credentials-title">Certifications, awards and volunteering</h2>
-        <!-- FILL: credential entries (certifications, awards, volunteering) -->
-        <div class="cred-grid" id="credentials"></div>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section class="section contact-band">
-      <div class="container">
-        <span class="eyebrow reveal">Get in touch</span>
-        <p class="reveal d1">
-          Contact details are available on request via LinkedIn or brendansheppard.com.
-        </p>
-        <div class="btn-row reveal d2">
-          <button type="button" class="btn btn-primary" data-open-contact>Get in Touch</button>
-          <a href="https://www.linkedin.com/in/brendansheppard" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Connect on LinkedIn</a>
-        </div>
-      </div>
-    </section>
+      <footer class="footnote">Contact details are available on request via LinkedIn or brendansheppard.com.</footer>
+    </div>
   </main>
 
-    <footer>
+  <footer>
     <p class="footer-brand">Brendan Sheppard</p>
     <div class="footer-links">
       <a href="/work/">Work</a>
@@ -320,16 +348,10 @@
     <p class="copyright">&copy; 2026 Brendan Sheppard. All rights reserved.</p>
   </footer>
 
-
-<!-- click-to-reveal email: the email address is assembled from fragments
-     and only placed into the DOM on user click. The static HTML contains
-     zero trace of the address — scrapers and crawlers find nothing. -->
   <script>
     (function() {
       var parts = ['hello', String.fromCharCode(64), 'brendan', '.', 'pro'];
       var email = parts.join('');
-
-      /* Drawer: show "Click to reveal" until tapped */
       var drawerLink = document.getElementById('contact-email-link');
       if (drawerLink) {
         drawerLink.textContent = 'Click to reveal';
@@ -343,9 +365,6 @@
           if (btn) btn.setAttribute('data-copy', email);
         });
       }
-
-      /* Footer: runtime assembly only (link text is "Email", not the
-         address itself, so no click-to-reveal needed) */
       var footerLink = document.getElementById('footer-email-link');
       if (footerLink) {
         footerLink.href = 'mailto:' + email;
@@ -356,145 +375,240 @@
     })();
   </script>
 
-<!-- Career map renderer: ROLES below is the single source of truth for the
-     page. Entries are rendered into the Recent roles / Earlier career grids
-     and drive the System and Industry filters. -->
   <script>
-    (function() {
-      'use strict';
-
-      /* FILL: role entries. Copy this shape for each role.
-         band: "recent" (Oct 2021 to now) or "earlier" (2009 to 2021).
-         end: use "now" for the current role.
+    (function () {
       var ROLES = [
-        {
-          title: "Senior Business Analyst",
-          company: "Example Co",
-          start: "Oct 2021",
-          end: "now",
-          band: "recent",
-          type: "Contract",            // "Contract" | "Permanent"
-          industry: "Insurance",
-          systems: ["Salesforce", "Jira"],
-          summary: "One line on what the role involved."
-        }
+        { id: "fc26", org: "Flight Centre", short: "Flight Centre", title: "Senior Business Analyst", type: "Contract", start: "2026-02", end: null, place: "Brisbane", industry: ["Travel", "Retail"],
+          hl: ["800+ sales staff", "149 stores", "4 continents"],
+          systems: ["Salesforce", "Agentforce", "Atlassian", "Microsoft suite", "Slack", "Miro", "Claude Enterprise"],
+          bullets: [
+            "Delivering Salesforce to over 800 sales staff in 149 stores across 4 continents.",
+            "Defined the global scope, ensuring migration, logins, network performance and integrations were ready for go-live.",
+            "Leading requirements, UAT and implementation of Salesforce Messaging to replace an existing Genesys live chat instance in the UK.",
+            "Delivering an agentic Agentforce messaging solution with human escalation paths across phone and live chat to improve customer service efficiency.",
+            "Established a much-improved process to publish instructions and capture UAT results and feedback, including Jira Service Management forms, fields, workflows and automations.",
+            "Proactively improved the CRM help desk as demand scaled with the global Salesforce expansion, covering systems, SLA, knowledge base, process and automation."
+          ] },
+        { id: "flg", org: "Fitness & Lifestyle Group", short: "Fitness & Lifestyle", title: "Product Systems Analyst", type: "Permanent", start: "2025-11", end: "2026-02", place: "Brisbane", industry: "Retail",
+          hl: ["APAC Salesforce transformation"],
+          systems: ["Salesforce", "Atlassian", "Microsoft suite", "Figma", "ChatGPT"],
+          bullets: [
+            "Supported planning, implementation and support for a large Salesforce transformation programme across the Asia Pacific region.",
+            "Collaborated with in-house and offshore teams to run Agile sprints and maintain a backlog of bugs.",
+            "Managed training and support for pilot teams, prioritising scalable initiatives and developing training material.",
+            "Built custom Jira processes and automation for both agile delivery and service desk support.",
+            "Worked with vendors and technical resources to define requirements for SMS messaging within New Zealand."
+          ] },
+        { id: "alz", org: "Allianz Partners", short: "Allianz Partners", title: "Business Analyst", type: "Contract", start: "2025-08", end: "2025-10", place: "Brisbane", industry: "Insurance",
+          hl: ["Mapped to RG271 and GICOP"],
+          systems: ["Microsoft suite", "Atlassian", "Visio", "Lucidchart", "Figma"],
+          bullets: [
+            "Worked on integration between a major bank and Allianz Assistance for complimentary insurance.",
+            "Conducted BPMN process mapping aligned with RG271 and GICOP legislation.",
+            "Ensured reporting capabilities for SLA monitoring.",
+            "Mapped user journeys, identifying and resolving user friction and design ambiguity."
+          ] },
+        { id: "liq", org: "Liquid Interactive", short: "Liquid Interactive", title: "Senior Business Analyst", type: "Contract", start: "2025-01", end: "2025-06", place: "Brisbane", industry: "Government",
+          hl: ["My Aged Care reforms"],
+          systems: ["Microsoft suite", "Atlassian", "Miro", "Draw.io", "Figma", "Drupal CMS"],
+          bullets: [
+            "Led analysis, development and testing for improved user journeys across multiple work packages for the new My Aged Care government reforms.",
+            "Designed and delivered a site-wide personalisation solution built within a CMS, greatly improving the user experience across multiple sessions."
+          ] },
+        { id: "qut", org: "QUT", short: "QUT", title: "Principal Business Analyst", type: "Contract", start: "2024-06", end: "2024-11", place: "Brisbane", industry: "Education",
+          hl: ["Digital Experience Programme"],
+          systems: ["Salesforce", "Microsoft suite", "Atlassian"],
+          bullets: [
+            "Worked on the Digital Experience Programme to centralise university communications.",
+            "Completed analysis on call centre reporting requirements.",
+            "Assisted in finalising telephony requirements.",
+            "Conducted discovery for the marketing communications transfer."
+          ] },
+        { id: "pfb", org: "People First Bank", short: "People First Bank", title: "Senior Business Analyst", type: "Permanent", phases: [{ type: "Contract", start: "2022-09", end: "2023-11" }, { type: "Permanent", start: "2023-11", end: "2024-06" }], start: "2022-09", end: "2024-06", place: "Brisbane", industry: "Banking",
+          hl: ["$50,000+ saved via RPA", "$30,000+ a year projected"],
+          systems: ["Microsoft suite", "Atlassian", "Fiserv", "Miro", "Vonage", "AWS", "Visio"],
+          bullets: [
+            "Worked with architects and SMEs on application analysis and requirements across digital banking, compliance, telephony and teller systems.",
+            "Delivered a business case and vendor and service recommendations for a telephony solution.",
+            "Maintained risk, legal and change management vigilance.",
+            "Delivered operational improvements, saving over $50,000 through RPA, and proposed an automation projected to save at least $30,000 per annum.",
+            "Introduced improved ways of working in Jira to reduce risk and give better task oversight."
+          ] },
+        { id: "ag", org: "Auto & General", short: "Auto & General", title: "Digital Business Analyst", type: "Permanent", start: "2021-10", end: "2022-09", place: "Brisbane", industry: "Insurance",
+          hl: ["Storm-event call deflection, March 2022"],
+          systems: ["Microsoft suite", "Azure DevOps", "Power BI", "AWS", "Twilio", "LiveAgent"],
+          bullets: [
+            "Led analysis to improve customer experience and reduce costs by deflecting calls to LiveAgent chat and knowledge base self-service during the March 2022 storm events.",
+            "Led the hail alert system overhaul with AWS cloud architecture and Twilio integration, improving bulk SMS delivery, and created the product backlog for future enhancements."
+          ] }
       ];
-      */
-      var ROLES = [];
+      var EARLIER = [
+        { id: "fc21", org: "Flight Centre", short: "Flight Centre", title: "Business Analyst", type: "Contract", start: "2021-04", end: "2021-09", industry: ["Travel", "Retail"] },
+        { id: "qbcc", org: "Queensland Building & Construction Commission", short: "QBCC", title: "Business Analyst", type: "Permanent", start: "2018-12", end: "2021-04", industry: "Government", note: "Planning Award, 2020" },
+        { id: "fcmbo", org: "FCM Travel Solutions", short: "FCM Travel", title: "Business Optimisation Manager", type: "Permanent", start: "2017-02", end: "2018-09", industry: "Travel" },
+        { id: "fcmtl", org: "FCM Travel Solutions", short: "FCM Travel", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2011-06", end: "2017-02", industry: "Travel", note: "#1 Consultant Australia, 2015" },
+        { id: "fc09", org: "Flight Centre", short: "Flight Centre", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2009-06", end: "2011-06", industry: ["Travel", "Retail"] }
+      ];
+      var CATS = [
+        { name: "CRM and AI", items: ["Salesforce", "Agentforce", "Claude Enterprise", "ChatGPT"] },
+        { name: "Delivery and collaboration", items: ["Atlassian", "Microsoft suite", "Azure DevOps", "Slack", "Miro"] },
+        { name: "Design and modelling", items: ["Figma", "Visio", "Lucidchart", "Draw.io"] },
+        { name: "Cloud, data and platforms", items: ["AWS", "Power BI", "Twilio", "Vonage", "LiveAgent", "Fiserv", "Drupal CMS"] }
+      ];
+      var CERTS = [["Administering Jira Service Management, Koenig Solutions", "2026"], ["AI Product Manager, RMIT", "2025"], ["UX: The Beginner's Guide, Interaction Design Foundation", "2021"], ["RPA BA Foundations, UiPath Academy", "2020"], ["Agile BA Practitioner, APMG", "2019"], ["UX & Design Thinking, PeakXD", "2018"], ["Lean Six Sigma Green Belt, GoLeanSixSigma.com", "2018"], ["Certified Scrum Product Owner, Scrum Alliance", "2018"], ["Foundation Certificate in Business Analysis, BCS", "2018"]];
+      var AWARDS = [["Planning Award, Queensland Building & Construction Commission", "2020"], ["#1 Consultant Australia, FCM Travel", "2015"], ["#2 Consultant Globally, FCM Travel", "2015"], ["Global Ball Awards, FCM Travel & Flight Centre", "2010, 2012, 2013"]];
+      var VOL = [["Christmas Gift Wrapping, Act For Kids", "2021"], ["Home Builder, Habitat for Humanity", "2015"], ["Aged Care Companion, Delta Dogs", "2016 to 2018"]];
 
-      var state = { system: 'all', industry: 'all' };
-
-      function esc(s) {
-        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      var NOW = new Date();
+      var NOWT = NOW.getFullYear() + NOW.getMonth() / 12;
+      function parse(s) { var p = s.split("-"); return { y: +p[0], m: +p[1] - 1 }; }
+      function tval(s) { if (!s) return NOWT; var d = parse(s); return d.y + d.m / 12; }
+      function fmt(s) { if (!s) return "now"; var d = parse(s); return MON[d.m] + " " + d.y; }
+      function dur(a, b) {
+        var A = parse(a), B = b ? parse(b) : { y: NOW.getFullYear(), m: NOW.getMonth() };
+        var m = (B.y - A.y) * 12 + (B.m - A.m) + 1, y = Math.floor(m / 12), r = m % 12, out = [];
+        if (y) out.push(y + (y === 1 ? " yr" : " yrs"));
+        if (r) out.push(r + " mo");
+        return out.join(" ");
       }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+      function $(id) { return document.getElementById(id); }
+      function phasesOf(r) { return r.phases || [{ type: r.type, start: r.start, end: r.end }]; }
+      function inds(r) { return Array.isArray(r.industry) ? r.industry : [r.industry]; }
 
-      function roleCard(r) {
-        var dates = r.end === 'now'
-          ? r.start + ' — now'
-          : r.start + ' — ' + r.end;
-        var tags = ['<span class="role-tag role-tag--type">' + esc(r.type) + '</span>'];
-        tags.push('<span class="role-tag">' + esc(r.industry) + '</span>');
-        (r.systems || []).forEach(function(s) {
-          tags.push('<span class="role-tag">' + esc(s) + '</span>');
-        });
-        return (
-          '<article class="card role-card reveal d1">' +
-            '<p class="role-title">' + esc(r.title) + '</p>' +
-            '<p class="role-company">' + esc(r.company) + '</p>' +
-            '<p class="role-dates">' + esc(dates) + '</p>' +
-            (r.summary ? '<p class="role-summary">' + esc(r.summary) + '</p>' : '') +
-            '<div class="role-tags">' + tags.join('') + '</div>' +
-          '</article>'
-        );
-      }
+      var ALL = ROLES.concat(EARLIER);
+      var sysSet = {}, indSet = {};
+      ROLES.forEach(function (r) { r.systems.forEach(function (s) { sysSet[s] = (sysSet[s] || 0) + 1; }); });
+      ALL.forEach(function (r) { inds(r).forEach(function (i) { indSet[i] = (indSet[i] || 0) + 1; }); });
+      var sysList = Object.keys(sysSet).sort(function (a, b) { return sysSet[b] - sysSet[a] || a.localeCompare(b); });
+      var indList = Object.keys(indSet).sort(function (a, b) { return indSet[b] - indSet[a] || a.localeCompare(b); });
 
-      function visible(role) {
-        if (state.system !== 'all' && (role.systems || []).indexOf(state.system) === -1) return false;
-        if (state.industry !== 'all' && role.industry !== state.industry) return false;
+      var state = { sys: null, ind: null };
+
+      function matches(r) {
+        if (state.sys && !(r.systems && r.systems.indexOf(state.sys) > -1)) return false;
+        if (state.ind && inds(r).indexOf(state.ind) < 0) return false;
         return true;
       }
 
-      function render() {
-        var recent = document.getElementById('recent-roles');
-        var earlier = document.getElementById('earlier-roles');
-        if (!recent || !earlier) return;
-        var recentHtml = '', earlierHtml = '';
-        ROLES.forEach(function(r) {
-          if (!visible(r)) return;
-          var card = roleCard(r);
-          if (r.band === 'recent') recentHtml += card;
-          else earlierHtml += card;
-        });
-        recent.innerHTML = recentHtml;
-        earlier.innerHTML = earlierHtml;
-        document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('in'); });
-      }
+      /* facts */
+      $("facts").innerHTML =
+        '<div class="fact"><b>' + (NOW.getFullYear() - 2009) + '</b><span>years since first role, 2009</span></div>' +
+        '<div class="fact"><b>' + ROLES.length + '</b><span>organisations since Oct 2021</span></div>' +
+        '<div class="fact"><b>' + sysList.length + '</b><span>systems used</span></div>' +
+        '<div class="fact"><b>' + indList.length + '</b><span>industries</span></div>';
 
-      function buildFilters() {
-        var systems = {}, industries = {};
-        ROLES.forEach(function(r) {
-          (r.systems || []).forEach(function(s) { systems[s] = true; });
-          if (r.industry) industries[r.industry] = true;
-        });
-        var sysEl = document.getElementById('filter-systems');
-        var indEl = document.getElementById('filter-industries');
-        var strip = document.getElementById('systems-strip');
-        if (sysEl) {
-          sysEl.innerHTML = '<button type="button" class="filter-chip" data-system="all" aria-pressed="true">All</button>' +
-            Object.keys(systems).sort().map(function(s) {
-              return '<button type="button" class="filter-chip" data-system="' + esc(s) + '" aria-pressed="false">' + esc(s) + '</button>';
-            }).join('');
-        }
-        if (indEl) {
-          indEl.innerHTML = '<button type="button" class="filter-chip" data-industry="all" aria-pressed="true">All</button>' +
-            Object.keys(industries).sort().map(function(i) {
-              return '<button type="button" class="filter-chip" data-industry="' + esc(i) + '" aria-pressed="false">' + esc(i) + '</button>';
-            }).join('');
-        }
-        if (strip) {
-          strip.innerHTML = Object.keys(systems).sort().map(function(s) {
-            return '<button type="button" class="filter-chip" data-system="' + esc(s) + '" aria-pressed="false">' + esc(s) + '</button>';
-          }).join('');
-        }
-      }
+      /* chips */
+      function chipHtml(kind, v) { return '<button type="button" class="chip" data-kind="' + kind + '" data-v="' + esc(v) + '" aria-pressed="false">' + esc(v) + '</button>'; }
+      $("sysChips").innerHTML = sysList.map(function (s) { return chipHtml("sys", s); }).join("");
+      $("indChips").innerHTML = indList.map(function (s) { return chipHtml("ind", s); }).join("");
 
-      function bindFilters() {
-        function bindChips(attr, key) {
-          document.querySelectorAll('[data-' + attr + ']').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-              var val = btn.getAttribute('data-' + attr);
-              var parent = btn.parentElement;
-              if (parent) {
-                parent.querySelectorAll('[data-' + attr + ']').forEach(function(b) {
-                  b.setAttribute('aria-pressed', 'false');
-                });
-              }
-              btn.setAttribute('aria-pressed', 'true');
-              state[key] = val === 'all' ? 'all' : val;
-              // Keep the systems-strip in sync with the filter chips
-              if (attr === 'system') {
-                document.querySelectorAll('[data-system]').forEach(function(b) {
-                  b.setAttribute('aria-pressed', String(b.getAttribute('data-system') === state.system));
-                });
-              }
-              render();
-            });
+      /* career map: piecewise time scale, compressed before 2021 */
+      var T0 = 2009.4, T1 = 2021.25, T2 = 2026.95, SPLIT = 0.24;
+      function xp(t) {
+        if (t <= T1) return Math.max(0, (t - T1 + (T1 - T0)) / (T1 - T0)) * SPLIT * 100;
+        return (SPLIT + (t - T1) / (T2 - T1) * (1 - SPLIT)) * 100;
+      }
+      var ticks = [2010, 2015, 2020, 2022, 2023, 2024, 2025, 2026];
+      var minor = { 2015: 1, 2023: 1, 2025: 1 };
+      var axis = '<div class="axis"><div></div><div class="track">' +
+        '<div class="break" style="left:' + xp(T1) + '%"></div>' +
+        ticks.map(function (y) { return '<span class="tick' + (minor[y] ? ' minor' : '') + (y === ticks[0] ? ' first' : '') + '" style="left:' + xp(y) + '%">' + y + '</span>'; }).join("") + '</div></div>';
+      var rows = ALL.map(function (r, i) {
+        var segs = phasesOf(r).map(function (ph) {
+          var a = xp(tval(ph.start)), b = xp(tval(ph.end));
+          var cls = "bar-seg" + (ph.type === "Permanent" ? " perm" : "") + (!ph.end ? " now" : "");
+          return '<span class="' + cls + '" style="left:' + a + '%;width:' + Math.max(b - a, 0.6) + '%" title="' + esc(ph.type + ", " + fmt(ph.start) + " to " + fmt(ph.end)) + '"></span>';
+        }).join("");
+        var grid = ticks.map(function (y) { return '<span class="gridline' + (minor[y] ? ' minor' : '') + '" style="left:' + xp(y) + '%"></span>'; }).join("");
+        return '<button type="button" class="row" data-id="' + r.id + '" aria-label="' + esc(r.short + ", " + r.title + ", " + fmt(r.start) + " to " + fmt(r.end)) + '">' +
+          '<span class="who"><b>' + esc(r.short) + '</b><span>' + esc(r.title) + '</span></span>' +
+          '<span class="track">' + grid + segs + '</span></button>';
+      }).join("");
+      $("map").innerHTML = axis + rows;
+
+      /* cards */
+      $("cards").innerHTML = ROLES.map(function (r, i) {
+        return '<details class="card" id="role-' + r.id + '" data-id="' + r.id + '"' + (i === 0 ? " open" : "") + '>' +
+          '<summary><div><h3>' + esc(r.org) + '</h3><div class="role">' + esc(r.title) + '</div></div>' +
+          '<div class="when"><b>' + fmt(r.start) + ' to ' + fmt(r.end) + '</b>' + dur(r.start, r.end) + '</div>' +
+          '<div class="hl">' + phasesOf(r).map(function (ph) { return '<span class="tag ' + (ph.type === "Permanent" ? "perm" : "contract") + '">' + ph.type + '</span>'; }).join("") + inds(r).map(function (i) { return '<span class="tag">' + esc(i) + '</span>'; }).join("") +
+          (r.hl || []).map(function (h) { return '<strong>' + esc(h) + '</strong>'; }).join("") + '</div>' +
+          '<span class="toggle"></span></summary>' +
+          '<div class="body"><ul>' + r.bullets.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("") + '</ul>' +
+          '<div class="sys">' + r.systems.map(function (s) { return chipHtml("sys", s); }).join("") + '</div></div></details>';
+      }).join("");
+
+      $("earlier").innerHTML = EARLIER.map(function (r) {
+        return '<div data-id="' + r.id + '"><span><b>' + esc(r.title) + '</b>, ' + esc(r.org) +
+          (r.note ? ' <span class="tag">' + esc(r.note) + '</span>' : '') + '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span></div>';
+      }).join("");
+
+      /* matrix */
+      var mh = '<thead><tr><th class="sysname">System</th>' + ROLES.map(function (r) { return '<th data-col="' + r.id + '">' + esc(r.short) + '</th>'; }).join("") + '<th>Roles</th></tr></thead><tbody>';
+      CATS.forEach(function (c) {
+        mh += '<tr class="cat"><th colspan="' + (ROLES.length + 2) + '">' + esc(c.name) + '</th></tr>';
+        c.items.slice().sort(function (a, b) { return (sysSet[b] || 0) - (sysSet[a] || 0); }).forEach(function (s) {
+          mh += '<tr data-sys="' + esc(s) + '"><td class="sysname"><button type="button" data-kind="sys" data-v="' + esc(s) + '">' + esc(s) + '</button></td>' +
+            ROLES.map(function (r) { return '<td data-col="' + r.id + '">' + (r.systems.indexOf(s) > -1 ? '<span class="dot" role="img" aria-label="Used at ' + esc(r.short) + '"></span>' : "") + '</td>'; }).join("") +
+            '<td class="cnt">' + (sysSet[s] || 0) + '</td></tr>';
+        });
+      });
+      $("matrix").innerHTML = mh + "</tbody>";
+
+      /* credentials */
+      function listHtml(title, arr) { return '<h3>' + title + '</h3>' + arr.map(function (x) { return '<div><span>' + esc(x[0]) + '</span><span>' + esc(x[1]) + '</span></div>'; }).join(""); }
+      $("certs").innerHTML = listHtml("Certifications and training", CERTS);
+      $("awards").innerHTML = listHtml("Awards", AWARDS) + listHtml("Volunteering", VOL);
+
+      /* apply filters */
+      function apply() {
+        document.querySelectorAll('.chip[data-kind]').forEach(function (c) {
+          var key = c.getAttribute("data-kind"), val = c.getAttribute("data-v");
+          c.setAttribute("aria-pressed", state[key] === val ? "true" : "false");
+        });
+        var shown = 0;
+        ALL.forEach(function (r) {
+          var ok = matches(r); if (ok) shown++;
+          document.querySelectorAll('[data-id="' + r.id + '"]').forEach(function (el) {
+            el.classList.toggle("dim", !ok);
+            if (el.classList.contains("row")) el.classList.toggle("hit", !!(state.sys || state.ind) && ok);
           });
+        });
+        document.querySelectorAll("#matrix tr[data-sys]").forEach(function (tr) {
+          tr.classList.toggle("dimrow", !!state.sys && tr.getAttribute("data-sys") !== state.sys);
+        });
+        document.querySelectorAll("#matrix [data-col]").forEach(function (el) {
+          var r = ROLES.filter(function (x) { return x.id === el.getAttribute("data-col"); })[0];
+          if (el.tagName === "TH") el.classList.toggle("colmatch", !!(state.sys || state.ind) && matches(r));
+        });
+        var active = state.sys || state.ind;
+        $("clear").hidden = !active;
+        $("status").textContent = active
+          ? shown + " of " + ALL.length + " roles match " + [state.sys, state.ind].filter(Boolean).join(" and ") + "."
+          : "Showing all " + ALL.length + " roles.";
+        $("mapStatus").textContent = active ? "Highlighting " + shown + " of " + ALL.length + " roles" : "";
+      }
+      document.addEventListener("click", function (e) {
+        var target = e.target;
+        var chip = target.closest("[data-kind]");
+        if (chip) {
+          e.preventDefault(); e.stopPropagation();
+          var k = chip.getAttribute("data-kind"), v = chip.getAttribute("data-v");
+          state[k] = state[k] === v ? null : v;
+          apply(); return;
         }
-        bindChips('system', 'system');
-        bindChips('industry', 'industry');
-      }
+        var row = target.closest(".row");
+        if (row) {
+          var card = document.getElementById("role-" + row.getAttribute("data-id"));
+          if (card) { card.open = true; card.scrollIntoView({ behavior: "smooth", block: "start" }); }
+          else { var e2 = document.querySelector('#earlier [data-id="' + row.getAttribute("data-id") + '"]'); if (e2) e2.scrollIntoView({ block: "center" }); }
+        }
+      });
+      $("clear").addEventListener("click", function () { state.sys = null; state.ind = null; apply(); });
 
-      buildFilters();
-      bindFilters();
-      render();
-
-      /* Credentials — FILL: cards. */
-      var credEl = document.getElementById('credentials');
-      if (credEl) {
-        /* FILL: add .cred-card article blocks here once content exists */
-        credEl.innerHTML = '';
-      }
+      apply();
     })();
   </script>
 </body>
