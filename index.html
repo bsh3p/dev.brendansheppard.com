@@ -332,6 +332,13 @@
       line-height: 1.55;
       color: var(--fg);
     }
+  /* Patch v2.2, 19 Oct 2026: balance whitespace above and below the logo
+     marquee. The hero contributes ~80px bottom padding and the first
+     .section contributes ~104px top, so the band needs ~20px more top
+     than bottom padding for the perceived gaps to match. */
+    .logo-section {
+      padding: clamp(36px, 4.5vw, 56px) 0 clamp(16px, 2.5vw, 32px);
+    }
   </style>
 </head>
 <body>
