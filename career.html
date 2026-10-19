@@ -93,8 +93,9 @@
   /* Section headings */
   section { margin-top: 64px; }
   .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-bottom: 20px; }
-  .sec-head h2 { font-family: var(--font-display); letter-spacing: -.02em; margin: 0; font-size: clamp(1.5rem, 3.2vw, 2rem); font-weight: 600; }
-  .sec-head p { margin: 0; color: var(--muted); font-size: .9rem; }
+  .sec-head .eyebrow { margin-bottom: 0; }
+  .sec-head h2 { margin: 0; font-size: clamp(1.7rem, 3.4vw, 2.2rem); font-weight: 600; }
+  .sec-head p { margin: 0 0 0 auto; color: var(--muted); font-size: .9rem; }
 
   /* Career map Gantt */
   .map { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 16px 12px; box-shadow: var(--shadow-card); }
@@ -294,7 +295,7 @@
       <div class="facts" id="facts"></div>
 
       <section>
-        <div class="sec-head"><h2>Career map</h2><p>Select a role to jump to its detail. Time is compressed before 2021. The filters below highlight matching roles.</p></div>
+        <div class="sec-head"><span class="eyebrow">Interactive</span><h2>Career map</h2><p>Select a role to jump to its detail. Time is compressed before 2021. The filters below highlight matching roles.</p></div>
         <div class="map">
           <div class="legend"><span><i style="background:var(--accent)"></i>Contract</span><span><i style="background:var(--accent-cyan)"></i>Permanent</span><span id="mapStatus" class="mapstatus" aria-live="polite"></span></div>
           <div id="map"></div>
@@ -308,22 +309,22 @@
       </div>
 
       <section>
-        <div class="sec-head"><h2>Recent roles</h2><p>Oct 2021 to now</p></div>
+        <div class="sec-head"><span class="eyebrow">Timeline</span><h2>Recent roles</h2><p>Oct 2021 to now</p></div>
         <div class="cards" id="cards"></div>
       </section>
 
       <section>
-        <div class="sec-head"><h2>Earlier career</h2><p>2009 to 2021</p></div>
+        <div class="sec-head"><span class="eyebrow">Timeline</span><h2>Earlier career</h2><p>2009 to 2021</p></div>
         <div class="earlier" id="earlier"></div>
       </section>
 
       <section>
-        <div class="sec-head"><h2>Systems by role</h2><p>Select a system to filter the page.<span class="mhint"> Swipe sideways to see every role.</span></p></div>
+        <div class="sec-head"><span class="eyebrow">Matrix</span><h2>Systems by role</h2><p>Select a system to filter the page.<span class="mhint"> Swipe sideways to see every role.</span></p></div>
         <div class="scroll"><table id="matrix"></table></div>
       </section>
 
       <section>
-        <div class="sec-head"><h2>Credentials</h2><p>Certifications, awards and volunteering</p></div>
+        <div class="sec-head"><span class="eyebrow">Qualifications</span><h2>Credentials</h2><p>Certifications, awards and volunteering</p></div>
         <div class="two">
           <div class="list" id="certs"></div>
           <div class="list" id="awards"></div>
