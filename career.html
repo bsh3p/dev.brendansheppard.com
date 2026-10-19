@@ -87,23 +87,6 @@
     }
     .filter-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
-    /* Segmented Contract/Permanent toggle */
-    .seg { display: inline-flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 4px; }
-    .seg button {
-      border: none;
-      background: transparent;
-      color: var(--fg);
-      opacity: .65;
-      font-size: .85rem;
-      font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background .2s, opacity .2s, color .2s;
-    }
-    .seg button:hover { opacity: 1; }
-    .seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); opacity: 1; }
-
     /* Filter chips (interactive — NOT .chip, which is pointer-events:none) */
     .filter-chip {
       background: var(--surface);
@@ -252,23 +235,13 @@
         <span class="eyebrow reveal">Career map</span>
         <h1 class="reveal d1">Select a role to jump to its detail.</h1>
         <p class="reveal d2">Time is compressed before 2021. The filters below highlight matching roles.</p>
-        <p class="reveal d2">Contract&#8202;·&#8202;Permanent&#8202;·&#8202;Systems&#8202;·&#8202;Industries</p>
+        <p class="reveal d2">Systems and industries — use the filters below to find matching roles.</p>
       </div>
     </section>
 
     <!-- Filters -->
     <section class="filters" aria-label="Filter roles">
       <div class="container">
-        <div class="filter-group reveal d1">
-          <span class="filter-label">Engagement</span>
-          <div class="filter-row">
-            <div class="seg" role="group" aria-label="Engagement type">
-              <button type="button" data-filter-type="all" aria-pressed="true">All</button>
-              <button type="button" data-filter-type="Contract" aria-pressed="false">Contract</button>
-              <button type="button" data-filter-type="Permanent" aria-pressed="false">Permanent</button>
-            </div>
-          </div>
-        </div>
         <div class="filter-group reveal d2">
           <span class="filter-label">System</span>
           <div class="filter-row" id="filter-systems"></div>
@@ -409,7 +382,7 @@
       */
       var ROLES = [];
 
-      var state = { type: 'all', system: 'all', industry: 'all' };
+      var state = { system: 'all', industry: 'all' };
 
       function esc(s) {
         return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -436,7 +409,6 @@
       }
 
       function visible(role) {
-        if (state.type !== 'all' && role.type !== state.type) return false;
         if (state.system !== 'all' && (role.systems || []).indexOf(state.system) === -1) return false;
         if (state.industry !== 'all' && role.industry !== state.industry) return false;
         return true;
@@ -487,14 +459,6 @@
       }
 
       function bindFilters() {
-        document.querySelectorAll('.seg button').forEach(function(btn) {
-          btn.addEventListener('click', function() {
-            document.querySelectorAll('.seg button').forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
-            btn.setAttribute('aria-pressed', 'true');
-            state.type = btn.getAttribute('data-filter-type');
-            render();
-          });
-        });
         function bindChips(attr, key) {
           document.querySelectorAll('[data-' + attr + ']').forEach(function(btn) {
             btn.addEventListener('click', function() {
