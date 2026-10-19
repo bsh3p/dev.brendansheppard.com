@@ -339,6 +339,22 @@
     .logo-section {
       padding: clamp(36px, 4.5vw, 56px) 0 clamp(16px, 2.5vw, 32px);
     }
+  /* Patch v2.3, 19 Oct 2026: on wide screens keep the header controls and
+     the logo marquee aligned with the content column instead of
+     stretching to the viewport edges. The header is position:fixed/inset:0
+     so it always spans the viewport. Its side padding mirrors the
+     .container breakpoints (40/48/64/80/96rem) PLUS the container's inner
+     padding (clamp(20px,4vw,40px)), so the logo and buttons sit exactly
+     on the same text column as the page content. The marquee strip is
+     capped to the same widths and centred. max() keeps a minimum padding
+     so nothing ever jams an edge at the exact breakpoint widths. */
+    .header { padding: 0 clamp(14px, 3vw, 32px); }
+    .logo-strip { max-width: 100%; margin: 0 auto; }
+    @media (width >= 40rem)  { .header { padding: 0 max(calc((100vw - 40rem) / 2 + clamp(20px, 4vw, 40px)), clamp(14px, 3vw, 32px)); }  .logo-strip { max-width: 40rem; } }
+    @media (width >= 48rem)  { .header { padding: 0 max(calc((100vw - 48rem) / 2 + clamp(20px, 4vw, 40px)), clamp(14px, 3vw, 32px)); }  .logo-strip { max-width: 48rem; } }
+    @media (width >= 64rem)  { .header { padding: 0 max(calc((100vw - 64rem) / 2 + clamp(20px, 4vw, 40px)), clamp(14px, 3vw, 32px)); }  .logo-strip { max-width: 64rem; } }
+    @media (width >= 80rem)  { .header { padding: 0 max(calc((100vw - 80rem) / 2 + clamp(20px, 4vw, 40px)), clamp(14px, 3vw, 32px)); }  .logo-strip { max-width: 80rem; } }
+    @media (width >= 96rem)  { .header { padding: 0 max(calc((100vw - 96rem) / 2 + clamp(20px, 4vw, 40px)), clamp(14px, 3vw, 32px)); }  .logo-strip { max-width: 96rem; } }
   </style>
 </head>
 <body>
