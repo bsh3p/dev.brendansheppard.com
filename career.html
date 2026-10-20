@@ -281,9 +281,10 @@
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   /* Keep theme toggle visible on mobile — compiled stylesheet hides .theme-btn below 600px */
   #theme-toggle-desktop { display: grid; }
-  /* Opaque scrolled header — compiled rule uses 72% translucent bg + blur,
-     so section headings visibly slide under it. */
-  .header.scrolled { background: var(--bg); }
+  /* Frosted-glass scrolled header — 85% opaque (vs compiled 72%) with
+       heavier 24px blur so the frosted effect is visible through the
+       slight transparency without letting content read through clearly. */
+  .header.scrolled { background: color-mix(in srgb, var(--bg) 85%, transparent); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); }
 </style>
 </head>
 <body>
