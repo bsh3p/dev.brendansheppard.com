@@ -155,6 +155,7 @@
   .earlier div:first-child { border-top: 0; }
   .earlier .date { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
   .earlier div > span:first-child { min-width: 0; }
+  .earlier .ov { grid-column: 1 / -1; color: var(--muted); font-size: .85rem; line-height: 1.45; }
 
   /* Systems matrix */
   .scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
@@ -372,7 +373,7 @@
     (function () {
       var ROLES = [
         { id: "fc26", org: "Flight Centre", short: "Flight Centre", title: "Senior Business Analyst", type: "Contract", start: "2026-02", end: null, place: "Brisbane", industry: ["Travel", "Retail"],
-          hl: ["Global Salesforce implementation, Live Chat and Service Desk Design"],
+          hl: ["Global Salesforce transformation, live chat and global support strategy"],
           systems: ["Salesforce", "Agentforce", "Atlassian", "Microsoft suite", "Slack", "Miro", "Claude Enterprise"],
           bullets: [
             "Delivering Salesforce to over 800 sales staff in 149 stores across 4 continents.",
@@ -393,7 +394,7 @@
             "Worked with vendors and technical resources to define requirements for SMS messaging within New Zealand."
           ] },
         { id: "alz", org: "Allianz Partners", short: "Allianz Partners", title: "Business Analyst", type: "Contract", start: "2025-08", end: "2025-10", place: "Brisbane", industry: "Insurance",
-          hl: ["Mapping of banking system integrations, customer and operations processes for credit card insurance products"],
+          hl: ["Banking system integration aligned to credit card insurance"],
           systems: ["Microsoft suite", "Atlassian", "Visio", "Lucidchart", "Figma"],
           bullets: [
             "Worked on integration between a major bank and Allianz Assistance for complimentary insurance.",
@@ -402,14 +403,14 @@
             "Mapped user journeys, identifying and resolving user friction and design ambiguity."
           ] },
         { id: "liq", org: "Liquid Interactive", short: "Liquid Interactive", title: "Senior Business Analyst", type: "Contract", start: "2025-01", end: "2025-06", place: "Brisbane", industry: "Government",
-          hl: ["Redesign of the My Aged Care website to cater to new government reforms"],
+          hl: ["My Aged Care website rebuild including CMS personalisation"],
           systems: ["Microsoft suite", "Atlassian", "Miro", "Draw.io", "Figma", "Drupal CMS"],
           bullets: [
             "Led analysis, development and testing for improved user journeys across multiple work packages for the new My Aged Care government reforms.",
             "Designed and delivered a site-wide personalisation solution built within a CMS, greatly improving the user experience across multiple sessions."
           ] },
         { id: "qut", org: "QUT", short: "QUT", title: "Principal Business Analyst", type: "Contract", start: "2024-06", end: "2024-11", place: "Brisbane", industry: "Education",
-          hl: ["Digital Experience Programme"],
+          hl: ["Salesforce Digital Experience Programme"],
           systems: ["Salesforce", "Microsoft suite", "Atlassian"],
           bullets: [
             "Worked on the Digital Experience Programme to centralise university communications.",
@@ -418,7 +419,7 @@
             "Conducted discovery for the marketing communications transfer."
           ] },
         { id: "pfb", org: "People First Bank", short: "People First Bank", title: "Senior Business Analyst", type: "Permanent", phases: [{ type: "Contract", start: "2022-09", end: "2023-11" }, { type: "Permanent", start: "2023-11", end: "2024-06" }], start: "2022-09", end: "2024-06", place: "Brisbane", industry: "Banking",
-          hl: ["Banking merger and transformation"],
+          hl: ["Banking merger and digital transformation"],
           systems: ["Microsoft suite", "Atlassian", "Fiserv", "Miro", "Vonage", "AWS", "Visio"],
           bullets: [
             "Worked with architects and SMEs on application analysis and requirements across digital banking, compliance, telephony and teller systems.",
@@ -428,7 +429,7 @@
             "Introduced improved ways of working in Jira to reduce risk and give better task oversight."
           ] },
         { id: "ag", org: "Auto & General", short: "Auto & General", title: "Digital Business Analyst", type: "Permanent", start: "2021-10", end: "2022-09", place: "Brisbane", industry: "Insurance",
-          hl: ["Storm-event call deflection, March 2022"],
+          hl: ["Improvements to Budget Direct hail alert system"],
           systems: ["Microsoft suite", "Azure DevOps", "Power BI", "AWS", "Twilio", "LiveAgent"],
           bullets: [
             "Led analysis to improve customer experience and reduce costs by deflecting calls to LiveAgent chat and knowledge base self-service during the March 2022 storm events.",
@@ -436,8 +437,8 @@
           ] }
       ];
       var EARLIER = [
-        { id: "fc21", org: "Flight Centre", short: "Flight Centre", title: "Business Analyst", type: "Contract", start: "2021-04", end: "2021-09", industry: ["Travel", "Retail"] },
-        { id: "qbcc", org: "Queensland Building & Construction Commission", short: "QBCC", title: "Business Analyst", type: "Permanent", start: "2018-12", end: "2021-04", industry: "Government", note: "Planning Award, 2020" },
+        { id: "fc21", org: "Flight Centre", short: "Flight Centre", title: "Business Analyst", type: "Contract", start: "2021-04", end: "2021-09", industry: ["Travel", "Retail"], ov: "Requirements gathering for a Dynamics 365 global finance solution" },
+        { id: "qbcc", org: "Queensland Building & Construction Commission", short: "QBCC", title: "Business Analyst", type: "Permanent", start: "2018-12", end: "2021-04", industry: "Government", note: "Planning Award, 2020", ov: "Multiple public-facing initiatives including a customer portal and online forms" },
         { id: "fcmbo", org: "FCM Travel Solutions", short: "FCM Travel", title: "Business Optimisation Manager", type: "Permanent", start: "2017-02", end: "2018-09", industry: "Travel" },
         { id: "fcmtl", org: "FCM Travel Solutions", short: "FCM Travel", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2011-06", end: "2017-02", industry: "Travel", note: "#1 Consultant Australia, 2015" },
         { id: "fc09", org: "Flight Centre", short: "Flight Centre", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2009-06", end: "2011-06", industry: ["Travel", "Retail"] }
@@ -528,7 +529,8 @@
 
       $("earlier").innerHTML = EARLIER.map(function (r) {
         return '<div data-id="' + r.id + '"><span><b>' + esc(r.title) + '</b>, ' + esc(r.org) +
-          (r.note ? ' <span class="tag">' + esc(r.note) + '</span>' : '') + '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span></div>';
+          (r.note ? ' <span class="tag">' + esc(r.note) + '</span>' : '') + '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span>' +
+          (r.ov ? '<span class="ov">' + esc(r.ov) + '</span>' : '') + '</div>';
       }).join("");
 
       /* matrix */
