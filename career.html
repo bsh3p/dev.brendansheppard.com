@@ -15,10 +15,14 @@
      non-matching (30%) instead of purple-highlighting; matrix dots neutral;
      cyan text token fixed to #00707A (AA); sr-only h1 'Career map'.
      v2.4, 20 Oct 2026: role cards critique — headlines navy, type chips
-     tinted, gold award tags, earlier roles upgraded to company-first cards
-     with type/industry chips + duration + outcome lines, white cards on a
-     --surface band, opaque scrolled header.
-     Dev only: not copied to prod until Brendan confirms. -->
+    tinted, gold award tags, earlier roles upgraded to company-first cards
+    with type/industry chips + duration + outcome lines, white cards on a
+    --surface band, opaque scrolled header.
+    v2.5, 20 Oct 2026: earlier cards separated with horizontal gap; type/
+    industry pills moved to their own line below role/company; tenure
+    inline with dates "Dec 2018 to Apr 2021 (2 yrs 5 mo)"; mobile matrix
+    col 1 shrunk, category labels merged across the full band.
+    Dev only: not copied to prod until Brendan confirms. -->
 <!DOCTYPE html>
 <html lang="en-AU">
 <head>
@@ -192,13 +196,11 @@
   .sys .chip { font-size: .76rem; padding: 3px 10px; }
 
   /* Earlier career — same card language as recent roles */
-  .earlier { display: grid; gap: 0; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .earlier div { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 12px 20px; border-top: 1px solid var(--border); border-left: 4px solid var(--border); transition: opacity .2s, border-color .2s; }
-  .earlier div:first-child { border-top: 0; }
+  .earlier { display: grid; gap: 10px; }
+  .earlier div { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 12px 20px; background: var(--bg); border: 1px solid var(--border); border-left-width: 4px; border-radius: var(--radius); transition: opacity .2s, border-color .2s; }
   .earlier div.p { border-left-color: var(--accent); }
   .earlier div.c { border-left-color: var(--accent-cyan); }
   .earlier .date { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-  .earlier .when { grid-column: 1 / -1; margin-top: 4px; font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
   .earlier .note { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
   /* Awards are the gold moment — tinted gold fill, readable gold text.
      #c9a24b as text fails contrast, so light theme uses dark #7a5c14. */
@@ -217,6 +219,10 @@
   thead th.sysname { background: var(--surface); }
   tr.cat th { position: sticky; left: 0; z-index: 1; text-align: left; background: var(--surface); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); white-space: nowrap; }
   tr.cat td { background: var(--surface); }
+  /* Mobile-only category label: on narrow screens the category name is
+     dropped from the sticky first column and rendered inside the band
+     spanning all columns, letting col 1 shrink to system-name width. */
+  .cat-mobile { display: none; }
   td button { background: none; border: 0; padding: 0; cursor: pointer; font-weight: 600; text-align: left; }
   td button:hover { color: var(--accent-text); }
   .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); }
@@ -262,6 +268,13 @@
     .body { padding: 0 16px 16px; }
     .earlier div { grid-template-columns: 1fr; padding: 12px 16px; }
     .earlier .date { text-align: left; white-space: normal; }
+    /* Mobile matrix: shrink the sticky first column so more role
+       columns fit on screen; category labels drop the sticky th and
+       render merged inside the full-width band instead. */
+    tr.cat th { display: none; }
+    tr.cat td { text-align: left; }
+    .cat-mobile { display: inline; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); font-weight: 700; }
+    th.sysname, td.sysname { max-width: 108px; overflow: hidden; text-overflow: ellipsis; padding: 8px 5px; }
     .list { padding: 6px 16px; }
     .list div { flex-direction: column; gap: 2px; }
     .mhint { display: inline; }
@@ -575,7 +588,7 @@
       $("cards").innerHTML = ROLES.map(function (r, i) {
         return '<details class="card" id="role-' + r.id + '" data-id="' + r.id + '"' + (i === 0 ? " open" : "") + '>' +
           '<summary><div><h3>' + esc(r.org) + '</h3><div class="role">' + esc(r.title) + '</div></div>' +
-          '<div class="when"><b>' + fmt(r.start) + ' to ' + fmt(r.end) + '</b>' + dur(r.start, r.end) + '</div>' +
+          '<div class="when"><b>' + fmt(r.start) + ' to ' + fmt(r.end) + ' (' + dur(r.start, r.end) + ')</b></div>' +
           '<div class="hl">' + phasesOf(r).map(function (ph) { return '<span class="tag ' + (ph.type === "Permanent" ? "perm" : "contract") + '">' + ph.type + '</span>'; }).join("") + inds(r).map(function (i) { return '<span class="tag">' + esc(i) + '</span>'; }).join("") +
           (r.hl || []).map(function (h) { return '<strong>' + esc(h) + '</strong>'; }).join("") + '</div>' +
           '<span class="toggle"></span></summary>' +
@@ -586,11 +599,11 @@
       $("earlier").innerHTML = EARLIER.map(function (r) {
         var notes = Array.isArray(r.note) ? r.note : (r.note ? [r.note] : []);
         var cls = r.type === "Permanent" ? "p" : "c";
-        return '<div data-id="' + r.id + '" class="' + cls + '"><span><b>' + esc(r.org) + '</b>, ' + esc(r.title) +
-          ' <span class="tag ' + (r.type === "Permanent" ? "perm" : "contract") + '">' + esc(r.type) + '</span>' +
-          inds(r).map(function (i) { return ' <span class="tag">' + esc(i) + '</span>'; }).join("") +
-          '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span>' +
-          '<span class="when">' + dur(r.start, r.end) + '</span>' +
+        return '<div data-id="' + r.id + '" class="' + cls + '">' +
+          '<span><b>' + esc(r.org) + '</b>, ' + esc(r.title) + '</span>' +
+          '<span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + ' (' + dur(r.start, r.end) + ')</span>' +
+          '<span class="note">' + '<span class="tag ' + (r.type === "Permanent" ? "perm" : "contract") + '">' + esc(r.type) + '</span>' +
+          inds(r).map(function (i) { return '<span class="tag">' + esc(i) + '</span>'; }).join("") + '</span>' +
           (notes.length ? '<span class="note">' + notes.map(function (n) { return '<span class="tag gold">' + esc(n) + '</span>'; }).join("") + '</span>' : '') +
           (r.ov ? '<span class="ov">' + esc(r.ov) + '</span>' : '') + '</div>';
       }).join("");
@@ -598,7 +611,7 @@
       /* matrix */
       var mh = '<thead><tr><th class="sysname">System</th>' + MATRIX.map(function (r) { return '<th data-col="' + r.id + '">' + esc(r.short) + '</th>'; }).join("") + '<th>Roles</th></tr></thead><tbody>';
       CATS.forEach(function (c) {
-        mh += '<tr class="cat"><th>' + esc(c.name) + '</th><td colspan="' + (MATRIX.length + 1) + '"></td></tr>';
+        mh += '<tr class="cat"><th>' + esc(c.name) + '</th><td class="cat-band" colspan="' + (MATRIX.length + 2) + '"><span class="cat-mobile">' + esc(c.name) + '</span></td></tr>';
         c.items.slice().sort(function (a, b) { return (sysSet[b] || 0) - (sysSet[a] || 0); }).forEach(function (s) {
           mh += '<tr data-sys="' + esc(s) + '"><td class="sysname"><button type="button" data-kind="sys" data-v="' + esc(s) + '">' + esc(s) + '</button></td>' +
             MATRIX.map(function (r) { return '<td data-col="' + r.id + '">' + (r.systems.indexOf(s) > -1 ? '<span class="dot" role="img" aria-label="Used at ' + esc(r.short) + '"></span>' : "") + '</td>'; }).join("") +
