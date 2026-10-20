@@ -631,8 +631,6 @@
     <!-- Facet cards -->
     <section class="section">
       <div class="container">
-        <span class="eyebrow reveal">Tools and expertise</span>
-        <h2 class="section-title reveal">The platforms, systems and methods I work with</h2>
         <div class="facet-grid">
           <div class="card facet-card reveal d1">
             <h3>Core Skills</h3>
@@ -774,13 +772,18 @@
           return { el: c, w: c.offsetWidth };
         });
 
-        // best-fit decreasing: sort biggest first
-        items.sort(function(a, b) { return b.w - a.w; });
+        // Pinned chips (data-pin="first") seed the FIRST row so the pack can
+        // fill in beside them — e.g. Core Skills "Business Analysis". Other
+        // chips pack best-fit decreasing around them.
+        var pinned = items.filter(function(it) { return it.el.getAttribute('data-pin') === 'first'; });
+        var rest = items.filter(function(it) { return it.el.getAttribute('data-pin') !== 'first'; });
+        rest.sort(function(a, b) { return b.w - a.w; }); // best-fit decreasing: sort biggest first
 
         var cw = container.offsetWidth;
         var rows = [];
+        if (pinned.length) rows.push(pinned);
 
-        items.forEach(function(item) {
+        if (rest.length) rest.forEach(function(item) {
           var placed = false;
           for (var i = 0; i < rows.length; i++) {
             var row = rows[i];
@@ -801,10 +804,6 @@
         rows.forEach(function(row) {
           row.forEach(function(item) { ordered.push(item.el); });
         });
-        // Pinned chips (data-pin="first") always stay first — e.g. Core Skills "Business Analysis"
-        var pinned = ordered.filter(function(el) { return el.getAttribute('data-pin') === 'first'; });
-        var rest = ordered.filter(function(el) { return el.getAttribute('data-pin') !== 'first'; });
-        ordered = pinned.concat(rest);
         ordered.forEach(function(el) { container.appendChild(el); });
       }
 

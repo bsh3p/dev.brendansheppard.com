@@ -103,6 +103,8 @@
   .sec-head .eyebrow { margin-bottom: 0; }
   .sec-head h2 { margin: 0; font-size: clamp(1.7rem, 3.4vw, 2.2rem); font-weight: 600; }
   .sec-head p { margin: 0 0 0 auto; color: var(--muted); font-size: .9rem; }
+  .sec-head.sec-head-stack { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .sec-head.sec-head-stack p { margin: 0; }
 
   /* Career map Gantt */
   .map { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 16px 12px; box-shadow: var(--shadow-card); }
@@ -320,12 +322,12 @@
       </div>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Timeline - Recent Roles</span><p>Oct 2021 to now</p></div>
+        <div class="sec-head sec-head-stack"><span class="eyebrow">Timeline - Recent Roles</span><p>Oct 2021 to now</p></div>
         <div class="cards" id="cards"></div>
       </section>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Timeline - Earlier Career</span><p>2009 to 2021</p></div>
+        <div class="sec-head sec-head-stack"><span class="eyebrow">Timeline - Earlier Career</span><p>2009 to 2021</p></div>
         <div class="earlier" id="earlier"></div>
       </section>
 
