@@ -14,6 +14,10 @@
      uses gold edge + gold dot; multi-phase bars seamless; filters dim
      non-matching (30%) instead of purple-highlighting; matrix dots neutral;
      cyan text token fixed to #00707A (AA); sr-only h1 'Career map'.
+     v2.4, 20 Oct 2026: role cards critique — headlines navy, type chips
+     tinted, gold award tags, earlier roles upgraded to company-first cards
+     with type/industry chips + duration + outcome lines, white cards on a
+     --surface band, opaque scrolled header.
      Dev only: not copied to prod until Brendan confirms. -->
 <!DOCTYPE html>
 <html lang="en-AU">
@@ -164,7 +168,7 @@
 
   /* Recent roles — expandable cards */
   .cards { display: grid; gap: 14px; }
-  details.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: opacity .2s, border-color .2s; scroll-margin-top: 16px; }
+  details.card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); transition: opacity .2s, border-color .2s; scroll-margin-top: 16px; }
   details.card[open] { border-color: var(--accent); }
   details.card summary { list-style: none; cursor: pointer; padding: 12px 20px; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: start; }
   details.card summary::-webkit-details-marker { display: none; }
@@ -173,10 +177,10 @@
   .card .when { text-align: right; font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .card .when b { display: block; color: var(--fg); font-weight: 600; }
   .card .hl { grid-column: 1 / -1; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
-  .hl strong { color: var(--accent-text); font-family: var(--font-display); font-size: 1.05rem; }
+  .hl strong { color: var(--fg); font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; }
   .tag { font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-radius: 6px; padding: 3px 8px; border: 1px solid var(--border-strong); color: var(--muted); background: var(--bg); }
-  .tag.contract { color: var(--accent-cyan-text); border-color: var(--accent-cyan); }
-  .tag.perm { color: var(--accent-text); border-color: var(--accent); }
+  .tag.contract { color: var(--accent-cyan-text); border-color: transparent; background: color-mix(in srgb, var(--accent-cyan) 12%, transparent); }
+  .tag.perm { color: var(--accent-text); border-color: transparent; background: color-mix(in srgb, var(--accent) 12%, transparent); }
   .toggle { grid-column: 1 / -1; font-size: .8rem; color: var(--accent-text); font-weight: 600; margin-top: 12px; }
   details.card[open] .toggle::before { content: "Hide detail"; }
   details.card:not([open]) .toggle::before { content: "Show detail"; }
@@ -187,12 +191,19 @@
   .sys { display: flex; flex-wrap: wrap; gap: 6px; }
   .sys .chip { font-size: .76rem; padding: 3px 10px; }
 
-  /* Earlier career */
-  .earlier { display: grid; gap: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
-  .earlier div { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 12px 20px; border-top: 1px solid var(--border); transition: opacity .2s; }
+  /* Earlier career — same card language as recent roles */
+  .earlier { display: grid; gap: 0; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .earlier div { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 12px 20px; border-top: 1px solid var(--border); border-left: 4px solid var(--border); transition: opacity .2s, border-color .2s; }
   .earlier div:first-child { border-top: 0; }
+  .earlier div.p { border-left-color: var(--accent); }
+  .earlier div.c { border-left-color: var(--accent-cyan); }
   .earlier .date { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  .earlier .when { grid-column: 1 / -1; margin-top: 4px; font-size: .82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
   .earlier .note { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  /* Awards are the gold moment — tinted gold fill, readable gold text.
+     #c9a24b as text fails contrast, so light theme uses dark #7a5c14. */
+  .earlier .tag.gold { color: #7a5c14; background: color-mix(in srgb, var(--accent-gold) 15%, transparent); border-color: color-mix(in srgb, var(--accent-gold) 45%, transparent); }
+  [data-theme="dark"] .earlier .tag.gold { color: var(--accent-gold); }
   .earlier div > span:first-child { min-width: 0; }
   .earlier .ov { grid-column: 1 / -1; color: var(--muted); font-size: .85rem; line-height: 1.45; }
 
@@ -222,6 +233,11 @@
   .list span:last-child { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* Footer note inside career page */
+
+  /* Band sections — white cards on a --surface band */
+  section.band { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-top: 64px; padding: clamp(16px, 3vw, 28px); }
+  section.band .sec-head { margin-bottom: 16px; }
+  section.band .sec-head p { margin-left: 0; }
 
   /* Responsive overrides */
   @media (max-width: 640px) {
@@ -253,6 +269,9 @@
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   /* Keep theme toggle visible on mobile — compiled stylesheet hides .theme-btn below 600px */
   #theme-toggle-desktop { display: grid; }
+  /* Opaque scrolled header — compiled rule uses 72% translucent bg + blur,
+     so section headings visibly slide under it. */
+  .header.scrolled { background: var(--bg); }
 </style>
 </head>
 <body>
@@ -340,12 +359,12 @@
         <div class="status" id="status" aria-live="polite"></div>
       </div>
 
-      <section>
+      <section class="band">
         <div class="sec-head sec-head-stack"><span class="eyebrow">Timeline - Recent Roles</span><p>Oct 2021 to now</p></div>
         <div class="cards" id="cards"></div>
       </section>
 
-      <section>
+      <section class="band">
         <div class="sec-head sec-head-stack"><span class="eyebrow">Timeline - Earlier Career</span><p>2009 to 2021</p></div>
         <div class="earlier" id="earlier"></div>
       </section>
@@ -476,7 +495,7 @@
       var EARLIER = [
         { id: "fc21", org: "Flight Centre", short: "Flight Centre", title: "Business Analyst", type: "Contract", start: "2021-04", end: "2021-09", industry: ["Travel", "Retail"], systems: ["Dynamics 365", "Azure DevOps", "Microsoft Suite"], ov: "Requirements gathering for a Dynamics 365 global finance solution" },
         { id: "qbcc", org: "Queensland Building & Construction Commission", short: "QBCC", title: "Business Analyst", type: "Permanent", start: "2018-12", end: "2021-04", industry: "Government", systems: ["Atlassian", "Microsoft Suite", "Salesforce", "Visio", "UiPath", "Case Management"], note: "Planning Award, 2020", ov: "Multiple public-facing initiatives including a customer portal and online forms" },
-        { id: "fcmbo", org: "FCM Travel Solutions", short: "FCM Travel", title: "Business Optimisation Manager", type: "Permanent", start: "2017-02", end: "2018-09", industry: "Travel", systems: ["Microsoft Suite", "Salesforce", "Case Management", "Visio"] },
+        { id: "fcmbo", org: "FCM Travel Solutions", short: "FCM Travel", title: "Business Optimisation Manager", type: "Permanent", start: "2017-02", end: "2018-09", industry: "Travel", systems: ["Microsoft Suite", "Salesforce", "Case Management", "Visio"], ov: "Leading a national helpdesk whilst optimising operational systems" },
         { id: "fcmtl", org: "FCM Travel Solutions", short: "FCM Travel", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2011-06", end: "2017-02", industry: "Travel", note: ["#1 Consultant Australia, 2015", "#2 Consultant Globally, 2015", "Global Ball Awards, 2012, 2013"] },
         { id: "fc09", org: "Flight Centre", short: "Flight Centre", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2009-06", end: "2011-06", industry: ["Travel", "Retail"], note: "Global Ball Awards, 2010" }
       ];
@@ -566,8 +585,13 @@
 
       $("earlier").innerHTML = EARLIER.map(function (r) {
         var notes = Array.isArray(r.note) ? r.note : (r.note ? [r.note] : []);
-        return '<div data-id="' + r.id + '"><span><b>' + esc(r.title) + '</b>, ' + esc(r.org) + '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span>' +
-          (notes.length ? '<span class="note">' + notes.map(function (n) { return '<span class="tag">' + esc(n) + '</span>'; }).join("") + '</span>' : '') +
+        var cls = r.type === "Permanent" ? "p" : "c";
+        return '<div data-id="' + r.id + '" class="' + cls + '"><span><b>' + esc(r.org) + '</b>, ' + esc(r.title) +
+          ' <span class="tag ' + (r.type === "Permanent" ? "perm" : "contract") + '">' + esc(r.type) + '</span>' +
+          inds(r).map(function (i) { return ' <span class="tag">' + esc(i) + '</span>'; }).join("") +
+          '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span>' +
+          '<span class="when">' + dur(r.start, r.end) + '</span>' +
+          (notes.length ? '<span class="note">' + notes.map(function (n) { return '<span class="tag gold">' + esc(n) + '</span>'; }).join("") + '</span>' : '') +
           (r.ov ? '<span class="ov">' + esc(r.ov) + '</span>' : '') + '</div>';
       }).join("");
 

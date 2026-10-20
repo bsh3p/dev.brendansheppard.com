@@ -5,6 +5,8 @@
      mobile hamburger restored (2+ nav items), envelope button removed.
      v2.9, 20 Oct 2026: hero portrait full-size (removed dev-only half-size
      patch — prod look), Core Skills 'Business Analysis' pinned first.
+     v2.10, 20 Oct 2026: opaque scrolled header (was 72% translucent + blur —
+     headings slid under it).
      Dev only: career.html not yet on prod. -->
 <!DOCTYPE html>
 <html lang="en-AU">
@@ -426,6 +428,9 @@
      at every width; the mobile nav drawer toggle is an extra, not the
      only option. */
     #theme-toggle-desktop { display: grid; }
+    /* Opaque scrolled header — compiled rule uses 72% translucent bg + blur,
+       so section headings visibly slide under it. */
+    .header.scrolled { background: var(--bg); }
   </style>
 </head>
 <body>
