@@ -165,12 +165,13 @@
   /* Systems matrix */
   .scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
   .mhint { display: none; }
-  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: .85rem; }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 720px; font-size: .85rem; }
   th, td { padding: 8px 10px; text-align: center; border-bottom: 1px solid var(--border); }
   thead th { font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 700; vertical-align: bottom; background: var(--surface); }
   th.sysname, td.sysname { text-align: left; position: sticky; left: 0; background: var(--bg); white-space: nowrap; box-shadow: 1px 0 0 var(--border); }
   thead th.sysname { background: var(--surface); }
-  tr.cat th { position: sticky; left: 0; text-align: left; background: var(--surface); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); }
+  tr.cat th { position: sticky; left: 0; z-index: 1; text-align: left; background: var(--surface); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); white-space: nowrap; }
+  tr.cat td { background: var(--surface); }
   td button { background: none; border: 0; padding: 0; cursor: pointer; font-weight: 600; text-align: left; }
   td button:hover { color: var(--accent-text); }
   .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
@@ -317,7 +318,7 @@
       </section>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Matrix</span><h2>Systems by role</h2><p>Select a system to filter the page.<span class="mhint"> Swipe sideways to see every role.</span></p></div>
+        <div class="sec-head"><span class="eyebrow">Matrix</span><p>Select a system to filter the page.<span class="mhint"> Swipe sideways to see every role.</span></p></div>
         <div class="scroll"><table id="matrix"></table></div>
       </section>
 
@@ -541,7 +542,7 @@
       /* matrix */
       var mh = '<thead><tr><th class="sysname">System</th>' + ROLES.map(function (r) { return '<th data-col="' + r.id + '">' + esc(r.short) + '</th>'; }).join("") + '<th>Roles</th></tr></thead><tbody>';
       CATS.forEach(function (c) {
-        mh += '<tr class="cat"><th colspan="' + (ROLES.length + 2) + '">' + esc(c.name) + '</th></tr>';
+        mh += '<tr class="cat"><th>' + esc(c.name) + '</th><td colspan="' + (ROLES.length + 1) + '"></td></tr>';
         c.items.slice().sort(function (a, b) { return (sysSet[b] || 0) - (sysSet[a] || 0); }).forEach(function (s) {
           mh += '<tr data-sys="' + esc(s) + '"><td class="sysname"><button type="button" data-kind="sys" data-v="' + esc(s) + '">' + esc(s) + '</button></td>' +
             ROLES.map(function (r) { return '<td data-col="' + r.id + '">' + (r.systems.indexOf(s) > -1 ? '<span class="dot" role="img" aria-label="Used at ' + esc(r.short) + '"></span>' : "") + '</td>'; }).join("") +
