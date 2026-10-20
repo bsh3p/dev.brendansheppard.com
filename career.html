@@ -4,6 +4,10 @@
      single headers; card padding reduced; Show/Hide detail gap increased;
      awards on line below role; Global Ball 2010 to 2009-11 role; credentials
      stacked; Experience Matrix header; Microsoft Suite casing.
+     v2.2, 20 Oct 2026: matrix extended back to FCM Business Optimisation
+     (adds FC 2021, QBCC, FCM BO columns); square join on multi-phase bars
+     (People First Bank contract->permanent); new systems Case Management,
+     UiPath, Dynamics 365 + role systems data (QBCC, FC 2021, FCM BO, fc26, flg).
      Dev only: not copied to prod until Brendan confirms. -->
 <!DOCTYPE html>
 <html lang="en-AU">
@@ -119,6 +123,8 @@
   .row .who span { font-size: .72rem; color: var(--muted); }
   .bar-seg { position: absolute; top: 50%; height: 14px; transform: translateY(-50%); border-radius: 7px; min-width: 9px; background: var(--accent); }
   .bar-seg.perm { background: var(--accent-cyan); }
+  .bar-seg:not(:last-child) { border-radius: 7px 0 0 7px; }
+  .bar-seg + .bar-seg { border-radius: 0 7px 7px 0; }
   .bar-seg.now::after { content: ""; position: absolute; right: -5px; top: 50%; width: 10px; height: 10px; transform: translateY(-50%); border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); }
   .row.dim { opacity: .22; }
   .row.hit { background: var(--accent-soft); }
@@ -384,7 +390,7 @@
       var ROLES = [
         { id: "fc26", org: "Flight Centre", short: "Flight Centre", title: "Senior Business Analyst", type: "Contract", start: "2026-02", end: null, place: "Brisbane", industry: ["Travel", "Retail"],
           hl: ["Global Salesforce transformation, live chat and global support strategy"],
-          systems: ["Salesforce", "Agentforce", "Atlassian", "Microsoft Suite", "Slack", "Miro", "Claude Enterprise"],
+          systems: ["Salesforce", "Agentforce", "Atlassian", "Microsoft Suite", "Slack", "Miro", "Claude Enterprise", "Case Management"],
           bullets: [
             "Delivering Salesforce to over 800 sales staff in 149 stores across 4 continents.",
             "Defined the global scope, ensuring migration, logins, network performance and integrations were ready for go-live.",
@@ -395,7 +401,7 @@
           ] },
         { id: "flg", org: "Fitness & Lifestyle Group", short: "Fitness & Lifestyle", title: "Product Systems Analyst", type: "Permanent", start: "2025-11", end: "2026-02", place: "Brisbane", industry: "Retail",
           hl: ["APAC Salesforce transformation"],
-          systems: ["Salesforce", "Atlassian", "Microsoft Suite", "Figma", "ChatGPT"],
+          systems: ["Salesforce", "Atlassian", "Microsoft Suite", "Figma", "ChatGPT", "Case Management"],
           bullets: [
             "Supported planning, implementation and support for a large Salesforce transformation programme across the Asia Pacific region.",
             "Collaborated with in-house and offshore teams to run Agile sprints and maintain a backlog of bugs.",
@@ -447,9 +453,9 @@
           ] }
       ];
       var EARLIER = [
-        { id: "fc21", org: "Flight Centre", short: "Flight Centre", title: "Business Analyst", type: "Contract", start: "2021-04", end: "2021-09", industry: ["Travel", "Retail"], ov: "Requirements gathering for a Dynamics 365 global finance solution" },
-        { id: "qbcc", org: "Queensland Building & Construction Commission", short: "QBCC", title: "Business Analyst", type: "Permanent", start: "2018-12", end: "2021-04", industry: "Government", note: "Planning Award, 2020", ov: "Multiple public-facing initiatives including a customer portal and online forms" },
-        { id: "fcmbo", org: "FCM Travel Solutions", short: "FCM Travel", title: "Business Optimisation Manager", type: "Permanent", start: "2017-02", end: "2018-09", industry: "Travel" },
+        { id: "fc21", org: "Flight Centre", short: "Flight Centre", title: "Business Analyst", type: "Contract", start: "2021-04", end: "2021-09", industry: ["Travel", "Retail"], systems: ["Dynamics 365", "Azure DevOps", "Microsoft Suite"], ov: "Requirements gathering for a Dynamics 365 global finance solution" },
+        { id: "qbcc", org: "Queensland Building & Construction Commission", short: "QBCC", title: "Business Analyst", type: "Permanent", start: "2018-12", end: "2021-04", industry: "Government", systems: ["Atlassian", "Microsoft Suite", "Salesforce", "Visio", "UiPath", "Case Management"], note: "Planning Award, 2020", ov: "Multiple public-facing initiatives including a customer portal and online forms" },
+        { id: "fcmbo", org: "FCM Travel Solutions", short: "FCM Travel", title: "Business Optimisation Manager", type: "Permanent", start: "2017-02", end: "2018-09", industry: "Travel", systems: ["Microsoft Suite", "Salesforce", "Case Management", "Visio"] },
         { id: "fcmtl", org: "FCM Travel Solutions", short: "FCM Travel", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2011-06", end: "2017-02", industry: "Travel", note: ["#1 Consultant Australia, 2015", "#2 Consultant Globally, 2015", "Global Ball Awards, 2012, 2013"] },
         { id: "fc09", org: "Flight Centre", short: "Flight Centre", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2009-06", end: "2011-06", industry: ["Travel", "Retail"], note: "Global Ball Awards, 2010" }
       ];
@@ -457,7 +463,7 @@
         { name: "CRM and AI", items: ["Salesforce", "Agentforce", "Claude Enterprise", "ChatGPT"] },
         { name: "Delivery and collaboration", items: ["Atlassian", "Microsoft Suite", "Azure DevOps", "Slack", "Miro"] },
         { name: "Design and modelling", items: ["Figma", "Visio", "Lucidchart", "Draw.io"] },
-        { name: "Cloud, data and platforms", items: ["AWS", "Power BI", "Twilio", "Vonage", "LiveAgent", "Fiserv", "Drupal CMS"] }
+        { name: "Cloud, data and platforms", items: ["AWS", "Power BI", "Twilio", "Vonage", "LiveAgent", "Fiserv", "Drupal CMS", "Case Management", "UiPath", "Dynamics 365"] }
       ];
       var CERTS = [["Administering Jira Service Management, Koenig Solutions", "2026"], ["AI Product Manager, RMIT", "2025"], ["UX: The Beginner's Guide, Interaction Design Foundation", "2021"], ["RPA BA Foundations, UiPath Academy", "2020"], ["Agile BA Practitioner, APMG", "2019"], ["UX & Design Thinking, PeakXD", "2018"], ["Lean Six Sigma Green Belt, GoLeanSixSigma.com", "2018"], ["Certified Scrum Product Owner, Scrum Alliance", "2018"], ["Foundation Certificate in Business Analysis, BCS", "2018"]];
       var VOL = [["Christmas Gift Wrapping, Act For Kids", "2021"], ["Home Builder, Habitat for Humanity", "2015"], ["Aged Care Companion, Delta Dogs", "2016 to 2018"]];
@@ -481,8 +487,9 @@
       function inds(r) { return Array.isArray(r.industry) ? r.industry : [r.industry]; }
 
       var ALL = ROLES.concat(EARLIER);
+      var MATRIX = ROLES.concat(EARLIER.filter(function (r) { return r.id === "fc21" || r.id === "qbcc" || r.id === "fcmbo"; }));
       var sysSet = {}, indSet = {};
-      ROLES.forEach(function (r) { r.systems.forEach(function (s) { sysSet[s] = (sysSet[s] || 0) + 1; }); });
+      MATRIX.forEach(function (r) { r.systems.forEach(function (s) { sysSet[s] = (sysSet[s] || 0) + 1; }); });
       ALL.forEach(function (r) { inds(r).forEach(function (i) { indSet[i] = (indSet[i] || 0) + 1; }); });
       var sysList = Object.keys(sysSet).sort(function (a, b) { return sysSet[b] - sysSet[a] || a.localeCompare(b); });
       var indList = Object.keys(indSet).sort(function (a, b) { return indSet[b] - indSet[a] || a.localeCompare(b); });
@@ -544,12 +551,12 @@
       }).join("");
 
       /* matrix */
-      var mh = '<thead><tr><th class="sysname">System</th>' + ROLES.map(function (r) { return '<th data-col="' + r.id + '">' + esc(r.short) + '</th>'; }).join("") + '<th>Roles</th></tr></thead><tbody>';
+      var mh = '<thead><tr><th class="sysname">System</th>' + MATRIX.map(function (r) { return '<th data-col="' + r.id + '">' + esc(r.short) + '</th>'; }).join("") + '<th>Roles</th></tr></thead><tbody>';
       CATS.forEach(function (c) {
-        mh += '<tr class="cat"><th>' + esc(c.name) + '</th><td colspan="' + (ROLES.length + 1) + '"></td></tr>';
+        mh += '<tr class="cat"><th>' + esc(c.name) + '</th><td colspan="' + (MATRIX.length + 1) + '"></td></tr>';
         c.items.slice().sort(function (a, b) { return (sysSet[b] || 0) - (sysSet[a] || 0); }).forEach(function (s) {
           mh += '<tr data-sys="' + esc(s) + '"><td class="sysname"><button type="button" data-kind="sys" data-v="' + esc(s) + '">' + esc(s) + '</button></td>' +
-            ROLES.map(function (r) { return '<td data-col="' + r.id + '">' + (r.systems.indexOf(s) > -1 ? '<span class="dot" role="img" aria-label="Used at ' + esc(r.short) + '"></span>' : "") + '</td>'; }).join("") +
+            MATRIX.map(function (r) { return '<td data-col="' + r.id + '">' + (r.systems.indexOf(s) > -1 ? '<span class="dot" role="img" aria-label="Used at ' + esc(r.short) + '"></span>' : "") + '</td>'; }).join("") +
             '<td class="cnt">' + (sysSet[s] || 0) + '</td></tr>';
         });
       });
@@ -578,7 +585,7 @@
           tr.classList.toggle("dimrow", !!state.sys && tr.getAttribute("data-sys") !== state.sys);
         });
         document.querySelectorAll("#matrix [data-col]").forEach(function (el) {
-          var r = ROLES.filter(function (x) { return x.id === el.getAttribute("data-col"); })[0];
+          var r = MATRIX.filter(function (x) { return x.id === el.getAttribute("data-col"); })[0];
           if (el.tagName === "TH") el.classList.toggle("colmatch", !!(state.sys || state.ind) && matches(r));
         });
         var active = state.sys || state.ind;
