@@ -8,6 +8,12 @@
      (adds FC 2021, QBCC, FCM BO columns); square join on multi-phase bars
      (People First Bank contract->permanent); new systems Case Management,
      UiPath, Dynamics 365 + role systems data (QBCC, FC 2021, FCM BO, fc26, flg).
+     v2.3, 20 Oct 2026: design critique v1 — colour mapping swapped so
+     contract = cyan, permanent = purple (was purple contract / cyan perm);
+     bars restyled to pale tinted fill + 4px solid left edge; current role
+     uses gold edge + gold dot; multi-phase bars seamless; filters dim
+     non-matching (30%) instead of purple-highlighting; matrix dots neutral;
+     cyan text token fixed to #00707A (AA); sr-only h1 'Career map'.
      Dev only: not copied to prod until Brendan confirms. -->
 <!DOCTYPE html>
 <html lang="en-AU">
@@ -42,12 +48,16 @@
     --border-strong: #C9CCD3;
     --accent-soft: #F3E8FF;
     --cyan-soft: #E0F7FA;
+    /* Cyan text contrast fix: compiled #00838f fails WCAG AA on
+       --surface (#f5f5f5). #00707A passes both white and surface. */
+    --accent-cyan-text: #00707A;
   }
   [data-theme="dark"] {
     --muted: #A9B0C3;
     --border-strong: #3B4562;
     --accent-soft: #2A1F45;
     --cyan-soft: #0F2A33;
+    --accent-cyan-text: #67e8f9;
   }
 
   /* Header nav links — same as home page */
@@ -119,17 +129,26 @@
   .gridline { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border); }
   .break { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed var(--border-strong); }
   .row { width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--border); padding: 5px 4px; cursor: pointer; align-items: center; transition: opacity .2s, background .15s; border-radius: 0; }
-  .row:hover { background: var(--surface); }
+  .row:hover { background: var(--surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg) 25%, transparent); }
+  .row:focus-visible { outline: 2px solid var(--fg); outline-offset: -2px; }
   .row .who { min-width: 0; line-height: 1.25; }
   .row .who b { display: block; font-size: .85rem; font-weight: 600; overflow-wrap: anywhere; }
   .row .who span { font-size: .72rem; color: var(--muted); }
-  .bar-seg { position: absolute; top: 50%; height: 14px; transform: translateY(-50%); border-radius: 7px; min-width: 9px; background: var(--accent); }
-  .bar-seg.perm { background: var(--accent-cyan); }
-  .bar-seg:not(:last-child) { border-radius: 7px 0 0 7px; }
-  .bar-seg + .bar-seg { border-radius: 0 7px 7px 0; }
-  .bar-seg.now::after { content: ""; position: absolute; right: -5px; top: 50%; width: 10px; height: 10px; transform: translateY(-50%); border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); }
-  .row.dim { opacity: .22; }
-  .row.hit { background: var(--accent-soft); }
+  /* Timeline bar: pale tinted fill + solid 4px left edge in the role
+     colour. Contract = cyan, Permanent = purple (see legend). The
+     current role ('now') uses the gold edge + gold end dot — gold means
+     "now" and is used nowhere else on the timeline. */
+  .bar-seg { position: absolute; top: 50%; height: 14px; transform: translateY(-50%); border-radius: 3px; min-width: 9px; background: color-mix(in srgb, var(--accent-cyan) 12%, transparent); border-left: 4px solid var(--accent-cyan); }
+  .bar-seg.perm { background: color-mix(in srgb, var(--accent) 12%, transparent); border-left: 4px solid var(--accent); }
+  .bar-seg.now { border-left-color: var(--accent-gold); }
+  /* Multi-phase roles (e.g. People First Bank contract->permanent and
+     any future role with phases) stay seamless — square joining edges,
+     no gap, and no extra left edge on the follow-on segment so the bar
+     reads as one continuous block that changes colour. */
+  .bar-seg:not(:last-child) { border-radius: 3px 0 0 3px; }
+  .bar-seg + .bar-seg { border-radius: 0 3px 3px 0; border-left-width: 0; }
+  .bar-seg.now::after { content: ""; position: absolute; right: -5px; top: 50%; width: 10px; height: 10px; transform: translateY(-50%); border-radius: 50%; background: var(--accent-gold); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-gold) 25%, transparent); }
+  .row.dim { opacity: .3; }
   .mapstatus { margin-left: auto; color: var(--accent-text); font-weight: 600; }
   .mapstatus:empty { display: none; }
 
@@ -156,8 +175,8 @@
   .card .hl { grid-column: 1 / -1; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
   .hl strong { color: var(--accent-text); font-family: var(--font-display); font-size: 1.05rem; }
   .tag { font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-radius: 6px; padding: 3px 8px; border: 1px solid var(--border-strong); color: var(--muted); background: var(--bg); }
-  .tag.contract { color: var(--accent-text); border-color: var(--accent); }
-  .tag.perm { color: var(--accent-cyan-text); border-color: var(--accent-cyan); }
+  .tag.contract { color: var(--accent-cyan-text); border-color: var(--accent-cyan); }
+  .tag.perm { color: var(--accent-text); border-color: var(--accent); }
   .toggle { grid-column: 1 / -1; font-size: .8rem; color: var(--accent-text); font-weight: 600; margin-top: 12px; }
   details.card[open] .toggle::before { content: "Hide detail"; }
   details.card:not([open]) .toggle::before { content: "Show detail"; }
@@ -189,7 +208,7 @@
   tr.cat td { background: var(--surface); }
   td button { background: none; border: 0; padding: 0; cursor: pointer; font-weight: 600; text-align: left; }
   td button:hover { color: var(--accent-text); }
-  .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+  .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); }
   .cnt { color: var(--muted); font-variant-numeric: tabular-nums; }
   tr.dimrow { opacity: .28; }
   td.colmatch, th.colmatch { box-shadow: inset 0 -2px 0 var(--accent); }
@@ -305,12 +324,12 @@
 
   <main>
     <div class="wrap">
-      <h1 class="sr" style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">Brendan Sheppard — interactive career map</h1>
+      <h1 class="sr" style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">Career map</h1>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Interactive career map</span><p>Select a role to jump to its detail. Time is compressed before 2021. The filters below highlight matching roles.</p></div>
+        <div class="sec-head"><span class="eyebrow">Interactive career map</span><p>Select a role to jump to its detail. Time is compressed before 2021. The filters below dim non-matching roles.</p></div>
         <div class="map">
-          <div class="legend"><span><i style="background:var(--accent)"></i>Contract</span><span><i style="background:var(--accent-cyan)"></i>Permanent</span><span id="mapStatus" class="mapstatus" aria-live="polite"></span></div>
+          <div class="legend"><span><i style="background:var(--accent-cyan)"></i>Contract</span><span><i style="background:var(--accent)"></i>Permanent</span><span id="mapStatus" class="mapstatus" aria-live="polite"></span></div>
           <div id="map"></div>
         </div>
       </section>
@@ -595,7 +614,7 @@
         $("status").textContent = active
           ? shown + " of " + ALL.length + " roles match " + [state.sys, state.ind].filter(Boolean).join(" and ") + "."
           : "Showing all " + ALL.length + " roles.";
-        $("mapStatus").textContent = active ? "Highlighting " + shown + " of " + ALL.length + " roles" : "";
+        $("mapStatus").textContent = active ? "Showing " + shown + " of " + ALL.length + " roles" : "";
       }
       document.addEventListener("click", function (e) {
         var target = e.target;
