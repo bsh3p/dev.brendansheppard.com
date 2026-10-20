@@ -265,6 +265,10 @@
     }
     .header-right .nav-link:hover { opacity: 1; background: var(--surface); }
     .header-right .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
+    /* Dark mode: the compiled --accent-text (#e9d5ff) is nearly identical
+       to the white inactive links at .78 opacity — use the saturated
+       --accent purple instead so the active page is obvious. */
+    [data-theme="dark"] .header-right .nav-link[aria-current="page"] { color: var(--accent); }
 
     /* Mobile drawer nav links */
     .mobile-nav .nav-link {
@@ -279,6 +283,7 @@
     }
     .mobile-nav .nav-link:hover,
     .mobile-nav .nav-link[aria-current="page"] { opacity: 1; color: var(--accent-text); }
+    [data-theme="dark"] .mobile-nav .nav-link[aria-current="page"] { color: var(--accent); }
     .mobile-nav .mobile-nav-links { margin-bottom: 4px; }
   /* Patch v2.1, 17 Oct 2026: Why I'm Different section — three
        accent-left cards in a row, number above claim. */
