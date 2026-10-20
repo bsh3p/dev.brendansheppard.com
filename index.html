@@ -3,6 +3,8 @@
      first 90 days, how I work, certifications. Years claim corrected.
      v2.8, 19 Oct 2026: career map page added — header Career nav link,
      mobile hamburger restored (2+ nav items), envelope button removed.
+     v2.9, 20 Oct 2026: hero portrait full-size (removed dev-only half-size
+     patch — prod look), Core Skills 'Business Analysis' pinned first.
      Dev only: career.html not yet on prod. -->
 <!DOCTYPE html>
 <html lang="en-AU">
@@ -418,22 +420,6 @@
       padding-top: clamp(24px, 3vw, 40px);
       padding-bottom: clamp(64px, 9vw, 104px);
     }
-  /* Patch v2.7, 19 Oct 2026: dev-only — profile portrait at half size.
-     Compiled widths min(260px,58vw) / min(320px,68vw) halve to
-     min(130px,29vw) / min(160px,34vw). Overrides all three breakpoint
-     states (mobile, 900-1024 single col, 1025+ two col). The half-size
-     portrait also makes the media column shorter than the copy column,
-     which stretches grid row 1 and floats the caption far below the
-     photo — anchor the media block to the bottom of its row so the
-     caption gap stays at the 35px row-gap. */
-    .portrait { width: min(130px, 29vw); }
-    @media (width >= 900px) and (width <= 1024px) {
-      .portrait { width: min(130px, 29vw); }
-    }
-    @media (width >= 1025px) {
-      .portrait { width: min(160px, 34vw); }
-      .hero-media { align-self: end; }
-    }
   /* Patch v2.8, 20 Oct 2026: keep theme toggle visible on mobile. The
      compiled stylesheet hides .theme-btn below 600px. For multi-page
      sites (Home + Career) the desktop header toggle should stay visible
@@ -651,7 +637,7 @@
           <div class="card facet-card reveal d1">
             <h3>Core Skills</h3>
             <div class="chips">
-              <span class="chip">Business Analysis</span>
+              <span class="chip" data-pin="first">Business Analysis</span>
               <span class="chip">Process Optimisation</span>
               <span class="chip">Digital Transformation</span>
               <span class="chip">Automation</span>
@@ -815,6 +801,10 @@
         rows.forEach(function(row) {
           row.forEach(function(item) { ordered.push(item.el); });
         });
+        // Pinned chips (data-pin="first") always stay first — e.g. Core Skills "Business Analysis"
+        var pinned = ordered.filter(function(el) { return el.getAttribute('data-pin') === 'first'; });
+        var rest = ordered.filter(function(el) { return el.getAttribute('data-pin') !== 'first'; });
+        ordered = pinned.concat(rest);
         ordered.forEach(function(el) { container.appendChild(el); });
       }
 

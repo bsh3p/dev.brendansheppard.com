@@ -1,5 +1,9 @@
 <!-- brendansheppard.com, career map (dev only)
      v2.0, 20 Oct 2026: full career map from brendan_sheppard_career_map_v8_20oct26.txt.
+     v2.1, 20 Oct 2026: 'Timeline - Recent Roles' / 'Timeline - Earlier Career'
+     single headers; card padding reduced; Show/Hide detail gap increased;
+     awards on line below role; Global Ball 2010 to 2009-11 role; credentials
+     stacked; Experience Matrix header; Microsoft Suite casing.
      Dev only: not copied to prod until Brendan confirms. -->
 <!DOCTYPE html>
 <html lang="en-AU">
@@ -135,7 +139,7 @@
   .cards { display: grid; gap: 14px; }
   details.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: opacity .2s, border-color .2s; scroll-margin-top: 16px; }
   details.card[open] { border-color: var(--accent); }
-  details.card summary { list-style: none; cursor: pointer; padding: 18px 20px; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: start; }
+  details.card summary { list-style: none; cursor: pointer; padding: 12px 20px; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: start; }
   details.card summary::-webkit-details-marker { display: none; }
   .card h3 { font-family: var(--font-display); letter-spacing: -.02em; margin: 0; font-size: 1.25rem; font-weight: 700; }
   .card .role { font-weight: 500; }
@@ -146,7 +150,7 @@
   .tag { font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-radius: 6px; padding: 3px 8px; border: 1px solid var(--border-strong); color: var(--muted); background: var(--bg); }
   .tag.contract { color: var(--accent-text); border-color: var(--accent); }
   .tag.perm { color: var(--accent-cyan-text); border-color: var(--accent-cyan); }
-  .toggle { grid-column: 1 / -1; font-size: .8rem; color: var(--accent-text); font-weight: 600; }
+  .toggle { grid-column: 1 / -1; font-size: .8rem; color: var(--accent-text); font-weight: 600; margin-top: 12px; }
   details.card[open] .toggle::before { content: "Hide detail"; }
   details.card:not([open]) .toggle::before { content: "Show detail"; }
   details.card { scroll-margin-top: calc(var(--header-h) + 16px); }
@@ -161,6 +165,7 @@
   .earlier div { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 12px 20px; border-top: 1px solid var(--border); transition: opacity .2s; }
   .earlier div:first-child { border-top: 0; }
   .earlier .date { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  .earlier .note { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
   .earlier div > span:first-child { min-width: 0; }
   .earlier .ov { grid-column: 1 / -1; color: var(--muted); font-size: .85rem; line-height: 1.45; }
 
@@ -182,7 +187,7 @@
   td.colmatch, th.colmatch { box-shadow: inset 0 -2px 0 var(--accent); }
 
   /* Credentials */
-  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 20px; }
+  .two { display: grid; grid-template-columns: 1fr; gap: 20px; }
   .list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 20px; }
   .list h3 { font-family: var(--font-body); font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); margin: 0; padding-top: 14px; }
   .list div { display: flex; justify-content: space-between; gap: 14px; min-width: 0; padding: 10px 0; border-top: 1px solid var(--border); }
@@ -209,7 +214,7 @@
     .row .who span { display: inline; font-size: .78rem; }
     .track { min-height: 22px; }
     .tick.minor, .gridline.minor { display: none; }
-    details.card summary { grid-template-columns: 1fr; padding: 16px; }
+    details.card summary { grid-template-columns: 1fr; padding: 12px 16px; }
     .card .when { text-align: left; white-space: normal; }
     .body { padding: 0 16px 16px; }
     .earlier div { grid-template-columns: 1fr; padding: 12px 16px; }
@@ -309,17 +314,17 @@
       </div>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Timeline</span><h2>Recent roles</h2><p>Oct 2021 to now</p></div>
+        <div class="sec-head"><span class="eyebrow">Timeline - Recent Roles</span><p>Oct 2021 to now</p></div>
         <div class="cards" id="cards"></div>
       </section>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Timeline</span><h2>Earlier career</h2><p>2009 to 2021</p></div>
+        <div class="sec-head"><span class="eyebrow">Timeline - Earlier Career</span><p>2009 to 2021</p></div>
         <div class="earlier" id="earlier"></div>
       </section>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Matrix</span><p>Select a system to filter the page.<span class="mhint"> Swipe sideways to see every role.</span></p></div>
+        <div class="sec-head"><span class="eyebrow">Experience Matrix</span><p>Select a system to filter the page.<span class="mhint"> Swipe sideways to see every role.</span></p></div>
         <div class="scroll"><table id="matrix"></table></div>
       </section>
 
@@ -379,7 +384,7 @@
       var ROLES = [
         { id: "fc26", org: "Flight Centre", short: "Flight Centre", title: "Senior Business Analyst", type: "Contract", start: "2026-02", end: null, place: "Brisbane", industry: ["Travel", "Retail"],
           hl: ["Global Salesforce transformation, live chat and global support strategy"],
-          systems: ["Salesforce", "Agentforce", "Atlassian", "Microsoft suite", "Slack", "Miro", "Claude Enterprise"],
+          systems: ["Salesforce", "Agentforce", "Atlassian", "Microsoft Suite", "Slack", "Miro", "Claude Enterprise"],
           bullets: [
             "Delivering Salesforce to over 800 sales staff in 149 stores across 4 continents.",
             "Defined the global scope, ensuring migration, logins, network performance and integrations were ready for go-live.",
@@ -390,7 +395,7 @@
           ] },
         { id: "flg", org: "Fitness & Lifestyle Group", short: "Fitness & Lifestyle", title: "Product Systems Analyst", type: "Permanent", start: "2025-11", end: "2026-02", place: "Brisbane", industry: "Retail",
           hl: ["APAC Salesforce transformation"],
-          systems: ["Salesforce", "Atlassian", "Microsoft suite", "Figma", "ChatGPT"],
+          systems: ["Salesforce", "Atlassian", "Microsoft Suite", "Figma", "ChatGPT"],
           bullets: [
             "Supported planning, implementation and support for a large Salesforce transformation programme across the Asia Pacific region.",
             "Collaborated with in-house and offshore teams to run Agile sprints and maintain a backlog of bugs.",
@@ -400,7 +405,7 @@
           ] },
         { id: "alz", org: "Allianz Partners", short: "Allianz Partners", title: "Business Analyst", type: "Contract", start: "2025-08", end: "2025-10", place: "Brisbane", industry: "Insurance",
           hl: ["Banking system integration aligned to credit card insurance"],
-          systems: ["Microsoft suite", "Atlassian", "Visio", "Lucidchart", "Figma"],
+          systems: ["Microsoft Suite", "Atlassian", "Visio", "Lucidchart", "Figma"],
           bullets: [
             "Worked on integration between a major bank and Allianz Assistance for complimentary insurance.",
             "Conducted BPMN process mapping aligned with RG271 and GICOP legislation.",
@@ -409,14 +414,14 @@
           ] },
         { id: "liq", org: "Liquid Interactive", short: "Liquid Interactive", title: "Senior Business Analyst", type: "Contract", start: "2025-01", end: "2025-06", place: "Brisbane", industry: "Government",
           hl: ["My Aged Care website rebuild including CMS personalisation"],
-          systems: ["Microsoft suite", "Atlassian", "Miro", "Draw.io", "Figma", "Drupal CMS"],
+          systems: ["Microsoft Suite", "Atlassian", "Miro", "Draw.io", "Figma", "Drupal CMS"],
           bullets: [
             "Led analysis, development and testing for improved user journeys across multiple work packages for the new My Aged Care government reforms.",
             "Designed and delivered a site-wide personalisation solution built within a CMS, greatly improving the user experience across multiple sessions."
           ] },
         { id: "qut", org: "QUT", short: "QUT", title: "Principal Business Analyst", type: "Contract", start: "2024-06", end: "2024-11", place: "Brisbane", industry: "Education",
           hl: ["Salesforce Digital Experience Programme"],
-          systems: ["Salesforce", "Microsoft suite", "Atlassian"],
+          systems: ["Salesforce", "Microsoft Suite", "Atlassian"],
           bullets: [
             "Worked on the Digital Experience Programme to centralise university communications.",
             "Completed analysis on call centre reporting requirements.",
@@ -425,7 +430,7 @@
           ] },
         { id: "pfb", org: "People First Bank", short: "People First Bank", title: "Senior Business Analyst", type: "Permanent", phases: [{ type: "Contract", start: "2022-09", end: "2023-11" }, { type: "Permanent", start: "2023-11", end: "2024-06" }], start: "2022-09", end: "2024-06", place: "Brisbane", industry: "Banking",
           hl: ["Banking merger and digital transformation"],
-          systems: ["Microsoft suite", "Atlassian", "Fiserv", "Miro", "Vonage", "AWS", "Visio"],
+          systems: ["Microsoft Suite", "Atlassian", "Fiserv", "Miro", "Vonage", "AWS", "Visio"],
           bullets: [
             "Worked with architects and SMEs on application analysis and requirements across digital banking, compliance, telephony and teller systems.",
             "Delivered a business case and vendor and service recommendations for a telephony solution.",
@@ -435,7 +440,7 @@
           ] },
         { id: "ag", org: "Auto & General", short: "Auto & General", title: "Digital Business Analyst", type: "Permanent", start: "2021-10", end: "2022-09", place: "Brisbane", industry: "Insurance",
           hl: ["Improvements to Budget Direct hail alert system"],
-          systems: ["Microsoft suite", "Azure DevOps", "Power BI", "AWS", "Twilio", "LiveAgent"],
+          systems: ["Microsoft Suite", "Azure DevOps", "Power BI", "AWS", "Twilio", "LiveAgent"],
           bullets: [
             "Led analysis to improve customer experience and reduce costs by deflecting calls to LiveAgent chat and knowledge base self-service during the March 2022 storm events.",
             "Led the hail alert system overhaul with AWS cloud architecture and Twilio integration, improving bulk SMS delivery, and created the product backlog for future enhancements."
@@ -445,12 +450,12 @@
         { id: "fc21", org: "Flight Centre", short: "Flight Centre", title: "Business Analyst", type: "Contract", start: "2021-04", end: "2021-09", industry: ["Travel", "Retail"], ov: "Requirements gathering for a Dynamics 365 global finance solution" },
         { id: "qbcc", org: "Queensland Building & Construction Commission", short: "QBCC", title: "Business Analyst", type: "Permanent", start: "2018-12", end: "2021-04", industry: "Government", note: "Planning Award, 2020", ov: "Multiple public-facing initiatives including a customer portal and online forms" },
         { id: "fcmbo", org: "FCM Travel Solutions", short: "FCM Travel", title: "Business Optimisation Manager", type: "Permanent", start: "2017-02", end: "2018-09", industry: "Travel" },
-        { id: "fcmtl", org: "FCM Travel Solutions", short: "FCM Travel", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2011-06", end: "2017-02", industry: "Travel", note: ["#1 Consultant Australia, 2015", "#2 Consultant Globally, 2015", "Global Ball Awards, 2010, 2012, 2013"] },
-        { id: "fc09", org: "Flight Centre", short: "Flight Centre", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2009-06", end: "2011-06", industry: ["Travel", "Retail"] }
+        { id: "fcmtl", org: "FCM Travel Solutions", short: "FCM Travel", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2011-06", end: "2017-02", industry: "Travel", note: ["#1 Consultant Australia, 2015", "#2 Consultant Globally, 2015", "Global Ball Awards, 2012, 2013"] },
+        { id: "fc09", org: "Flight Centre", short: "Flight Centre", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2009-06", end: "2011-06", industry: ["Travel", "Retail"], note: "Global Ball Awards, 2010" }
       ];
       var CATS = [
         { name: "CRM and AI", items: ["Salesforce", "Agentforce", "Claude Enterprise", "ChatGPT"] },
-        { name: "Delivery and collaboration", items: ["Atlassian", "Microsoft suite", "Azure DevOps", "Slack", "Miro"] },
+        { name: "Delivery and collaboration", items: ["Atlassian", "Microsoft Suite", "Azure DevOps", "Slack", "Miro"] },
         { name: "Design and modelling", items: ["Figma", "Visio", "Lucidchart", "Draw.io"] },
         { name: "Cloud, data and platforms", items: ["AWS", "Power BI", "Twilio", "Vonage", "LiveAgent", "Fiserv", "Drupal CMS"] }
       ];
@@ -533,8 +538,8 @@
 
       $("earlier").innerHTML = EARLIER.map(function (r) {
         var notes = Array.isArray(r.note) ? r.note : (r.note ? [r.note] : []);
-        return '<div data-id="' + r.id + '"><span><b>' + esc(r.title) + '</b>, ' + esc(r.org) +
-          notes.map(function (n) { return ' <span class="tag">' + esc(n) + '</span>'; }).join("") + '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span>' +
+        return '<div data-id="' + r.id + '"><span><b>' + esc(r.title) + '</b>, ' + esc(r.org) + '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span>' +
+          (notes.length ? '<span class="note">' + notes.map(function (n) { return '<span class="tag">' + esc(n) + '</span>'; }).join("") + '</span>' : '') +
           (r.ov ? '<span class="ov">' + esc(r.ov) + '</span>' : '') + '</div>';
       }).join("");
 
