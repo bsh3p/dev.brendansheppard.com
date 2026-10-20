@@ -83,13 +83,6 @@
     padding: calc(72px + clamp(20px, 3vw, 40px)) clamp(20px, 4vw, 40px) 80px;
   }
 
-  /* Facts strip */
-  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px 28px; }
-  .fact { min-width: 0; }
-  .fact b { display: block; font-family: var(--font-display); font-size: 1.6rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
-  .fact span { font-size: .8rem; color: var(--muted); }
-  .facts + section { margin-top: 40px; }
-
   /* Section headings */
   section { margin-top: 64px; }
   .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-bottom: 20px; }
@@ -194,7 +187,6 @@
   @media (max-width: 640px) {
     .wrap { padding-bottom: 56px; }
     section { margin-top: 48px; }
-    .facts { gap: 16px 20px; grid-template-columns: 1fr 1fr; }
     .sec-head { flex-direction: column; }
     .sec-head p { margin-top: 4px; }
     .filter-label { min-width: 100%; }
@@ -292,12 +284,10 @@
 
   <main>
     <div class="wrap">
-      <h1 class="sr" style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">Brendan Sheppard career map</h1>
-
-      <div class="facts" id="facts"></div>
+      <h1 class="sr" style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">Brendan Sheppard — interactive career map</h1>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Interactive</span><h2>Career map</h2><p>Select a role to jump to its detail. Time is compressed before 2021. The filters below highlight matching roles.</p></div>
+        <div class="sec-head"><h2 class="eyebrow">Interactive career map</h2><p>Select a role to jump to its detail. Time is compressed before 2021. The filters below highlight matching roles.</p></div>
         <div class="map">
           <div class="legend"><span><i style="background:var(--accent)"></i>Contract</span><span><i style="background:var(--accent-cyan)"></i>Permanent</span><span id="mapStatus" class="mapstatus" aria-live="polite"></span></div>
           <div id="map"></div>
@@ -340,7 +330,7 @@
   <footer>
     <p class="footer-brand">Brendan Sheppard</p>
     <div class="footer-links">
-      <a href="/work/">Work</a>
+      <a href="/career.html">Career</a>
       <a href="/cv/">CV</a>
       <span class="footer-email-wrap">
         <a href="mailto:" id="footer-email-link" data-copy="">Email</a>
@@ -494,13 +484,6 @@
         if (state.ind && inds(r).indexOf(state.ind) < 0) return false;
         return true;
       }
-
-      /* facts */
-      $("facts").innerHTML =
-        '<div class="fact"><b>' + (NOW.getFullYear() - 2009) + '</b><span>years since first role, 2009</span></div>' +
-        '<div class="fact"><b>' + ROLES.length + '</b><span>organisations since Oct 2021</span></div>' +
-        '<div class="fact"><b>' + sysList.length + '</b><span>systems used</span></div>' +
-        '<div class="fact"><b>' + indList.length + '</b><span>industries</span></div>';
 
       /* chips */
       function chipHtml(kind, v) { return '<button type="button" class="chip" data-kind="' + kind + '" data-v="' + esc(v) + '" aria-pressed="false">' + esc(v) + '</button>'; }
