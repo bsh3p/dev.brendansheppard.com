@@ -22,6 +22,10 @@
     industry pills moved to their own line below role/company; tenure
     inline with dates "Dec 2018 to Apr 2021 (2 yrs 5 mo)"; mobile matrix
     col 1 shrunk, category labels merged across the full band.
+    v2.6, 20 Oct 2026: mobile matrix col 1 no longer truncates system
+    names (dropped ellipsis cap); category labels stay pinned via the
+    sticky th (wrap inside a narrow col on mobile); gold awards moved to
+    the bottom of earlier cards, after the outcome line.
     Dev only: not copied to prod until Brendan confirms. -->
 <!DOCTYPE html>
 <html lang="en-AU">
@@ -219,10 +223,6 @@
   thead th.sysname { background: var(--surface); }
   tr.cat th { position: sticky; left: 0; z-index: 1; text-align: left; background: var(--surface); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); white-space: nowrap; }
   tr.cat td { background: var(--surface); }
-  /* Mobile-only category label: on narrow screens the category name is
-     dropped from the sticky first column and rendered inside the band
-     spanning all columns, letting col 1 shrink to system-name width. */
-  .cat-mobile { display: none; }
   td button { background: none; border: 0; padding: 0; cursor: pointer; font-weight: 600; text-align: left; }
   td button:hover { color: var(--accent-text); }
   .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); }
@@ -268,13 +268,12 @@
     .body { padding: 0 16px 16px; }
     .earlier div { grid-template-columns: 1fr; padding: 12px 16px; }
     .earlier .date { text-align: left; white-space: normal; }
-    /* Mobile matrix: shrink the sticky first column so more role
-       columns fit on screen; category labels drop the sticky th and
-       render merged inside the full-width band instead. */
-    tr.cat th { display: none; }
-    tr.cat td { text-align: left; }
-    .cat-mobile { display: inline; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-cyan-text); font-weight: 700; }
-    th.sysname, td.sysname { max-width: 108px; overflow: hidden; text-overflow: ellipsis; padding: 8px 5px; }
+    /* Mobile matrix: the first column stays sized to the system names
+       (no ellipsis — text must never be cut). Category labels keep the
+       sticky th so they stay pinned and visible while the table scrolls
+       horizontally; they wrap inside a narrow col instead of inflating it. */
+    tr.cat th { white-space: normal; max-width: 108px; line-height: 1.25; }
+    th.sysname, td.sysname { padding: 8px 5px; }
     .list { padding: 6px 16px; }
     .list div { flex-direction: column; gap: 2px; }
     .mhint { display: inline; }
@@ -604,14 +603,14 @@
           '<span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + ' (' + dur(r.start, r.end) + ')</span>' +
           '<span class="note">' + '<span class="tag ' + (r.type === "Permanent" ? "perm" : "contract") + '">' + esc(r.type) + '</span>' +
           inds(r).map(function (i) { return '<span class="tag">' + esc(i) + '</span>'; }).join("") + '</span>' +
-          (notes.length ? '<span class="note">' + notes.map(function (n) { return '<span class="tag gold">' + esc(n) + '</span>'; }).join("") + '</span>' : '') +
-          (r.ov ? '<span class="ov">' + esc(r.ov) + '</span>' : '') + '</div>';
+          (r.ov ? '<span class="ov">' + esc(r.ov) + '</span>' : '') +
+          (notes.length ? '<span class="note">' + notes.map(function (n) { return '<span class="tag gold">' + esc(n) + '</span>'; }).join("") + '</span>' : '') + '</div>';
       }).join("");
 
       /* matrix */
       var mh = '<thead><tr><th class="sysname">System</th>' + MATRIX.map(function (r) { return '<th data-col="' + r.id + '">' + esc(r.short) + '</th>'; }).join("") + '<th>Roles</th></tr></thead><tbody>';
       CATS.forEach(function (c) {
-        mh += '<tr class="cat"><th>' + esc(c.name) + '</th><td class="cat-band" colspan="' + (MATRIX.length + 2) + '"><span class="cat-mobile">' + esc(c.name) + '</span></td></tr>';
+        mh += '<tr class="cat"><th>' + esc(c.name) + '</th><td colspan="' + (MATRIX.length + 1) + '"></td></tr>';
         c.items.slice().sort(function (a, b) { return (sysSet[b] || 0) - (sysSet[a] || 0); }).forEach(function (s) {
           mh += '<tr data-sys="' + esc(s) + '"><td class="sysname"><button type="button" data-kind="sys" data-v="' + esc(s) + '">' + esc(s) + '</button></td>' +
             MATRIX.map(function (r) { return '<td data-col="' + r.id + '">' + (r.systems.indexOf(s) > -1 ? '<span class="dot" role="img" aria-label="Used at ' + esc(r.short) + '"></span>' : "") + '</td>'; }).join("") +
