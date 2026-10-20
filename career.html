@@ -85,8 +85,9 @@
   .wrap {
     max-width: var(--container-w);
     margin: 0 auto;
-    padding: calc(72px + clamp(20px, 3vw, 40px)) clamp(20px, 4vw, 40px) 80px;
+    padding: calc(var(--header-h) + clamp(32px, 8vw, 92px)) clamp(20px, 4vw, 40px) 80px;
   }
+  .wrap > section:first-of-type { margin-top: 0; }
 
   /* Section headings */
   section { margin-top: 64px; }
@@ -148,6 +149,7 @@
   .toggle { grid-column: 1 / -1; font-size: .8rem; color: var(--accent-text); font-weight: 600; }
   details.card[open] .toggle::before { content: "Hide detail"; }
   details.card:not([open]) .toggle::before { content: "Show detail"; }
+  details.card { scroll-margin-top: calc(var(--header-h) + 16px); }
   .body { padding: 0 20px 20px; }
   .body ul { margin: 0 0 16px; padding-left: 1.2rem; }
   .body li { margin-bottom: 6px; max-width: 75ch; }
@@ -188,7 +190,6 @@
   .list span:last-child { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* Footer note inside career page */
-  .footnote { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: .85rem; }
 
   /* Responsive overrides */
   @media (max-width: 640px) {
@@ -323,14 +324,12 @@
       </section>
 
       <section>
-        <div class="sec-head"><span class="eyebrow">Qualifications</span><h2>Credentials</h2><p>Certifications, awards and volunteering</p></div>
         <div class="two">
           <div class="list" id="certs"></div>
           <div class="list" id="awards"></div>
         </div>
       </section>
 
-      <footer class="footnote">Contact details are available on request via LinkedIn or brendansheppard.com.</footer>
     </div>
   </main>
 
@@ -446,7 +445,7 @@
         { id: "fc21", org: "Flight Centre", short: "Flight Centre", title: "Business Analyst", type: "Contract", start: "2021-04", end: "2021-09", industry: ["Travel", "Retail"], ov: "Requirements gathering for a Dynamics 365 global finance solution" },
         { id: "qbcc", org: "Queensland Building & Construction Commission", short: "QBCC", title: "Business Analyst", type: "Permanent", start: "2018-12", end: "2021-04", industry: "Government", note: "Planning Award, 2020", ov: "Multiple public-facing initiatives including a customer portal and online forms" },
         { id: "fcmbo", org: "FCM Travel Solutions", short: "FCM Travel", title: "Business Optimisation Manager", type: "Permanent", start: "2017-02", end: "2018-09", industry: "Travel" },
-        { id: "fcmtl", org: "FCM Travel Solutions", short: "FCM Travel", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2011-06", end: "2017-02", industry: "Travel", note: "#1 Consultant Australia, 2015" },
+        { id: "fcmtl", org: "FCM Travel Solutions", short: "FCM Travel", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2011-06", end: "2017-02", industry: "Travel", note: ["#1 Consultant Australia, 2015", "#2 Consultant Globally, 2015", "Global Ball Awards, 2010, 2012, 2013"] },
         { id: "fc09", org: "Flight Centre", short: "Flight Centre", title: "Assistant Team Leader & Consultant", type: "Permanent", start: "2009-06", end: "2011-06", industry: ["Travel", "Retail"] }
       ];
       var CATS = [
@@ -456,7 +455,6 @@
         { name: "Cloud, data and platforms", items: ["AWS", "Power BI", "Twilio", "Vonage", "LiveAgent", "Fiserv", "Drupal CMS"] }
       ];
       var CERTS = [["Administering Jira Service Management, Koenig Solutions", "2026"], ["AI Product Manager, RMIT", "2025"], ["UX: The Beginner's Guide, Interaction Design Foundation", "2021"], ["RPA BA Foundations, UiPath Academy", "2020"], ["Agile BA Practitioner, APMG", "2019"], ["UX & Design Thinking, PeakXD", "2018"], ["Lean Six Sigma Green Belt, GoLeanSixSigma.com", "2018"], ["Certified Scrum Product Owner, Scrum Alliance", "2018"], ["Foundation Certificate in Business Analysis, BCS", "2018"]];
-      var AWARDS = [["Planning Award, Queensland Building & Construction Commission", "2020"], ["#1 Consultant Australia, FCM Travel", "2015"], ["#2 Consultant Globally, FCM Travel", "2015"], ["Global Ball Awards, FCM Travel & Flight Centre", "2010, 2012, 2013"]];
       var VOL = [["Christmas Gift Wrapping, Act For Kids", "2021"], ["Home Builder, Habitat for Humanity", "2015"], ["Aged Care Companion, Delta Dogs", "2016 to 2018"]];
 
       var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -534,8 +532,9 @@
       }).join("");
 
       $("earlier").innerHTML = EARLIER.map(function (r) {
+        var notes = Array.isArray(r.note) ? r.note : (r.note ? [r.note] : []);
         return '<div data-id="' + r.id + '"><span><b>' + esc(r.title) + '</b>, ' + esc(r.org) +
-          (r.note ? ' <span class="tag">' + esc(r.note) + '</span>' : '') + '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span>' +
+          notes.map(function (n) { return ' <span class="tag">' + esc(n) + '</span>'; }).join("") + '</span><span class="date">' + fmt(r.start) + ' to ' + fmt(r.end) + '</span>' +
           (r.ov ? '<span class="ov">' + esc(r.ov) + '</span>' : '') + '</div>';
       }).join("");
 
@@ -554,7 +553,7 @@
       /* credentials */
       function listHtml(title, arr) { return '<h3>' + title + '</h3>' + arr.map(function (x) { return '<div><span>' + esc(x[0]) + '</span><span>' + esc(x[1]) + '</span></div>'; }).join(""); }
       $("certs").innerHTML = listHtml("Certifications and training", CERTS);
-      $("awards").innerHTML = listHtml("Awards", AWARDS) + listHtml("Volunteering", VOL);
+      $("awards").innerHTML = listHtml("Volunteering", VOL);
 
       /* apply filters */
       function apply() {
